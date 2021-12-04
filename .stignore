@@ -1,0 +1,16 @@
+.git
+vim/.vim/undo
+vim/.vim/swap
+vim/.vim/backup
+emacs/.emacs.d/**/*
+!emacs/.emacs.d/elisp
+!emacs/.emacs.d/init.el
+.cask
+.redo
+*.un~
+fish/.config/fish/generated_completions/
+fish/.config/fish/fishd.*
+fish/.config/fish/fish_history
+nvim/.nvim/plugged
+nvim/.config/nvim/.netrwhist
+nvim/.config/nvim/plugin/packer_compiled.vim
