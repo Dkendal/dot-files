@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+str = ARGV[0]
+opts = ARGV[1..-1]
+puts opts
+
+tokens = str.split('::')
+files = ''
+last_token = ''
+
+tokens.reduce('') do |acc, token|
+  last_token = token
+  cmd = %{rg "(module|class)\\s+#{token}\\b" --type=ruby -l -- #{acc}}
+  files = `#{cmd}`.tr("\n", ' ')
+end
+
+puts `rg "(module|class)\\s+#{last_token}\\b" --type=ruby --with-filename --line-number --column -no-heading --color=always -- #{files}`

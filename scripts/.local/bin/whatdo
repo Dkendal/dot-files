@@ -1,0 +1,17 @@
+#!/bin/bash
+git log  --author-date-order --all --author=$1 --date=short  \
+  --format="%at |%ad | %s" |\
+  sort |\
+  uniq |\
+  sed "s/|/\t|/g"  |\
+  DATE="" awk -F'|' '
+DATE!=$2 {
+  print "-----------"
+  print $2
+  print "-----------"
+}
+{
+  DATE = $2
+  print "\t" $3
+}
+'

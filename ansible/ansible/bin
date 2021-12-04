@@ -1,0 +1,1 @@
+ansible all --connection=local -m ping

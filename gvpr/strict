@@ -1,0 +1,8 @@
+BEG_G { graph_t g = graph ("merge", "S"); }
+E {
+  node_t h = clone(g,$.head);
+  node_t t = clone(g,$.tail);
+  edge_t e = edge(t,h,"");
+  e.weight = e.weight + 1;
+}
+END_G { $O = g; }

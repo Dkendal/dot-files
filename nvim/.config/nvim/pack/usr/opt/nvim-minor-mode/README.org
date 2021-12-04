@@ -1,0 +1,157 @@
+* Nvim-minor-mode
+
+This package adds similar functionality as Emacs's minor modes.
+
+** Minor modes
+
+Within the definition of this package a minor mode is a set of keymaps that
+are enabled with some command, and can be disabled using the same command.
+
+They're useful for functionality that you don't necessarily always want to be
+active.
+
+** Installation
+
+Use whatever package manager you like:
+
+#+begin_src vim
+Plug 'Dkendal/nvim-minor-mode'
+#+end_src
+
+#+begin_src lua
+use { 'Dkendal/nvim-minor-mode' }
+#+end_src
+
+** Usage
+
+Minor modes can be defined using the =define_minor_mode= function.
+
+Say I wanted to defined a "lisp" minor mode. While I could write a new plugin
+and define it for all filetypes that are a lisp, I could instead define a
+minor mode and enable it as desired while editing files.
+
+#+begin_src lua
+local define_minor_mode = require('minor-mode').define_minor_mode
+
+define_minor_mode('lisp', [[
+  Minor modes for lisps to navigate sexps. Replaces some normal movement
+  keybindings.
+  ]], {
+  command = 'LispMode',
+  keymap = {
+    {
+      'n',
+      'j',
+      function()
+        vim.fn.search('(')
+      end,
+      { silent = true }
+    },
+
+    {
+      'n',
+      'k',
+      function()
+        vim.fn.search('(', 'b')
+      end,
+      { silent = true }
+    }
+  }
+})
+#+end_src
+
+The second argument, =LispMode=, will be used to define a new command.
+
+#+begin_src vim
+:LispMode
+#+end_src
+
+Calling it again will remove all the keymaps.
+
+** Types
+
+#+begin_example
+vim-expr :: string
+
+command-name :: string
+
+  A valid vim command name.
+
+mode :: "n" | "v" | "x" | ... | "!" ""
+
+  See [map-overview] or [nvim_set_keymap]
+
+minor-mode-name :: string
+
+lhs :: string
+
+rhs :: vim-expr | function
+
+  Standard right hand side of a keybinding, but can also be a lua function.
+
+mapping-opts :: {
+  nowait = boolean,
+  silent = boolean,
+  script = boolean,
+  expr = boolean,
+  unique = boolean,
+  noremap = boolean,
+}
+
+  See the definition of {opts} for [nvim_set_keymap].
+
+mapping :: { mode lhs, rhs, mapping-opts || null }
+
+  Same arguments as [nvim_set_keymap], except rhs may also be a lua function.
+
+keymap :: { mapping }
+#+end_example
+
+
+** API
+All top level API functions should treat kebab-case methods and
+underscore_case functions interchangeably for fennel and lua use,
+respectively.
+
+*** =define_minor_mode(mode :: minor-mode-name, doc :: string, minor-mode-opts)=
+
+Defines a new minor mode whose name is =mode= (a string). It defines a Vim
+command named after =opts.command= to toggle the minor mode, standard Vim
+command naming rules apply (:h :user-cmd-ambiguous). Provide a short
+explanation of what the minor mode is in =doc-string= - this value isn't
+exposed anywhere at the moment.
+
+=minor-mode-opts= is a map, key values are defined below:
+
+**** =:command= =command-name=
+
+**** =:keymap= =keymap=
+
+An array of key bindings that will be activated with the minor mode. Key
+bindings are the same as arguments to =nvim_set_keymap= (:h nvim_set_keymap())
+
+Here's an example keymap:
+
+#+begin_src lua
+{
+  keymap = {
+    { 'n', '<c-p>', ':echo \"down\"', { silent = true } },
+    { 'n', '<c-n>', ':echo \"up\"',   { silent = true } } }
+  }
+}
+#+end_src
+
+** Caveats
+
+This plugin uses buffer local keymaps, if you already have a buffer local
+keymap present, or overwrite it with another while a minor mode is active and
+then disable said minor mode, the keymap will be removed.
+
+** Related
+
+- https://github.com/kana/vim-submode
+- https://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Minor-Modes.html
+
+** Liscence
+
+MPL-2.0

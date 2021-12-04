@@ -1,0 +1,174 @@
+#!/usr/bin/perl
+
+        # Copyright 2012, Dee Newcum.  License: GPL v3.
+
+# List ALL Git repositories on the current machine, grouped by cloned repositories.
+# 
+# This is essentially a wrapper around:
+#       locate -br '^HEAD$'
+#
+# This has minimal dependencies, it should JUST WORK on any machine that can run Git.
+# (requires only an old version of Perl, v5.8.4, and it doesn't require any non-core modules)
+
+    use strict;
+    use warnings;
+
+    use File::Basename;
+
+    use Data::Dumper;
+    #use Devel::Comments;           # uncomment this during development to enable the ### debugging statements
+
+my ($cmdline_view_all) = grep /^(-a|--all)$/,    @ARGV;     # display everything, despite lsgit.hide
+my ($cmdline_raw)      = grep /^(-r|--raw)$/,    @ARGV;     # don't cluster things, display only the directory list
+my ($cmdline_status)   = grep /^(-s|--status)$/, @ARGV;     # show status too   (may be slow if there are any large repos)
+
+
+my %repos;
+open my $pin, '-|',  'locate', '-r', '/HEAD$'
+        or die $!;
+while (<$pin>) {
+    chomp;
+    my $git_dir = File::Basename::dirname($_);
+
+    if (-d "$git_dir/refs/heads" && -f "$git_dir/HEAD" && -d "$git_dir/branches") {
+        $repos{$git_dir} = {};
+    }
+}
+
+my %revisions;      # data needed to create %related_to
+while (my ($git_dir, $data) = each %repos) {
+    ## You can hide individual repos from lsgit, by doing this:
+    ##      git config lsgit.hide true
+    ##
+    ## The most common use for this is to hide things that are maintiained by
+    ## other organizations, so lsgit by default only displays the in-house
+    ## repositories.
+    ##
+    ## 'lsgit --all' displays everything, ignoring any lsgit.hide settings.
+    if (!$cmdline_view_all && git(qw[ config --get lsgit.hide ], $git_dir) =~ /^true$/) {
+        delete $repos{$git_dir};
+        next;
+    }
+
+    ## find the work tree, if any
+    if (git(qw[ config --get core.bare ], $git_dir) =~ /^false$/) {
+        if ($data->{work_tree} = git(qw[ config --get core.worktree ], $git_dir)) {
+            $data->{work_tree} =~ s#[/\n\r]+$##s;
+        } else {
+            ## there are other ways to specify the git-dir and work-tree...
+            ##      http://paperlined.org/apps/git/separate_working_tree.html
+            ## TODO: can we support any more of them?
+
+            ## this is a rough guesstimate
+            if ((my $w = $git_dir) =~ s#/\.git$##) {
+                $data->{work_tree} = $w;
+            }
+        }
+    }
+
+    ## fill out %revisions
+    $data->{latest_change} = 0;
+    $data->{latest_change_human} = '';
+    if (!$cmdline_raw) {
+        foreach my $l (split /\n(?=commit )/s, git(qw[rev-list --all --walk-reflogs --pretty=%ct%n%cr%n], $git_dir)) {
+            my @F = split /\n/, $l;
+            splice @F, 0, scalar(@F) - 3;
+            my ($revision, $datetime, $datetime_human) = @F;
+            push( @{$revisions{$revision}}, $git_dir);
+            if (defined($datetime) && $datetime > $data->{latest_change}) {
+                $data->{latest_change}       = $datetime;
+                $data->{latest_change_human} = $datetime_human;
+            }
+        }
+    }
+}
+#print Dumper \%repos; exit;
+#print Dumper \%revisions; exit;
+
+
+## for every repo, fill out %related_to
+foreach my $repos (values %revisions) {
+    next if (@$repos == 1);
+    for (my $ctr1=0; $ctr1<scalar(@$repos); $ctr1++) {
+        for (my $ctr2=0; $ctr2<scalar(@$repos); $ctr2++) {
+            next if ($ctr1 == $ctr2);
+            my ($repo1, $repo2) = ($repos->[$ctr1], $repos->[$ctr2]);
+            $repos{$repo1}{related_to}{$repo2} = 1;
+        }
+    }
+}
+#print Dumper \%repos; exit;
+
+
+## print the list, clustered by %related_to
+if ($cmdline_raw) {
+    print join("\n", map {
+            $repos{$_}{work_tree} || $_
+        } sort repo_sort keys %repos), "\n";
+} else {
+    my %output_seen;
+    my $is_first = 1;
+    foreach my $repo (sort repo_sort keys %repos) {
+        next if ($output_seen{$repo});
+        my @this_cluster = ($repo, keys(%{$repos{$repo}{related_to}}));
+        print "-"x80, "\n"      unless ($is_first);
+        foreach my $r (sort repo_sort @this_cluster) {
+            $output_seen{$r}++;
+            display_repo($r);
+        }
+        $is_first = 0;
+    }
+}
+
+
+
+sub display_repo {
+    my $git_dir = shift;
+    my %repo = %{$repos{$git_dir}};
+    my $name = $repo{work_tree} || $git_dir;
+    #my $when = scalar(localtime($repo{latest_change}));
+    print "$name/   $repo{latest_change_human}\n";
+    if ($cmdline_status) {
+        my @cmd = ('git', "--git-dir=$git_dir", 'status', '--short');
+        splice(@cmd, 1, 0, "--work-tree=$repo{work_tree}")  if exists $repo{work_tree};
+        splice(@cmd, 1, 0, '-c', 'color.ui=always')   if (-t STDOUT);       # force color
+        my $status = readpipe_ultimate( sub {
+                    open STDERR, '>', '/dev/null';
+                },
+                @cmd);
+        $status =~ s/^(?=.)/  /mg;
+        print "$status";
+    }
+}
+
+
+# Defines the sort order for displaying repositories, both within one cluster,
+# as well as how to order the clusters amongst each other.
+sub repo_sort {
+       $repos{$b}{latest_change} <=> $repos{$a}{latest_change}
+    or $a cmp $b
+}
+
+
+
+
+# runs a 'git' command, under the context of a specific repo....  the repo should be specified as
+# the last argument
+sub git {
+    my $repo_dir = pop;
+    #print "GIT_DIR=$repo_dir git ", join(" ", @_), "\n";
+    readpipe_ultimate( sub {
+            $ENV{GIT_DIR} = $repo_dir;
+            open STDERR, '>', '/dev/null';
+        }, 
+        "git", @_);
+}
+
+
+# like qx// or readpipe(), BUT it allows you to give explicitely delimited args, so you don't have to worry about escaping quotes
+# see also   IPC::System::Simple
+sub readpipe_args {my$p=open(my$f,'-|',@_)or die$!;my@o=<$f>;close$f;waitpid($p,0);wantarray?@o:join("",@o)}
+
+# lie qx// or readpipe(), BUT it allows complete control over what the child pid does between
+# forking and execing...  you pass it a subroutine that gets run just after forking
+sub readpipe_ultimate {my$s=shift;defined(my$p=open(my$f,'-|'))or die$!;if(!$p){&$s;exec@_ or die$!}my@o=<$f>;close$f;waitpid($p,0);wantarray?@o:join("",@o)}

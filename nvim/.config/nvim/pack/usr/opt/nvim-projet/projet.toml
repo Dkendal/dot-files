@@ -1,0 +1,18 @@
+[[rules]]
+name="Src"
+pattern="^fnl/(.*)%.fnl$"
+template="""
+Hello world!
+"""
+
+[[rules.links]]
+name="Spec"
+pattern="spec/%s_spec.fnl"
+
+[[rules]]
+name="Spec"
+pattern="^spec/(.*)_spec%.fnl$"
+
+[[rules.links]]
+name="Src"
+pattern="fnl/%s.fnl"

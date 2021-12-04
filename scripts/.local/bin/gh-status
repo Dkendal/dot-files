@@ -1,0 +1,39 @@
+#!/usr/bin/env fish
+
+
+set query "query {
+  viewer {
+    pullRequests(states: OPEN, first: 10, orderBy: {field: UPDATED_AT, direction: DESC}) {
+      nodes {
+        updatedAt
+        url
+        title
+        commits(last: 1) {
+          nodes {
+            commit {
+              status {
+                state
+                contexts {
+                  state
+                  targetUrl
+                  description
+                  context
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+"
+
+set query (string replace '\n' ' ' $query | tr -s ' ')
+
+echo $query
+
+curl -H "Authorization: bearer $GITHUB_AUTH_TOKEN" -X POST -d \
+  "{ \"query\": \"$query\" }" \
+  https://api.github.com/graphql | \
+  jq ''

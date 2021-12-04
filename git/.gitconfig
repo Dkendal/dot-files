@@ -1,0 +1,93 @@
+[user]
+	email = dylankendal@gmail.com
+	name = Dylan Kendal
+	signingkey = CD2E62F5AA5337F72F36F063620883772E7853CA
+
+[rerere]
+	enabled = true
+
+[core]
+	editor = nvim
+	excludesfile = ~/.gitignore_global
+	autocrlf = false
+	; pager = diff-so-fancy | less --tabs=4 -RFX
+	pager = delta
+	commitGraph = true
+
+[delta]
+	features = side-by-side line-numbers decoration
+
+[pretty]
+	terse = %C(yellow)%h %C(green)(%ar) - %C(reset)%s %C(blue)[%an] %C(red)%d%C(reset)%n
+
+[alias]
+	sed ="!git grep -z --full-name -l '.' | xargs -0 sed"
+	b = branch --sort=committerdate -vv
+	clean-branches="!git branch --merged | cut -c2- | xargs git branch -d"
+	p = push
+	ws = status --short
+	pf = push --force-with-lease
+	fr = pull --rebase
+	current-branch = rev-parse --abbrev-ref HEAD
+	forked-master = merge-base --fork-point origin/master @
+	l = log --oneline
+	lG = log --graph --pretty=terse --all
+	ld = log $(git merge-base --fork-point origin/master @)..@ --pretty=terse
+	lg = log --pretty=terse
+	ri = rebase --interactive
+	rim ="!git rebase --interactive $(git forked-master)"
+	root = rev-parse --show-toplevel
+	ts ="!git commit -m \"$(whoami) | $(hostname) | $(date)\""
+	yolo = push --force-with-lease
+	d = "!git diff $(git forked-master)..@"
+	dw = "!git diff --word-diff $(git forked-master)..@"
+	wip = "!git add -A; and git commit --no-verify -m wip"
+	ignore = "update-index --skip-worktree"
+	unignore = "update-index --no-skip-worktree"
+[color]
+	status = auto
+	ui = true
+[push]
+	default = current
+[merge]
+	conflictstyle = diff3
+	tool = vimdiff
+[rebase]
+	autosquash = true
+	instructionFormat = "(%cr) - %s [%an]"
+[filter "remove-trailing-whitespace"]
+	clean = sed -E 's/[[:space:]]*$//'
+	smudge = cat
+[include]
+	path = ~/.gitconfig_local
+[diff]
+	algorithm = patience
+[mergetool "vimdiff"]
+	cmd = nvim -d $LOCAL $REMOTE $MERGED
+	prompt = false
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[mergetool]
+	path = nvim
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg
+[protocol]
+	version = 2
+[log]
+	date = local
+[gc]
+	writeCommitGraph = true
+[github]
+	user = dkendal
+[init]
+	defaultBranch = main
+[pull]
+	ff = only
+[maintenance]
+	repo = /home/dylan/code/github.com/Dkendal/headlessapp.store
+	repo = /home/dylan/src/builder-internal/worktree/main

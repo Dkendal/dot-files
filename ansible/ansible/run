@@ -1,0 +1,2 @@
+#!/bin/sh
+ansible-playbook -c local ./desktop.yml  -f 1

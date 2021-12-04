@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+source ~/.profile
+
+set -e
+tmp=$(mktemp)
+
+echo "# Choose a commit by adding a 'p' at the start of the line" > $tmp
+echo "" >> $tmp
+
+git --no-pager log --format="  %h %s" $@ >> $tmp
+
+echo "# vim: set ft=gitrebase:" >> $tmp
+
+echo $EDITOR
+$EDITOR $tmp
+
+grep "^p" $tmp | perl -pe "s/p\s*//" | awk '{ print $1 }'
+
+rm $tmp

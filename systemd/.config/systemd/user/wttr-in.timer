@@ -1,0 +1,9 @@
+[Unit]
+Wants=graphical.target
+
+[Timer]
+OnBootSec=0s
+OnUnitInactiveSec=15m
+
+[Install]
+WantedBy=timers.target

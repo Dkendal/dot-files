@@ -1,0 +1,55 @@
+// vim: set sw=2 syntax=c commentstring=//\ %s:
+
+BEG_G {
+	graph_t g = graph("result", "S");
+	$tvtype = TV_prepostdfs;
+	int visited[string];
+	string heads[string];
+}
+
+
+E[] {
+	// print(tail, " ", tail.outdegree, " -> ", head, " ",  head.indegree);
+	// node($O, tail.name);
+	// node()
+	if (visited[$.name]) return;
+
+	if (!(tail.outdegree == 1 && head.indegree == 1)) {
+		copy(g, tail);
+		copy(g, head);
+		copy(g, $);
+		return;
+	}
+
+	node_t prev;
+	if (heads[tail.name]) prev = node(g, heads[tail.name]);
+	if (!prev) prev = node(g, tail.name);
+
+	node_t new = node(g, sprintf("%s\n%s", prev.name, head.name));
+
+	heads[head.name] = new.name;
+
+	edge_t e;
+	for(e = fstin(prev); e != NULL; e = nxtin(e)) {
+		edge(e.tail, new, "");
+	}
+
+	if (head.outdegree > 1) {
+		for(e = fstout(head); e != NULL; e = nxtout(e)) {
+			visited[e.name] = 1;
+			edge(new, node(g,  e.head.name), "");
+		}
+	}
+
+	delete(g, prev);
+
+	return;
+	// }
+	// tails[new] = tail;
+	// heads[new] = head;
+	// copy($T, $);
+}
+
+END_G {
+	write(g);
+}

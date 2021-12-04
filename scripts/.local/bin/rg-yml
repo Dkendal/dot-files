@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+str = ARGV[0]
+opts = ARGV[1..-1]
+puts opts
+
+tokens = str.split('.')
+files = ''
+query = ''
+
+a = tokens.each_with_index do |token, idx|
+  query = %{^#{"  " * idx}#{token}:}
+  cmd = %{rg "#{query}" --type=yaml -l -- #{files}}
+  files = `#{cmd}`.tr("\n", ' ')
+  break if files.empty?
+  files
+end
+
+keys = tokens.each_with_index.map do |token, idx|
+  "#{'  ' * idx}#{token}"
+end
+
+puts `rg "^(#{keys.join('|')}):" --type=yaml --with-filename --no-heading --color=always --line-number --column -- #{files}`

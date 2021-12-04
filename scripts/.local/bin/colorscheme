@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+
+MASTER=~/.Xresources
+SCHEME=~/colors/$1
+
+if [[ -f $SCHEME ]]; then
+  echo Using colorscheme: $SCHEME
+  xrdb $MASTER
+  xrdb -merge $SCHEME
+else
+  echo $SCHEME does not exist
+fi

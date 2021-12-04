@@ -1,0 +1,5 @@
+[Path]
+PathModified=/home/dylan/.local/share/dwall/style
+
+[Install]
+WantedBy=multi-user.target

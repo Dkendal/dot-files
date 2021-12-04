@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+git filter-branch -f --prune-empty --index-filter '
+  git rm --cached -r -q -- . ;
+  git reset -q $GIT_COMMIT -- test/javascripts/payment_request \
+    test/javascripts/storefront \
+    test/javascripts/shared \
+    app/assets/javascripts/storefront \
+    app/assets/javascripts/shared \
+    app/assets/javascripts/payments
+  '
+  -- --all

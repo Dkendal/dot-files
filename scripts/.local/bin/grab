@@ -1,0 +1,4 @@
+#!/bin/sh
+GRAB_PATH=~/screenshots/`date +%s`.png
+escrotum -s $GRAB_PATH
+echo $GRAB_PATH | xclip -selection p

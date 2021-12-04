@@ -1,0 +1,42 @@
+---
+
+- name: Add git-core ppa
+  become: yes
+  apt_repository:
+    repo: ppa:git-core/ppa
+    state: present
+
+- name: Add emacs ppa
+  become: yes
+  apt_repository:
+    repo: ppa:kelleyk/emacs
+    state: present
+
+- name: Add neovim ppa
+  become: yes
+  apt_repository:
+    repo: ppa:neovim-ppa/unstable
+    state: present
+
+- name: Install packages
+  become: yes
+  apt:
+    update_cache: yes
+    state: latest
+    name:
+    - autoconf
+    - automake
+    - cpanminus
+    - expect
+    - fish
+    - git
+    - gnupg2
+    - libncurses5-dev
+    - libssl-dev
+    - neovim
+    - pandoc
+    - perl
+    - stow
+    - rofi
+    - openssh-server
+    - libbz2-dev

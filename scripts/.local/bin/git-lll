@@ -1,0 +1,5 @@
+#!/bin/bash
+git log --oneline $@ \
+	| fzf -d ' ' \
+	--bind="tab:execute(git show --color {1} | less)" \
+	--preview='git show --color --stat {1}'

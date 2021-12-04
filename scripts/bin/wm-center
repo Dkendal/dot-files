@@ -1,0 +1,49 @@
+#!/home/dylan/.asdf/installs/ruby/3.0.0/bin/ruby
+
+NORTH_WEST = 1
+NORTH = 2
+NORTH_EAST = 3
+WEST = 4
+CENTER = 5
+EAST = 6
+SOUTH_WEST = 7
+SOUTH = 8
+SOUTH_EAST = 9
+STATIC = 10
+
+displays = `wmctrl -d`
+displays = displays.split("\n")
+displays = displays.map { |d| d.split(/\s+/) }
+
+current = displays.find do |display|
+  case display
+  in [String, "*", *rest]
+    true
+  else
+    false
+  end
+end
+
+case current
+  in [_, "*", "DG:", _, "VP:", _, "WA:", _, geometry, *rest]
+  gw, gh = geometry.split("x")
+  gw = gw.to_i
+  gh = gh.to_i
+
+  n = 5
+
+  w = gw / 2
+  h = gh / 2
+
+  x = gw / n
+  x2 = (gw / n) * (n - 2)
+
+  # Maximize vert instead
+  y = 0
+  y2 = gh
+
+  # y = gh / n
+  # y2 = (gh / n) * (n - 2)
+
+  _ = `wmctrl -r :ACTIVE: -b remove,maximized_horz && wmctrl -r :ACTIVE: -b remove,maximized_vert && wmctrl -r :ACTIVE: -e 1,#{x},#{y},#{x2},#{y2}`
+end

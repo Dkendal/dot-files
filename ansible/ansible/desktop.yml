@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  connection: local
+
+  roles:
+    - base
+    - dotfiles
+    - development
+
+  vars:
+    dotfiles_modules:
+      - nvim
+      - git
+      - fish
+      - emacs
+      - kitty
+      - input
+      - X
+      - tmux
+      - dev
+      - scripts

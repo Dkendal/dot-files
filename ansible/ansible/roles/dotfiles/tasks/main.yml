@@ -1,0 +1,12 @@
+---
+- name: clone repo
+  git:
+    repo: git@github.com:Dkendal/dot-files.git
+    clone: yes
+    update: no
+    dest: "{{ ansible_user_dir }}/dot-files"
+
+- name: stow
+  shell:
+    cmd: |
+      stow -d {{ ansible_user_dir }}/dot-files -v {{ dotfiles_modules | join(' ') }}

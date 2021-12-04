@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+org=${ORG:-"Shopify"}
+repo=${REPO:-"shopify"}
+page=${PAGE:-"1"}
+url=https://api.github.com/repos/${org}/${repo}/events\?page\=${page}
+user=${USER:-$(git config github.user)}
+password=${PASSWORD:-$(git config github.token)}
+file=$(mktemp)
+
+curl -u ${user}:${password} ${url} > $file
+
+function cleanup() {
+    rm $file
+}
+
+query=$(cat << EOF
+def fn:
+  [.id, .type, .actor.login, .created_at];
+
+map(fn)
+EOF
+)
+
+echo "${query}"
+
+jq "${query}" ${file}
+
+trap cleanup EXIT

@@ -1,0 +1,12 @@
+[Unit]
+Description=Dynamic wallpaper
+After=network.target
+Documentation=https://github.com/adi1090x/dynamic-wallpaper
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/dwall -s tokyostreet
+Restart=always
+
+[Install]
+WantedBy=graphical.target
