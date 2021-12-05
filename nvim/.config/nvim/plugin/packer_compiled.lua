@@ -110,7 +110,7 @@ _G.packer_plugins = {
     url = "https://github.com/hrsh7th/cmp-path"
   },
   ["cmp-tabnine"] = {
-    config = { "\27LJ\2\n„\1\0\0\5\0\4\0\a6\0\0\0'\2\1\0B\0\2\2\18\3\0\0009\1\2\0005\4\3\0D\1\3\0\1\0\4\27run_on_every_keystroke\2\14max_lines\3è\a\20max_num_results\3\20\tsort\2\nsetup\23cmp_tabnine.config\frequire\0" },
+    config = { "\27LJ\2\n„\1\0\0\5\0\4\0\a6\0\0\0'\2\1\0B\0\2\2\18\3\0\0009\1\2\0005\4\3\0D\1\3\0\1\0\4\27run_on_every_keystroke\2\tsort\2\14max_lines\3è\a\20max_num_results\3\20\nsetup\23cmp_tabnine.config\frequire\0" },
     loaded = true,
     path = "/home/dylan/.local/share/nvim/site/pack/packer/start/cmp-tabnine",
     url = "https://github.com/tzachar/cmp-tabnine"
@@ -388,6 +388,11 @@ _G.packer_plugins = {
     path = "/home/dylan/.local/share/nvim/site/pack/packer/opt/vim-jsonnet",
     url = "https://github.com/google/vim-jsonnet"
   },
+  ["vim-racket"] = {
+    loaded = true,
+    path = "/home/dylan/.local/share/nvim/site/pack/packer/start/vim-racket",
+    url = "https://github.com/wlangstroth/vim-racket"
+  },
   ["vim-repeat"] = {
     loaded = true,
     path = "/home/dylan/.local/share/nvim/site/pack/packer/start/vim-repeat",
@@ -485,18 +490,18 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: gitsigns.nvim
-time([[Config for gitsigns.nvim]], true)
-try_loadstring("\27LJ\2\n$\0\0\2\0\2\0\0036\0\0\0009\0\1\0D\0\1\0\rgitsigns\fplugins\0", "config", "gitsigns.nvim")
-time([[Config for gitsigns.nvim]], false)
--- Config for: twilight.nvim
-time([[Config for twilight.nvim]], true)
-try_loadstring("\27LJ\2\n]\0\0\5\0\6\0\b6\0\0\0'\2\1\0B\0\2\0029\1\2\0005\3\4\0005\4\3\0=\4\5\3D\1\2\0\fdimming\1\0\0\1\0\1\nalpha\4š³æÌ\t™³æþ\3\nsetup\rtwilight\frequire\0", "config", "twilight.nvim")
-time([[Config for twilight.nvim]], false)
--- Config for: indent-blankline.nvim
-time([[Config for indent-blankline.nvim]], true)
-try_loadstring("\27LJ\2\n,\0\0\2\0\2\0\0036\0\0\0009\0\1\0D\0\1\0\21indent-blankline\fplugins\0", "config", "indent-blankline.nvim")
-time([[Config for indent-blankline.nvim]], false)
+-- Config for: telescope.nvim
+time([[Config for telescope.nvim]], true)
+try_loadstring("\27LJ\2\nw\0\0\6\0\b\0\r6\0\0\0'\2\1\0B\0\2\0029\1\2\0005\3\5\0005\4\3\0004\5\0\0=\5\4\4=\4\6\3B\1\2\0019\1\a\0'\3\4\0D\1\2\0\19load_extension\15extensions\1\0\0\bfzf\1\0\0\nsetup\14telescope\frequire\0", "config", "telescope.nvim")
+time([[Config for telescope.nvim]], false)
+-- Config for: which-key.nvim
+time([[Config for which-key.nvim]], true)
+try_loadstring("\27LJ\2\n7\0\0\4\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\1\2\0004\3\0\0D\1\2\0\nsetup\14which-key\frequire\0", "config", "which-key.nvim")
+time([[Config for which-key.nvim]], false)
+-- Config for: trouble.nvim
+time([[Config for trouble.nvim]], true)
+try_loadstring("\27LJ\2\n#\0\0\2\0\2\0\0036\0\0\0009\0\1\0D\0\1\0\ftrouble\fplugins\0", "config", "trouble.nvim")
+time([[Config for trouble.nvim]], false)
 -- Config for: zen-mode.nvim
 time([[Config for zen-mode.nvim]], true)
 try_loadstring("\27LJ\2\n]\0\0\5\0\6\0\b6\0\0\0'\2\1\0B\0\2\0029\1\2\0005\3\4\0005\4\3\0=\4\5\3D\1\2\0\fdimming\1\0\0\1\0\1\nalpha\4š³æÌ\t™³æþ\3\nsetup\rzen-mode\frequire\0", "config", "zen-mode.nvim")
@@ -513,75 +518,75 @@ time([[Config for filetype.nvim]], false)
 time([[Config for formatter.nvim]], true)
 try_loadstring("\27LJ\2\n*\0\0\3\0\2\0\0036\0\0\0'\2\1\0D\0\2\0\19user.formatter\frequire\0", "config", "formatter.nvim")
 time([[Config for formatter.nvim]], false)
--- Config for: vim-visual-multi
-time([[Config for vim-visual-multi]], true)
-try_loadstring("\27LJ\2\n4\0\0\2\0\4\0\0066\0\0\0009\0\1\0'\1\3\0=\1\2\0+\0\0\0L\0\2\0\npaper\rVM_theme\6g\bvim\0", "config", "vim-visual-multi")
-time([[Config for vim-visual-multi]], false)
 -- Config for: nvim-cmp
 time([[Config for nvim-cmp]], true)
 try_loadstring("\27LJ\2\n\31\0\0\2\0\2\0\0036\0\0\0009\0\1\0D\0\1\0\bcmp\fplugins\0", "config", "nvim-cmp")
 time([[Config for nvim-cmp]], false)
--- Config for: galaxyline.nvim
-time([[Config for galaxyline.nvim]], true)
-try_loadstring("\27LJ\2\n/\0\0\3\0\2\0\0046\0\0\0'\2\1\0B\0\2\2D\0\1\0\20user.statusline\frequire\0", "config", "galaxyline.nvim")
-time([[Config for galaxyline.nvim]], false)
 -- Config for: nvim-treesitter
 time([[Config for nvim-treesitter]], true)
 try_loadstring("\27LJ\2\n+\0\0\3\0\2\0\0036\0\0\0'\2\1\0D\0\2\0\20user.treesitter\frequire\0", "config", "nvim-treesitter")
 time([[Config for nvim-treesitter]], false)
--- Config for: which-key.nvim
-time([[Config for which-key.nvim]], true)
-try_loadstring("\27LJ\2\n7\0\0\4\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\1\2\0004\3\0\0D\1\2\0\nsetup\14which-key\frequire\0", "config", "which-key.nvim")
-time([[Config for which-key.nvim]], false)
--- Config for: vim-vsnip
-time([[Config for vim-vsnip]], true)
-try_loadstring("\27LJ\2\nx\0\0\3\0\t\0\v5\0\1\0005\1\0\0=\1\2\0005\1\4\0005\2\3\0=\2\5\0016\2\6\0009\2\a\2=\1\b\2+\2\0\0L\2\2\0\20vsnip_filetypes\6g\bvim\15typescript\1\0\0\1\2\0\0\15javascript\njsonc\1\0\0\1\2\0\0\tjson\0", "config", "vim-vsnip")
-time([[Config for vim-vsnip]], false)
--- Config for: nvim-lspconfig
-time([[Config for nvim-lspconfig]], true)
-try_loadstring("\27LJ\2\n*\0\0\3\0\2\0\0036\0\0\0'\2\1\0D\0\2\0\19init-lspconfig\frequire\0", "config", "nvim-lspconfig")
-time([[Config for nvim-lspconfig]], false)
--- Config for: telescope.nvim
-time([[Config for telescope.nvim]], true)
-try_loadstring("\27LJ\2\nw\0\0\6\0\b\0\r6\0\0\0'\2\1\0B\0\2\0029\1\2\0005\3\5\0005\4\3\0004\5\0\0=\5\4\4=\4\6\3B\1\2\0019\1\a\0'\3\4\0D\1\2\0\19load_extension\15extensions\1\0\0\bfzf\1\0\0\nsetup\14telescope\frequire\0", "config", "telescope.nvim")
-time([[Config for telescope.nvim]], false)
+-- Config for: vim-visual-multi
+time([[Config for vim-visual-multi]], true)
+try_loadstring("\27LJ\2\n4\0\0\2\0\4\0\0066\0\0\0009\0\1\0'\1\3\0=\1\2\0+\0\0\0L\0\2\0\npaper\rVM_theme\6g\bvim\0", "config", "vim-visual-multi")
+time([[Config for vim-visual-multi]], false)
 -- Config for: symbols-outline.nvim
 time([[Config for symbols-outline.nvim]], true)
 try_loadstring("\27LJ\2\n+\0\0\2\0\2\0\0036\0\0\0009\0\1\0D\0\1\0\20symbols-outline\fplugins\0", "config", "symbols-outline.nvim")
 time([[Config for symbols-outline.nvim]], false)
+-- Config for: galaxyline.nvim
+time([[Config for galaxyline.nvim]], true)
+try_loadstring("\27LJ\2\n/\0\0\3\0\2\0\0046\0\0\0'\2\1\0B\0\2\2D\0\1\0\20user.statusline\frequire\0", "config", "galaxyline.nvim")
+time([[Config for galaxyline.nvim]], false)
+-- Config for: vim-vsnip
+time([[Config for vim-vsnip]], true)
+try_loadstring("\27LJ\2\nx\0\0\3\0\t\0\v5\0\1\0005\1\0\0=\1\2\0005\1\4\0005\2\3\0=\2\5\0016\2\6\0009\2\a\2=\1\b\2+\2\0\0L\2\2\0\20vsnip_filetypes\6g\bvim\15typescript\1\0\0\1\2\0\0\15javascript\njsonc\1\0\0\1\2\0\0\tjson\0", "config", "vim-vsnip")
+time([[Config for vim-vsnip]], false)
 -- Config for: cmp-tabnine
 time([[Config for cmp-tabnine]], true)
-try_loadstring("\27LJ\2\n„\1\0\0\5\0\4\0\a6\0\0\0'\2\1\0B\0\2\2\18\3\0\0009\1\2\0005\4\3\0D\1\3\0\1\0\4\27run_on_every_keystroke\2\14max_lines\3è\a\20max_num_results\3\20\tsort\2\nsetup\23cmp_tabnine.config\frequire\0", "config", "cmp-tabnine")
+try_loadstring("\27LJ\2\n„\1\0\0\5\0\4\0\a6\0\0\0'\2\1\0B\0\2\2\18\3\0\0009\1\2\0005\4\3\0D\1\3\0\1\0\4\27run_on_every_keystroke\2\tsort\2\14max_lines\3è\a\20max_num_results\3\20\nsetup\23cmp_tabnine.config\frequire\0", "config", "cmp-tabnine")
 time([[Config for cmp-tabnine]], false)
+-- Config for: indent-blankline.nvim
+time([[Config for indent-blankline.nvim]], true)
+try_loadstring("\27LJ\2\n,\0\0\2\0\2\0\0036\0\0\0009\0\1\0D\0\1\0\21indent-blankline\fplugins\0", "config", "indent-blankline.nvim")
+time([[Config for indent-blankline.nvim]], false)
+-- Config for: gitsigns.nvim
+time([[Config for gitsigns.nvim]], true)
+try_loadstring("\27LJ\2\n$\0\0\2\0\2\0\0036\0\0\0009\0\1\0D\0\1\0\rgitsigns\fplugins\0", "config", "gitsigns.nvim")
+time([[Config for gitsigns.nvim]], false)
+-- Config for: twilight.nvim
+time([[Config for twilight.nvim]], true)
+try_loadstring("\27LJ\2\n]\0\0\5\0\6\0\b6\0\0\0'\2\1\0B\0\2\0029\1\2\0005\3\4\0005\4\3\0=\4\5\3D\1\2\0\fdimming\1\0\0\1\0\1\nalpha\4š³æÌ\t™³æþ\3\nsetup\rtwilight\frequire\0", "config", "twilight.nvim")
+time([[Config for twilight.nvim]], false)
+-- Config for: nvim-lspconfig
+time([[Config for nvim-lspconfig]], true)
+try_loadstring("\27LJ\2\n*\0\0\3\0\2\0\0036\0\0\0'\2\1\0D\0\2\0\19init-lspconfig\frequire\0", "config", "nvim-lspconfig")
+time([[Config for nvim-lspconfig]], false)
 -- Config for: emmet-vim
 time([[Config for emmet-vim]], true)
 try_loadstring("\27LJ\2\nA\0\0\2\0\4\0\0066\0\0\0009\0\1\0'\1\3\0=\1\2\0+\0\0\0L\0\2\0\n<c-y>\26user_emmet_leader_key\6g\bvim\0", "config", "emmet-vim")
 time([[Config for emmet-vim]], false)
--- Config for: trouble.nvim
-time([[Config for trouble.nvim]], true)
-try_loadstring("\27LJ\2\n#\0\0\2\0\2\0\0036\0\0\0009\0\1\0D\0\1\0\ftrouble\fplugins\0", "config", "trouble.nvim")
-time([[Config for trouble.nvim]], false)
 vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
-vim.cmd [[au FileType fish ++once lua require("packer.load")({'vim-fish'}, { ft = "fish" }, _G.packer_plugins)]]
 vim.cmd [[au FileType fennel ++once lua require("packer.load")({'fennel.vim'}, { ft = "fennel" }, _G.packer_plugins)]]
-vim.cmd [[au FileType eelixer ++once lua require("packer.load")({'vim-elixir'}, { ft = "eelixer" }, _G.packer_plugins)]]
-vim.cmd [[au FileType jsonnet ++once lua require("packer.load")({'vim-jsonnet'}, { ft = "jsonnet" }, _G.packer_plugins)]]
 vim.cmd [[au FileType elixir ++once lua require("packer.load")({'vim-elixir'}, { ft = "elixir" }, _G.packer_plugins)]]
+vim.cmd [[au FileType eelixer ++once lua require("packer.load")({'vim-elixir'}, { ft = "eelixer" }, _G.packer_plugins)]]
+vim.cmd [[au FileType fish ++once lua require("packer.load")({'vim-fish'}, { ft = "fish" }, _G.packer_plugins)]]
+vim.cmd [[au FileType jsonnet ++once lua require("packer.load")({'vim-jsonnet'}, { ft = "jsonnet" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
 vim.cmd("augroup END")
 vim.cmd [[augroup filetypedetect]]
-time([[Sourcing ftdetect script at: /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-elixir/ftdetect/elixir.vim]], true)
-vim.cmd [[source /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-elixir/ftdetect/elixir.vim]]
-time([[Sourcing ftdetect script at: /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-elixir/ftdetect/elixir.vim]], false)
-time([[Sourcing ftdetect script at: /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-fish/ftdetect/fish.vim]], true)
-vim.cmd [[source /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-fish/ftdetect/fish.vim]]
-time([[Sourcing ftdetect script at: /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-fish/ftdetect/fish.vim]], false)
 time([[Sourcing ftdetect script at: /home/dylan/.local/share/nvim/site/pack/packer/opt/fennel.vim/ftdetect/fennel.vim]], true)
 vim.cmd [[source /home/dylan/.local/share/nvim/site/pack/packer/opt/fennel.vim/ftdetect/fennel.vim]]
 time([[Sourcing ftdetect script at: /home/dylan/.local/share/nvim/site/pack/packer/opt/fennel.vim/ftdetect/fennel.vim]], false)
+time([[Sourcing ftdetect script at: /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-fish/ftdetect/fish.vim]], true)
+vim.cmd [[source /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-fish/ftdetect/fish.vim]]
+time([[Sourcing ftdetect script at: /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-fish/ftdetect/fish.vim]], false)
+time([[Sourcing ftdetect script at: /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-elixir/ftdetect/elixir.vim]], true)
+vim.cmd [[source /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-elixir/ftdetect/elixir.vim]]
+time([[Sourcing ftdetect script at: /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-elixir/ftdetect/elixir.vim]], false)
 time([[Sourcing ftdetect script at: /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-jsonnet/ftdetect/jsonnet.vim]], true)
 vim.cmd [[source /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-jsonnet/ftdetect/jsonnet.vim]]
 time([[Sourcing ftdetect script at: /home/dylan/.local/share/nvim/site/pack/packer/opt/vim-jsonnet/ftdetect/jsonnet.vim]], false)
