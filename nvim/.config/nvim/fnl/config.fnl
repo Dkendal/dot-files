@@ -62,9 +62,9 @@
      {:ft [:elixir :eelixer] :config #(plugins.vim-elixir)})
 
 (use :jparise/vim-graphql)
-(use :leafgarland/typescript-vim)
+;; (use :leafgarland/typescript-vim)
 (use :kristijanhusak/orgmode.nvim
-     { :config #(: (require :orgmode) :setup
+     {:config #(: (require :orgmode) :setup
                   {:org_agenda_files ["~/notes/**/*"]
                    :org_default_notes_file "~/notes/gtd.org"})})
 
@@ -81,10 +81,12 @@
 (use :junegunn/vader.vim)
 (use :janko-m/vim-test)
 
+;; Comments
+(use :tpope/vim-commentary)
+
 ; tpope
 (use :tpope/vim-speeddating)
 (use :tpope/vim-abolish)
-(use :tpope/vim-commentary)
 
 (use :tpope/vim-eunuch)
 (use :tpope/vim-fugitive)
@@ -485,4 +487,6 @@
 
 (set vim.o.exrc true)
 (set vim.o.secure true)
+
+;; vi: lispwords+=use :
 

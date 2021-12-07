@@ -2,7 +2,7 @@
 
 ;; Plugins
 
-;; Plugins/vim-commentary
+;; Comment.nvim
 (do
   (map :o "<leader>;" ":Commentary<CR>")
   (map :v "<leader>;" ":Commentary<CR>")
