@@ -8,9 +8,9 @@
 
 (set parser-config.markdown
      {:filetype :markdown
-      :install_info {:url "https://github.com/ikatyang/tree-sitter-markdown"
+      :install_info {:url "https://github.com/MDeiml/tree-sitter-markdown"
                      :files [:src/parser.c :src/scanner.cc]
-                     :branch :master}})
+                     :revision :main}})
 
 ;; fnlfmt: skip
 (local textobjects

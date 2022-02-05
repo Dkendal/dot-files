@@ -1,5 +1,7 @@
 (require-macros :macros)
 
+(local {: register} (require :which-key))
+
 ;; Plugins
 
 ;; Comment.nvim
@@ -19,7 +21,7 @@
   (map :n :s :<nop>)
   (map :x :s :<nop>))
 
-;; Plugins/gitsigns
+;; Gitsigns
 (do
   (map :n :<leader>gb "<cmd>Gitsigns blame_line<cr>"
        {:nowait true :noremap true :silent true}))
@@ -41,40 +43,70 @@
 ;; Plugins/nvim-viper
 (do
   (map :v :<leader>/ ":y:<C-u>:ViperGrep rg --vimgrep -w -- <C-r>0<CR>")
-  (map :n :<leader>hdL (.. ":ViperFiles fd . " (vim.fn.stdpath :data) :<cr>))
-  (map :n :<leader>hdl ":ViperFiles fd . ~/.config/nvim<cr>")
-  (map :n :<leader>ff ":ViperFiles fd -H<cr>")
-  (map :n :<leader>fF ":ViperFiles fd -u<cr>")
-  (map :n :<leader>fr ":ViperHistory<cr>")
-  (map :n :<leader>bb ":ViperBuffers<cr>")
-  (map :n :<leader>pr ":ViperRegisters<cr>")
-  ;; (map :n :<leader>/ ":ViperGrep rg --vimgrep<space>")
-  (map :n :<leader>/ ":Telescope live_grep<cr>")
-  (map :n :<leader>pf ":ViperFiles git ls-files<cr>")
-  (map :n :<leader>pg ":ViperGitStatus<cr>"))
+  (map :n :<leader>bb ":ViperBuffers<cr>"))
+
+(map :n :<m-h> "<cmd>lua require('treeclimber.internal').move_to_prev()<cr>")
+(map :n :<m-k> "<cmd>lua require('treeclimber.internal').move_to_parent()<cr>")
+(map :n :<m-j> "<cmd>lua require('treeclimber.internal').move_to_first_child()<cr>")
+(map :n :<m-l> "<cmd>lua require('treeclimber.internal').move_to_next()<cr>")
+
+(local ts (require :telescope.builtin))
+
+(register
+  {:f {:name :Files
+       :f [#(ts.find_files {:find_command ["fd"]}) "Find files"]
+       :F [#(ts.find_files {:find_command ["fd" "-u"]}) "Find files w/ hidden"]}
+
+   :<leader> ["<cmd>Telescope commands<cr>"]
+
+   :s {:s [#(ts.current_buffer_fuzzy_find) "Search current buffer"]}
+
+   :p {:r [":ViperRegisters<cr>" :Registers]
+       :f [#(ts.git_files) "Git files"]
+       :g [":ViperGitStatus<cr>" "Git status"]}
+
+   :h {:name "Vim"
+       :h ["<cmd>Telescope help_tags<cr>" "Help tags"]
+       :m ["<cmd>Telescope man_pages<cr>" "Help tags"]
+
+       :d {:name "Describe"
+           :f ["<cmd>P! function<cr>" "Functions"]
+           :v ["<cmd>P! verbose let<cr>" "Variables"]
+           :m ["<cmd>Telescope keymaps<cr>" "Keymaps"]}
+
+       :r {:name "Vim Runtime"
+           :r ["<cmd>Telescope reloader<cr>" "Reloader"]
+           :/ [#(ts.live_grep {:cwd (vim.fn.stdpath :config)}) "Search Vim config"]
+           :? [#(ts.live_grep {:cwd (vim.fn.stdpath :data)}) "Search Vim data"]
+           :l [#(ts.find_files {:cwd (vim.fn.stdpath :config)}) "Vim config files"]
+           :L [#(ts.find_files {:cwd (vim.fn.stdpath :data)}) "Vim data files"]}}}
+  {:prefix :<leader>})
 
 ;; Plugins/fzf.vim
 (do
-  (map :n :<leader>hh ":Helptags<cr>")
   (map :n :<leader>pm ":Marks<cr>")
   (map :n :<leader>ww ":Windows<cr>")
-  ;; (map :n :<leader>po ":Tags<cr>")
-  (map :n :<leader>sj ":BTags<cr>")
   (map :n :<expr> "<leader>* '<cmd>Rg!<space>'.expand('<cword>').'<cr>'")
-  (map :n :<leader>ss ":BLines<cr>")
-  (map :n :<leader>hdc ":Commands<cr>")
-  (map :n :<leader><leader> ":Commands<cr>")
-  (map :n :<leader>hdm ":Maps<cr>")
-  (map :n :<leader>hdf ":P! function<cr>")
-  (map :n :<leader>hdv ":P! verbose let<cr>"))
+  )
 
 ;; Plugins/telescope
 (do
-  (map :n :<leader>lws "<cmd>Telescope lsp_workspace_symbols<cr>" {:silent true})
-  (map :n :<leader>lwd "<cmd>Telescope lsp_workspace_diagnostics<cr>" {:silent true})
-  (map :n :<leader>lca "<cmd>Telescope lsp_code_actions<cr>" {:silent true})
-  (map :n :<leader>ldws "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>" {:silent true})
-  (map :n :<leader>lds "<cmd>Telescope lsp_document_symbols<cr>" {:silent true}))
+  (map :n :<leader>/ "<cmd>Telescope live_grep<cr>")
+  (map :n :<leader>fr "<cmd>Telescope oldfiles<CR>")
+  (map :n :<leader>gla "<cmd>Telescope git_commits<cr>")
+  (map :n :<leader>glb "<cmd>Telescope git_bcommits<cr>")
+  (map :n :<leader>lca "<cmd>Telescope lsp_code_actions<cr>")
+  (map :n :<leader>lds "<cmd>Telescope lsp_document_symbols<cr>")
+  (map :n :<leader>ldws "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>")
+  (map :n :<leader>lwd "<cmd>Telescope lsp_workspace_diagnostics<cr>")
+  (map :n :<leader>lws "<cmd>Telescope lsp_workspace_symbols<cr>"))
+
+;; Trouble.nvim
+(do
+  (map :n :<space>q "<cmd>TroubleToggle workspace_diagnostics<CR>"
+       {:silent true})
+  (map :n :<space>q "<cmd>TroubleToggle document_diagnostics<CR>"
+       {:silent true}))
 
 ;; Plugins/zen
 (do
@@ -163,8 +195,7 @@
 
     \" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
     \" See https://github.com/hrsh7th/vim-vsnip/pull/50
-    nmap        <c-l>   <Plug>(vsnip-select-text)
-    xmap        <c-l>   <Plug>(vsnip-select-text)
+    xmap        <C-L>   <Plug>(vsnip-cut-text)
     \"nmap        S   <Plug>(vsnip-cut-text)
     \"xmap        S   <Plug>(vsnip-cut-text)
     ")

@@ -1,0 +1,47 @@
+VERSION 0.6
+FROM alpine:3.10
+WORKDIR /app
+
+lua5-1:
+  RUN set -ex \
+      && apk add --no-cache --virtual .lua-builddeps \
+          ca-certificates \
+          curl \
+          gcc \
+          libc-dev \
+          make \
+          readline-dev \
+          ncurses-dev \
+      && curl -fsSL -o /tmp/lua.tar.gz "https://www.lua.org/ftp/lua-5.1.5.tar.gz" \
+      && cd /tmp \
+      && echo "b3882111ad02ecc6b972f8c1241647905cb2e3fc *lua.tar.gz" | sha1sum -c - \
+      && mkdir /tmp/lua \
+      && tar -xf /tmp/lua.tar.gz -C /tmp/lua --strip-components=1 \
+      && cd /tmp/lua \
+      && make linux \
+      && make install \
+      && cd /\
+      && apk add --no-network --no-cache --virtual .lua-rundeps \
+          readline \
+          ncurses-libs \
+      && rm -rf /tmp/lua /tmp/lua.tar.gz \
+      && lua -v
+
+  CMD ["lua"]
+
+fennel:
+  FROM +lua5-1
+  RUN set -ex \
+      && curl --fail --silent --show-error --location --output /tmp/fennel "https://fennel-lang.org/downloads/fennel-1.0.0" \
+      && cd /tmp \
+      && echo "b8aa4a99228092e0cb078ee4aec65bff2e689fb8 *fennel" | sha1sum -cw - \
+      && chmod u+x fennel \
+      && mv /tmp/fennel /usr/bin/fennel \
+      && fennel --version
+
+build:
+  FROM +fennel
+  COPY scripts ./scripts
+  COPY fnl fnl
+  RUN sh scripts/build.sh
+  SAVE ARTIFACT lua/fnl AS LOCAL lua

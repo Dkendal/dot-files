@@ -1,4 +1,5 @@
 local lspconfig = require('lspconfig')
+local util = require('lspconfig/util')
 
 function assign(...) return vim.tbl_extend('force', ...) end
 
@@ -49,8 +50,6 @@ local on_attach = function(client, bufnr)
     bmap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
     bmap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
     -- bmap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-    bmap('n', '<space>q', '<cmd>LspTroubleWorkspaceToggle<CR>', opts)
-    bmap('n', '<space>q', '<cmd>LspTroubleDocumentToggle<CR>', opts)
     bmap('n', '<space>F', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 end
 
@@ -67,15 +66,6 @@ local opts = {
 -- by way of vsnip
 opts.capabilities.textDocument.completion.completionItem.snippetSupport = true
 
--- lspconfig.racket.setup(assign(opts, {
---     default_config = {
---         -- cmd = {'racket', '--lib', 'racket-langserver'},
---         -- filetypes = {'racket', 'scheme'},
---         -- root_dir = util.find_git_ancestor,
---         single_file_support = true
---     },
--- }))
-
 lspconfig.tsserver.setup(assign(opts, {
     verbose = true,
     settings = {
@@ -90,9 +80,9 @@ lspconfig.tsserver.setup(assign(opts, {
 }))
 
 lspconfig.racket_langserver.setup({
-    cmd = { 'racket', '--lib', 'racket-langserver' },
-    filetypes = { 'racket', 'scheme' },
-    single_file_support = true,
+    cmd = {'racket', '--lib', 'racket-langserver'},
+    filetypes = {'racket', 'scheme'},
+    single_file_support = true
 })
 
 lspconfig.pyright.setup(assign(opts, {
@@ -135,12 +125,13 @@ lspconfig.elixirls.setup(assign(opts, {
 lspconfig.efm.setup(assign(opts, {
     init_options = {documentFormatting = true},
     filetypes = {
-        'vim', 'markdown', 'fennel', 'lua', 'javascript', 'javascriptreact',
+        'vim',
+        'markdown', 'fennel', 'lua', 'javascript', 'javascriptreact',
         'typescript', 'typescriptreact', 'json', 'html', 'css', 'elixir', 'vcl'
     },
-    single_file_support = true,
+    -- single_file_support = true,
     settings = {
-        logLevel = 1,
+        logLevel = 8,
         logFile = "/tmp/efm.log",
         languages = {
             vcl = {
@@ -165,6 +156,16 @@ lspconfig.efm.setup(assign(opts, {
                 {
                     lintCommand = 'fennel --globals vim,jit,unpack --compile',
                     lintFormats = {'%f:%l'}
+                }
+            },
+            bash = {
+                {
+                    lintCommand = "shellcheck -f gcc -x",
+                    lintSource = "shellcheck",
+                    lintFormats = {
+                        '%f:%l:%c: %trror: %m', '%f:%l:%c: %tarning: %m',
+                        '%f:%l:%c: %tote: %m'
+                    }
                 }
             },
             sh = {

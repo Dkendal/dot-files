@@ -6,7 +6,7 @@ local fn = vim.fn
 local init = {}
 _G.init = init
 
-local packer_path = fn.stdpath('data') .. '/site/pack/packer/opt/packer.nvim'
+local packer_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 
 if fn.empty(fn.glob(packer_path)) > 0 then
     print("downloading packer.nvim...")
@@ -21,4 +21,4 @@ end
 ex 'packadd! nvim-fennel'
 
 require 'nvim-fennel'
-require 'config'
+require 'user'

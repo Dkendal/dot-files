@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+raise "Need at least ruby 3" unless Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.0")
+
+case ARGV
+in ["watch"]
+  exec "fd --exclude lua | entr -c earthly +build"
+in ["clean"]
+  exec "rm -rf ./lua"
+in ["build"]
+  exec "earthly +build"
+in []
+  puts "usage: dev <command>"
+end

@@ -16,6 +16,7 @@
       luaformat #{:exe :lua-format :args [] :stdin true}
       prettier #{:exe :prettier :args [:--write] :stdin false}
       import-sort #{:exe :import-sort :args [:--write] :stdin false}
+      raco-fmt #{:exe :raco :args [:fmt :--width 80] :stdin true}
       jsbeautify #{:exe :npx
                    :args [:js-beautify
                           :--end-with-newline
@@ -43,6 +44,7 @@
                                :bzl [buildifier]
                                :fennel [fnlfmt]
                                :lua [luaformat]
+                               :racket [raco-fmt]
                                :json [#(or (package-json) (jq))]
                                :jsonc [#(or (package-json) (jq))]
                                :javascript [#(or (package-json) (prettier))]
