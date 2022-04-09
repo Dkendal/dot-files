@@ -1,4 +1,4 @@
-local nvim = require 'nvim'
+local nvim = require 'fnl.nvim'
 
 _G.ftplugin_fennel = {}
 
