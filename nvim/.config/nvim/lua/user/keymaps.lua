@@ -1,70 +1,69 @@
+local M = {}
 local map = vim.keymap.set
 local which_key = require("which-key")
 local ts = require("telescope.builtin")
 local register = which_key.register
 local ls = require("luasnip")
+local autocmd = vim.api.nvim_create_autocmd
+local fn = vim.fn
 
--------------------------------------------------------------------------------
--- Functions                                                                 --
--------------------------------------------------------------------------------
+-- Fix false friends keyboard inputs
+-- https://github.com/neovim/neovim/issues/17867
+if vim.env.TERM == "xterm-kitty" then
+	autocmd({"UIEnter"}, {
+		pattern = "*",
+		callback = function ()
+			if vim.v.event.chan == 0 then
+				vim.fn.chansend(vim.v.stderr, "\x1b[>1u")
+			end
+		end
+	})
+	autocmd({"UILeave"}, {
+		pattern = "*",
+		callback = function ()
+			if vim.v.event.chan == 0 then
+				vim.fn.chansend(vim.v.stderr, "\x1b[<1u")
+			end
+		end
+	})
+end
 
--------------------------------------------------------------------------------
--- Keymaps                                                                   --
--------------------------------------------------------------------------------
+local function feedkeys(keys)
+	local key = vim.api.nvim_replace_termcodes(keys, true, false, true)
+	vim.api.nvim_feedkeys(key, "n", false)
+end
 
--- local function get_visual_selection()
--- 	local start = table.unpack(vim.api.nvim_buf_get_mark(0, "<"))
--- 	local end_ = table.unpack(vim.api.nvim_buf_get_mark(0, ">"))
--- 	return vim.api.nvim_buf_get_lines(0, start - 1, end_, false)
--- end
+local function globToRegex(glob)
+	return string.gsub(glob, "*", "(.+)")
+end
 
--- general.setup({
--- 	use_whichkey = true,
--- })
+local function globToCapture(glob)
+	local idx = 0
+	return string.gsub(glob, "*", function()
+		idx = idx + 1
+		return "%" .. idx
+	end)
+end
 
--- general.map({
--- 	filetype = "lua",
--- 	maps = {
--- 		{
--- 			mode = "v",
--- 			label = "Eval range",
--- 			lhs = "<leader>ee",
--- 			rhs = {
--- 				"<esc>",
--- 				function()
--- 					local code = table.concat(get_visual_selection(), "\n")
--- 					local f = loadstring(code)
--- 					f()
--- 				end,
--- 			},
--- 		},
--- 	},
--- })
+local function mapAlternate(file, pattern, substitute)
+	file = vim.fn.fnamemodify(file, ":~:.")
 
--- general.map({
--- 	filetype = "lua",
--- 	label = "Markdown preview",
--- 	mode = "n",
--- 	lhs = "<leader>mp",
--- 	rhs = "<cmd>term glow %<>",
--- })
+	local alt = string.gsub(file, pattern, substitute)
 
--- map("n", "<M-J>", function()
--- 	tc.next()
--- end, {})
+	local function printAlt()
+		print(alt)
+	end
 
--- map("n", "<M-j>", function()
--- 	tc.next_named()
--- end, {})
+	local function open()
+		vim.cmd(string.format("e %s", alt))
+	end
 
--- map("n", "<M-k>", function()
--- 	tc.prev_named()
--- end, {})
+	vim.api.nvim_buf_create_user_command(0, "PrintAlt", printAlt, { force = true })
+	map("n", "<leader>pa", open, { buffer = true })
+end
 
-map("", "[[", "?{<CR>w99[{")
-map("", "[]", "k$][%?}<CR>")
-map("", "][", "/}<CR>b99]}")
-map("", "]]", "j0[[%/{<CR>")
+-- Readline like bindings
+
 map("c", "<C-a>", "<Home>")
 map("c", "<C-b>", "<Left>")
 map("c", "<C-e>", "<End>")
@@ -73,16 +72,27 @@ map("c", "<C-n>", "<Down>")
 map("c", "<C-p>", "<Up>")
 map("c", "<M-b>", "<S-Left>")
 map("c", "<M-f>", "<S-Right>")
+map("c", "<C-BS>", "<c-w>")
+
+-- Window height
+-- map("n", "<down>", "<c-w>-")
+-- map("n", "<up>", "<c-w>+")
+
+map("i", "<C-h>", vim.lsp.buf.signature_help)
 map("n", "-", ":Explore<cr>")
-map("n", "<down>", "<c-w>-")
+map("n", "<c-.>", vim.lsp.buf.code_action)
+map("n", "<c-\\>", vim.lsp.buf.format)
+map("n", "<c-s-o>", "<cmd>Telescope lsp_document_symbols<cr>")
+map("n", "<m-o>", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>")
 map("n", "<expr>", "<leader>* '<cmd>Rg!<space>'.expand('<cword>').'<cr>'")
 map("n", "<leader>/", "<cmd>Telescope live_grep<cr>")
 map("n", "<leader>;", ":Commentary<CR>")
+map("n", "<leader><space>", "<cmd>Telescope commands<cr>")
 map("n", "<leader>ay", ":let @+='[[' . expand('%:~') . '::' . line('.') . ']]'<cr>:let @*=@+<cr>:echo @*<cr>")
-map("n", "<leader>bb", ":ViperBuffers<cr>")
+map("n", "<leader>bb", "<cmd>Telescope buffers<cr>")
 map("n", "<leader>bd", ":bp<cr>:bd #<cr>")
 map("n", "<leader>e", ":e <c-r>=expand('%:h')<cr>")
-map("n", "<leader>feR", ":Runtime<cr>")
+map("n", "<leader>feR", ":source<cr>")
 map("n", "<leader>fed", "~/.config/nvim/fnl/config.fnl<cr>")
 map("n", "<leader>fr", "<cmd>Telescope oldfiles<CR>")
 map("n", "<leader>fyl", ":let @+=expand('%') . ':' . line('.')<cr>:let @*=@+<cr>")
@@ -104,16 +114,39 @@ map("n", "<leader>wn", ":tabe<cr>")
 map("n", "<leader>ww", ":Windows<cr>")
 map("n", "<leader>zF", "zMzv")
 map("n", "<left>", "<c-w>=")
+map("n", "<space>D", vim.lsp.buf.type_definition)
+map("n", "<space>Wa", vim.lsp.buf.add_workspace_folder)
+map("n", "<space>Wr", vim.lsp.buf.remove_workspace_folder)
+map("n", "<space>ee", ":lua vim.diagnostic.open_float()<cr>", { silent = true })
 map("n", "<space>q", "<cmd>TroubleToggle document_diagnostics<CR>")
 map("n", "<space>q", "<cmd>TroubleToggle workspace_diagnostics<CR>")
-map("n", "<up>", "<c-w>+")
+map("n", "<space>rn", vim.lsp.buf.rename)
+map("n", "K", vim.lsp.buf.hover)
+map("n", "[d", vim.diagnostic.goto_prev)
+map("n", "]d", vim.diagnostic.goto_next)
+map("n", "gD", vim.lsp.buf.declaration)
+map("n", "gO", vim.lsp.buf.document_symbol)
+map("n", "gd", vim.lsp.buf.definition)
+map("n", "gi", vim.lsp.buf.implementation)
 map("o", "<leader>;", ":Commentary<CR>")
 map("t", "<c-[>", "<c-\\><c-n>")
 map("v", "<", "<gv")
-map("v", "<leader>/", ":y:<C-u>:ViperGrep rg --vimgrep -w -- <C-r>0<CR>")
+map("v", "<c-.>", vim.lsp.buf.range_code_action)
 map("v", "<leader>;", ":Commentary<CR>")
 map("v", ">", ">gv")
 map("x", "@@", ":normal@@<cr>")
+
+map("n", "<space>Wl", function()
+	print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+end, opts)
+
+map("n", "gr", "<cmd>TroubleToggle lsp_references<CR>", opts)
+
+-- remap to open the Telescope refactoring menu in visual mode
+map("v", "<leader>rr", function()
+	feedkeys("<esc>")
+	require("telescope").extensions.refactoring.refactors()
+end, { noremap = true })
 
 map({ "i", "s" }, "<c-j>", function()
 	if ls.expand_or_jumpable() then
@@ -137,50 +170,35 @@ map("i", "<c-u>", require("luasnip.extras.select_choice"))
 
 map("i", "<c-.>", vim.lsp.codelens.display)
 
-register({
-	-- Context aware folding
-	["<tab>"] = {
-		function()
-			vim.wo.foldenable = true
+-- -- -- Context aware folding
+-- map("n", "<Tab>", function()
+-- 	vim.wo.foldenable = true
 
-			if vim.fn.foldlevel(".") <= 0 then
-				vim.api.nvim_feedkeys("zr", "nt", false)
-			else
-				vim.api.nvim_feedkeys("zo", "nt", false)
-			end
-		end,
-		"Fold more",
-	},
-	-- Context aware folding
-	["<s-tab>"] = {
-		function()
-			vim.wo.foldenable = true
-			if vim.fn.foldlevel(".") <= 0 then
-				vim.api.nvim_feedkeys("zm", "nt", false)
-			else
-				vim.api.nvim_feedkeys("zc", "nt", false)
-			end
-		end,
-		"Fold less",
-	},
-})
+-- 	if fn.foldlevel(".") <= 0 then
+-- 		feedkeys("zr")
+-- 	else
+-- 		feedkeys("zo")
+-- 	end
+-- end)
+-- -- -- Context aware folding
+-- map("n", "<S-Tab>", function()
+-- 	vim.wo.foldenable = true
+-- 	if fn.foldlevel(".") <= 0 then
+-- 		feedkeys("zm")
+-- 	else
+-- 		feedkeys("zc")
+-- 	end
+-- end)
 
+-- Normal <leader>
 register({
-	["<leader>"] = { "<cmd>Telescope commands<cr>" },
-	ee = { "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>", "Get diagnostic" },
-	ef = {
-		function()
-			vim.lsp.buf.formatting_seq_sync()
-		end,
-		"Format file",
-	},
+	["<s-c-o>"] = { "<cmd>Telescope jumplist<cr>", "Jumplist" },
 	f = {
 		name = "Files",
 		e = {
 			name = "Config files",
 			d = { "<cmd>e ~/.config/nvim/init.lua<cr>", "Open init.lua" },
 			c = { "<cmd>PackerCompile<cr>", "Packer compile" },
-			R = { "<cmd>lua reload 'init'<cr>", "Reload init.lua" },
 			s = { "<cmd>luafile ~/.config/nvim/after/plugin/snippets.lua<cr>", "Reload snippets" },
 			m = { "<cmd>luafile ~/.config/nvim/after/plugin/keymaps.lua<cr>", "Reload keymaps" },
 			e = { "<cmd>e .envrc<cr>", "Open envrc" },
@@ -188,25 +206,25 @@ register({
 			r = { "<cmd>Telescope reloader<cr>", "Reloader" },
 			["/"] = {
 				function()
-					return ts.live_grep({ cwd = vim.fn.stdpath("config") })
+					return ts.live_grep({ cwd = fn.stdpath("config") })
 				end,
 				"Search Vim config",
 			},
 			["?"] = {
 				function()
-					return ts.live_grep({ cwd = vim.fn.stdpath("data") })
+					return ts.live_grep({ cwd = fn.stdpath("data") })
 				end,
 				"Search Vim data",
 			},
 			l = {
 				function()
-					return ts.find_files({ cwd = vim.fn.stdpath("config") })
+					return ts.find_files({ cwd = fn.stdpath("config") })
 				end,
 				"Vim config files",
 			},
 			L = {
 				function()
-					return ts.find_files({ cwd = vim.fn.stdpath("data") })
+					return ts.find_files({ cwd = fn.stdpath("data") })
 				end,
 				"Vim data files",
 			},
@@ -264,7 +282,6 @@ register({
 	},
 	l = {
 		name = "LSP",
-		a = { "<cmd>Telescope lsp_code_actions<cr>", "Code action" },
 		d = {
 			name = "Document",
 			s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document symbols" },
@@ -296,3 +313,80 @@ for _, key in ipairs({ "b", "c", "d", "h", "i", "l", "n", "r", "s", "u", "v", "w
 	map("n", ("<leader>T" .. key), ("yo" .. key))
 end
 
+local group = vim.api.nvim_create_augroup("UserKeymaps", { clear = true })
+
+local function keymap(opts)
+	local events = opts.events or { "BufEnter", "BufWinEnter" }
+
+	autocmd(events, {
+		group = group,
+		pattern = opts.pattern,
+		callback = opts.callback,
+	})
+end
+
+keymap({
+	pattern = { "*.lua" },
+	callback = function(args)
+		map("n", "<leader>mr", function()
+			local file = args.file
+
+			if file:match("/?lua/") then
+				local module_name = file:gsub(".*/?lua/(.*)%.lua$", "%1"):gsub("/", ".")
+
+				if module_name ~= "" then
+					print("reloaded module", module_name)
+					reload(module_name)
+				end
+			else
+				print("reloaded file", file)
+				vim.cmd([[source %]])
+			end
+		end, { silent = true, buffer = true })
+	end,
+})
+
+-- Typescript / Javascript
+keymap({
+	pattern = { "*.ts", "*.tsx", "*.js", "*.jsx" },
+	callback = function(args)
+		mapAlternate(args.file, "(.+).([jt]sx?)", "%1.test.%2")
+	end,
+})
+
+keymap({
+	pattern = { "*.test.ts", "*.test.tsx", "*.js", "*.jsx" },
+	callback = function(args)
+		mapAlternate(args.file, "(.+).test.([jt]sx?)", "%1.%2")
+	end,
+})
+
+-- Lua
+keymap({
+	pattern = { "*.rkt" },
+	callback = function(args)
+		mapAlternate(args.file, "(.+).rkt", "%1-test.rkt")
+	end,
+})
+
+keymap({
+	pattern = { "*-test.rkt" },
+	callback = function(args)
+		mapAlternate(args.file, "(.+)-test.rkt", "%1.rkt")
+	end,
+})
+
+-- Lua
+keymap({
+	pattern = { "src/*.hs" },
+	callback = function(args)
+		mapAlternate(args.file, globToRegex("src/*.hs"), globToCapture("test/Spec/*.hs"))
+	end,
+})
+
+keymap({
+	pattern = { "test/Spec/*.hs" },
+	callback = function(args)
+		mapAlternate(args.file, globToRegex("test/Spec/*.hs"), globToCapture("src/*.hs"))
+	end,
+})

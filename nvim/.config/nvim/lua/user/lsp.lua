@@ -1,6 +1,4 @@
 local lspconfig = require("lspconfig")
-local ts = require("telescope.builtin")
-local cmp = require("cmp")
 
 require("user.lsp.completion_icons").setup()
 require("user.lsp.floating_window_decoration").setup()
@@ -9,48 +7,25 @@ local function assign(...)
 	return vim.tbl_extend("force", ...)
 end
 
-vim.lsp.set_log_level(3)
+-- vim.lsp.set_log_level(1)
 
 local lsp_status = require("lsp-status")
+
+lsp_status.config({
+	indicator_errors = "",
+	indicator_warnings = "",
+	indicator_info = "?",
+	indicator_hint = "!",
+	indicator_ok = "✔",
+	status_symbol = "λ ",
+})
 
 lsp_status.register_progress()
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, _)
-	local map = vim.keymap.set
-
 	lsp_status.on_attach(client)
-	print("attach")
-
-	-- Mappings.
-	local opts = { silent = true, noremap = true, buffer = true }
-
-	-- See `:help vim.lsp.*` for documentation on any of the below functions
-	map("i", "<C-h>", vim.lsp.buf.signature_help, opts)
-	map("n", "<space>D", vim.lsp.buf.type_definition, opts)
-	map("n", "<space>F", vim.lsp.buf.formatting, opts)
-	map("n", "<space>Wa", vim.lsp.buf.add_workspace_folder, opts)
-	map("n", "<space>Wr", vim.lsp.buf.remove_workspace_folder, opts)
-	map("n", "<space>ee", vim.lsp.diagnostic.show_line_diagnostics, opts)
-	map("n", "<space>rn", vim.lsp.buf.rename, opts)
-	map("n", "K", vim.lsp.buf.hover, opts)
-	map("n", "[d", vim.lsp.diagnostic.goto_prev, opts)
-	map("n", "]d", vim.lsp.diagnostic.goto_next, opts)
-	map("n", "gD", vim.lsp.buf.declaration, opts)
-	map("n", "gO", vim.lsp.buf.document_symbol, opts)
-	map("n", "gd", vim.lsp.buf.definition, opts)
-	map("n", "gi", vim.lsp.buf.implementation, opts)
-
-	map("n", "<space>ca", vim.lsp.buf.code_action, opts)
-
-	map("v", "<space>ca", vim.lsp.buf.range_code_action, opts)
-
-	map("n", "<space>Wl", function()
-		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-	end, opts)
-
-	map("n", "gr", "<cmd>TroubleToggle lsp_references<CR>", opts)
 end
 
 -- See link below for more default configurations
@@ -104,6 +79,10 @@ lspconfig.jsonls.setup(assign(opts, {
 	settings = {
 		json = {
 			schemas = {
+				{
+					fileMatch = { ".swcrc" },
+					url = "https://json.schemastore.org/swcrc.json",
+				},
 				{
 					fileMatch = { ".luarc.json" },
 					url = "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
@@ -166,6 +145,8 @@ lspconfig.sumneko_lua.setup({
 	},
 })
 
+lspconfig.hls.setup(assign(opts, {}))
+
 lspconfig.clangd.setup(assign(opts, {}))
 
 lspconfig.elixirls.setup(assign(opts, {
@@ -176,12 +157,21 @@ local null_ls = require("null-ls")
 
 null_ls.setup({
 	sources = {
-		null_ls.builtins.completion.spell,
-		null_ls.builtins.formatting.stylua,
-		null_ls.builtins.diagnostics.eslint,
+		-- null_ls.builtins.completion.spell,
+
+		-- null_ls.builtins.diagnostics.codespell,
+
+		null_ls.builtins.diagnostics.alex,
+		null_ls.builtins.diagnostics.proselint,
 		null_ls.builtins.diagnostics.shellcheck,
-		null_ls.builtins.formatting.shfmt,
+		null_ls.builtins.diagnostics.fish,
+		null_ls.builtins.diagnostics.luacheck.with({extra_args = {"--globals", "vim"}}),
+		null_ls.builtins.diagnostics.eslint,
+
+		-- null_ls.builtins.formatting.raco_fmt,
 		null_ls.builtins.formatting.shellharden,
+		null_ls.builtins.formatting.shfmt,
+		null_ls.builtins.formatting.stylua,
 		null_ls.builtins.formatting.prettier.with({
 			prefer_local = "node_modules/.bin",
 		}),
