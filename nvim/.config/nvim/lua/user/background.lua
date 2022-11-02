@@ -1,6 +1,6 @@
 local F = require("strings").interpolate
 
-local Mod = {}
+local M = {}
 
 local config = F("${home}/.local/share/nvim/background.vim", { home = vim.env.HOME })
 local theme = "gruvbox"
@@ -13,7 +13,7 @@ local function shell_toggle(color)
 end
 
 -- Toggle background colour and save it between sessions.
-function Mod.toggle()
+function M.toggle()
 	local background = "dark"
 
 	if vim.o.background == "dark" then
@@ -36,11 +36,9 @@ function Mod.toggle()
 	file:close()
 end
 
-function Mod.init()
+function M.init()
 	-- Persist background color between sessions
 	vim.cmd("source " .. config)
 end
 
-Mod.init()
-
-return Mod
+return M

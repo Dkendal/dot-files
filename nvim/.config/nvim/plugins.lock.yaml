@@ -1,0 +1,331 @@
+%YAML 1.1
+---
+packages:
+- sha: 1da13ad
+  name: nvim-lua/plenary.nvim
+  path: pack/plugins/start/plenary.nvim
+  source:
+- sha: a225865
+  name: ryanoasis/vim-devicons
+  path: pack/plugins/start/vim-devicons
+  source:
+- sha: 0c5b6d1
+  name: kyazdani42/nvim-web-devicons
+  path: pack/plugins/start/nvim-web-devicons
+  source:
+- sha: 559088a
+  name: bogado/file-line
+  path: pack/plugins/start/file-line
+  source:
+- sha: 679d2a6
+  name: dkendal/gruvbox
+  path: pack/plugins/start/gruvbox
+  source:
+- sha: bcc2250
+  name: lewis6991/impatient.nvim
+  path: pack/plugins/start/impatient.nvim
+  source:
+- sha: bd4411a
+  name: folke/which-key.nvim
+  path: pack/plugins/start/which-key.nvim
+  source:
+- sha: '08b06c3'
+  name: L3MON4D3/LuaSnip
+  path: pack/plugins/start/LuaSnip
+  source:
+- sha: 1f6a770
+  name: pwntester/octo.nvim
+  path: pack/plugins/start/octo.nvim
+  source:
+- sha: 014ebd5
+  name: mfussenegger/nvim-dap
+  path: pack/plugins/start/nvim-dap
+  source:
+- sha: 3b7a962
+  name: junegunn/fzf
+  path: pack/plugins/start/fzf
+  source:
+- sha: 2330a7e
+  name: nvim-telescope/telescope-fzf-native.nvim
+  path: pack/plugins/start/telescope-fzf-native.nvim
+  source:
+- sha: 1a91238
+  name: nvim-telescope/telescope.nvim
+  path: pack/plugins/start/telescope.nvim
+  source:
+- sha: 3f0c8fa
+  name: tpope/vim-abolish
+  path: pack/plugins/start/vim-abolish
+  source:
+- sha: '3654775'
+  name: tpope/vim-commentary
+  path: pack/plugins/start/vim-commentary
+  source:
+- sha: 39e0232
+  name: tpope/vim-eunuch
+  path: pack/plugins/start/vim-eunuch
+  source:
+- sha: 0e9f763
+  name: tpope/vim-fugitive
+  path: pack/plugins/start/vim-fugitive
+  source:
+- sha: 24afe92
+  name: tpope/vim-repeat
+  path: pack/plugins/start/vim-repeat
+  source:
+- sha: ab0d42b
+  name: tpope/vim-rhubarb
+  path: pack/plugins/start/vim-rhubarb
+  source:
+- sha: e181883
+  name: tpope/vim-rsi
+  path: pack/plugins/start/vim-rsi
+  source:
+- sha: 022fb74
+  name: tpope/vim-scriptease
+  path: pack/plugins/start/vim-scriptease
+  source:
+- sha: 1d25e8e
+  name: tpope/vim-sleuth
+  path: pack/plugins/start/vim-sleuth
+  source:
+- sha: 95da3d7
+  name: tpope/vim-speeddating
+  path: pack/plugins/start/vim-speeddating
+  source:
+- sha: '9842718'
+  name: tpope/vim-unimpaired
+  path: pack/plugins/start/vim-unimpaired
+  source:
+- sha: bb1bcdd
+  name: tpope/vim-vinegar
+  path: pack/plugins/start/vim-vinegar
+  source:
+- sha: c2e75a3
+  name: github/copilot.vim
+  path: pack/plugins/start/copilot.vim
+  source:
+- sha: 29b0ea8
+  name: nvim-treesitter/nvim-treesitter
+  path: pack/plugins/start/nvim-treesitter
+  source:
+- sha: b1e850b
+  name: nvim-treesitter/nvim-treesitter-textobjects
+  path: pack/plugins/start/nvim-treesitter-textobjects
+  source:
+- sha: 71b00a3
+  name: nvim-treesitter/playground
+  path: pack/plugins/start/playground
+  source:
+- sha: 20d2bd5
+  name: rrethy/nvim-treesitter-textsubjects
+  path: pack/plugins/start/nvim-treesitter-textsubjects
+  source:
+- sha: 190f8c8
+  name: p00f/nvim-ts-rainbow
+  path: pack/plugins/start/nvim-ts-rainbow
+  source:
+- sha: 4073f76
+  name: lsp-status.nvim
+  path: pack/plugins/start/lsp-status.nvim
+  source:
+- sha: b86a37c
+  name: neovim/nvim-lspconfig
+  path: pack/plugins/start/nvim-lspconfig
+  source:
+- sha: 4073f76
+  name: nvim-lua/lsp-status.nvim
+  path: pack/plugins/start/lsp-status.nvim
+  source:
+- sha: 57e5b5d
+  name: onsails/lspkind-nvim
+  path: pack/plugins/start/lspkind-nvim
+  source:
+- sha: 033a817
+  name: hrsh7th/nvim-cmp
+  path: pack/plugins/start/nvim-cmp
+  source:
+- sha: a9de941
+  name: saadparwaiz1/cmp_luasnip
+  path: pack/plugins/start/cmp_luasnip
+  source:
+- sha: 12463cf
+  name: hrsh7th/cmp-buffer
+  path: pack/plugins/start/cmp-buffer
+  source:
+- sha: f7efc20
+  name: hrsh7th/cmp-calc
+  path: pack/plugins/start/cmp-calc
+  source:
+- sha: 19075c3
+  name: hrsh7th/cmp-emoji
+  path: pack/plugins/start/cmp-emoji
+  source:
+- sha: affe808
+  name: hrsh7th/cmp-nvim-lsp
+  path: pack/plugins/start/cmp-nvim-lsp
+  source:
+- sha: d276254
+  name: hrsh7th/cmp-nvim-lua
+  path: pack/plugins/start/cmp-nvim-lua
+  source:
+- sha: 466b6b8
+  name: hrsh7th/cmp-path
+  path: pack/plugins/start/cmp-path
+  source:
+- sha: 5155be4
+  name: blankname/vim-fish
+  path: pack/plugins/start/vim-fish
+  source:
+- sha: 30b9bea
+  name: bakpakin/fennel.vim
+  path: pack/plugins/start/fennel.vim
+  source:
+- sha: '9402908'
+  name: earthly/earthly.vim
+  path: pack/plugins/start/earthly.vim
+  source:
+- sha: edf880c
+  name: elixir-editors/vim-elixir
+  path: pack/plugins/start/vim-elixir
+  source:
+- sha: b7459b3
+  name: google/vim-jsonnet
+  path: pack/plugins/start/vim-jsonnet
+  source:
+- sha: f9b608f
+  name: jamessan/vim-gnupg
+  path: pack/plugins/start/vim-gnupg
+  source:
+- sha: 99e2bdd
+  name: vim-test/vim-test
+  path: pack/plugins/start/vim-test
+  source:
+- sha: 6978fd3
+  name: rcarriga/vim-ultest
+  path: pack/plugins/start/vim-ultest
+  source:
+- sha: e13438e
+  name: rcarriga/neotest
+  path: pack/plugins/start/neotest
+  source:
+- sha: a72fa8e
+  name: rcarriga/neotest-vim-test
+  path: pack/plugins/start/neotest-vim-test
+  source:
+- sha: 1bfb32e
+  name: antoinemadec/FixCursorHold.nvim
+  path: pack/plugins/start/FixCursorHold.nvim
+  source:
+- sha: '8960269'
+  name: rcarriga/nvim-notify
+  path: pack/plugins/start/nvim-notify
+  source:
+- sha: bc19d68
+  name: KabbAmine/vCoolor.vim
+  path: pack/plugins/start/vCoolor.vim
+  source:
+- sha: 2b8f990
+  name: chrisbra/Colorizer
+  path: pack/plugins/start/Colorizer
+  source:
+- sha: 6e98c53
+  name: artnez/vim-wipeout
+  path: pack/plugins/start/vim-wipeout
+  source:
+- sha: '0416609'
+  name: fgsch/vim-varnish
+  path: pack/plugins/start/vim-varnish
+  source:
+- sha: dc8e427
+  name: glepnir/galaxyline.nvim
+  path: pack/plugins/start/galaxyline.nvim
+  source:
+- sha: 339091a
+  name: godlygeek/tabular
+  path: pack/plugins/start/tabular
+  source:
+- sha: 17266ba
+  name: machakann/vim-sandwich
+  path: pack/plugins/start/vim-sandwich
+  source:
+- sha: 678ce9f
+  name: pld-linux/vim-syntax-vcl
+  path: pack/plugins/start/vim-syntax-vcl
+  source:
+- sha: 0c4acf6
+  name: rktjmp/lush.nvim
+  path: pack/plugins/start/lush.nvim
+  source:
+- sha: 15ae99c
+  name: simrat39/symbols-outline.nvim
+  path: pack/plugins/start/symbols-outline.nvim
+  source:
+- sha: dfa57f5
+  name: tweekmonster/startuptime.vim
+  path: pack/plugins/start/startuptime.vim
+  source:
+- sha: 32ad231
+  name: wlangstroth/vim-racket
+  path: pack/plugins/start/vim-racket
+  source:
+- sha: 37f5e79
+  name: AndrewRadev/splitjoin.vim
+  path: pack/plugins/start/splitjoin.vim
+  source:
+- sha: 77d94b3
+  name: ThePrimeagen/refactoring.nvim
+  path: pack/plugins/start/refactoring.nvim
+  source:
+- sha: e027db9
+  name: chrisbra/NrrwRgn
+  path: pack/plugins/start/NrrwRgn
+  source:
+- sha: da61737
+  name: folke/trouble.nvim
+  path: pack/plugins/start/trouble.nvim
+  source:
+- sha: 8ab43c0
+  name: folke/twilight.nvim
+  path: pack/plugins/start/twilight.nvim
+  source:
+- sha: f1cc53d
+  name: folke/zen-mode.nvim
+  path: pack/plugins/start/zen-mode.nvim
+  source:
+- sha: c5b93fc
+  name: ggandor/lightspeed.nvim
+  path: pack/plugins/start/lightspeed.nvim
+  source:
+- sha: 37d536b
+  name: j-hui/fidget.nvim
+  path: pack/plugins/start/fidget.nvim
+  source:
+- sha: af19226
+  name: jose-elias-alvarez/null-ls.nvim
+  path: pack/plugins/start/null-ls.nvim
+  source:
+- sha: d5f1f86
+  name: junegunn/fzf.vim
+  path: pack/plugins/start/fzf.vim
+  source:
+- sha: 44372ff
+  name: lewis6991/gitsigns.nvim
+  path: pack/plugins/start/gitsigns.nvim
+  source:
+- sha: 6177a59
+  name: lukas-reineke/indent-blankline.nvim
+  path: pack/plugins/start/indent-blankline.nvim
+  source:
+- sha: def5d57
+  name: mattn/emmet-vim
+  path: pack/plugins/start/emmet-vim
+  source:
+- sha: 046d0d5
+  name: mg979/vim-visual-multi
+  path: pack/plugins/start/vim-visual-multi
+  source:
+- sha: 8c43aa5
+  name: jose-elias-alvarez/typescript.nvim
+  path: pack/plugins/start/typescript.nvim
+  source:

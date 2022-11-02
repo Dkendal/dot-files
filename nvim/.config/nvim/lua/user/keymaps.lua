@@ -1,48 +1,46 @@
-local M = {}
-local map = vim.keymap.set
 local which_key = require("which-key")
 local ts = require("telescope.builtin")
-local register = which_key.register
+local Hydra = require("hydra")
 local ls = require("luasnip")
+
+local map = vim.keymap.set
+local register = which_key.register
 local autocmd = vim.api.nvim_create_autocmd
 local fn = vim.fn
 
--- Fix false friends keyboard inputs
--- https://github.com/neovim/neovim/issues/17867
-if vim.env.TERM == "xterm-kitty" then
-	autocmd({"UIEnter"}, {
-		pattern = "*",
-		callback = function ()
-			if vim.v.event.chan == 0 then
-				vim.fn.chansend(vim.v.stderr, "\x1b[>1u")
-			end
-		end
-	})
-	autocmd({"UILeave"}, {
-		pattern = "*",
-		callback = function ()
-			if vim.v.event.chan == 0 then
-				vim.fn.chansend(vim.v.stderr, "\x1b[<1u")
-			end
-		end
-	})
+vim.cmd([[runtime macros/sandwich/keymap/surround.vim]])
+
+local function t(str)
+	return vim.api.nvim_replace_termcodes(str, true, false, true)
 end
 
 local function feedkeys(keys)
-	local key = vim.api.nvim_replace_termcodes(keys, true, false, true)
-	vim.api.nvim_feedkeys(key, "n", false)
+	vim.api.nvim_feedkeys(t(keys), "n", false)
 end
 
-local function globToRegex(glob)
-	return string.gsub(glob, "*", "(.+)")
+local function glob2re(glob)
+	local s = glob
+	s = string.gsub(s, "*", "(.+)")
+	s = string.gsub(s, "{(.-)}", function(str)
+		return "(" .. string.gsub(str, ",", "|") .. ")"
+	end)
+	return s
 end
 
-local function globToCapture(glob)
+local function glob2capture(glob)
 	local idx = 0
-	return string.gsub(glob, "*", function()
+	local s = glob
+
+	local function ref()
 		idx = idx + 1
 		return "%" .. idx
-	end)
+	end
+
+	s = string.gsub(glob, "*", ref)
+	s = string.gsub(s, "{(.-)}", ref)
+	s = string.gsub(s, "%[(.-)%]", ref)
+
+	return s
 end
 
 local function mapAlternate(file, pattern, substitute)
@@ -62,8 +60,9 @@ local function mapAlternate(file, pattern, substitute)
 	map("n", "<leader>pa", open, { buffer = true })
 end
 
--- Readline like bindings
-
+-------------------------------------------------------------------------------
+-- Readline like bindings                                                    --
+-------------------------------------------------------------------------------
 map("c", "<C-a>", "<Home>")
 map("c", "<C-b>", "<Left>")
 map("c", "<C-e>", "<End>")
@@ -74,16 +73,16 @@ map("c", "<M-b>", "<S-Left>")
 map("c", "<M-f>", "<S-Right>")
 map("c", "<C-BS>", "<c-w>")
 
--- Window height
--- map("n", "<down>", "<c-w>-")
--- map("n", "<up>", "<c-w>+")
-
 map("i", "<C-h>", vim.lsp.buf.signature_help)
-map("n", "-", ":Explore<cr>")
+
+map("n", "-", vim.cmd.Explore)
+
+map("n", "<C-s>", ":s/<c-r><c-w>//gc<left><left><left>")
 map("n", "<c-.>", vim.lsp.buf.code_action)
-map("n", "<c-\\>", vim.lsp.buf.format)
+map("n", "<c-\\>", function()
+	vim.lsp.buf.format({ async = true })
+end)
 map("n", "<c-s-o>", "<cmd>Telescope lsp_document_symbols<cr>")
-map("n", "<m-o>", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>")
 map("n", "<expr>", "<leader>* '<cmd>Rg!<space>'.expand('<cword>').'<cr>'")
 map("n", "<leader>/", "<cmd>Telescope live_grep<cr>")
 map("n", "<leader>;", ":Commentary<CR>")
@@ -98,20 +97,42 @@ map("n", "<leader>fr", "<cmd>Telescope oldfiles<CR>")
 map("n", "<leader>fyl", ":let @+=expand('%') . ':' . line('.')<cr>:let @*=@+<cr>")
 map("n", "<leader>fyp", ":let @+=expand('%:p')<cr>:let @*=@+<cr>")
 map("n", "<leader>fyt", ":let @+=expand('%:t')<cr>:let @*=@+<cr>")
-map("n", "<leader>fyy", ":let @+=expand('%')<cr>:let @*=@+<cr>")
-map("n", "<leader>fy~", ":let @+=expand('%:~')<cr>:let @*=@+<cr>")
+map("n", "<m-o>", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>")
+map("n", "gr", "<cmd>TroubleToggle lsp_references<CR>")
+map("v", "<C-s>", ":s/")
+
+-- Copy path to clipboard
+map("n", "<leader>fyy", function()
+	local path = vim.fn.expand("%:~")
+	vim.fn.setreg("@", path)
+	vim.fn.setreg("*", path)
+	vim.notify(path)
+end)
+
+-- map("n", "<leader>fy~", function ()
+-- 	local path = vim.fn.expand("%:~:.")
+-- 	vim.fn.setreg("@", path)
+-- 	vim.fn.setreg("*", path)
+-- 	vim.notify(path)
+-- end)
+
 map("n", "<leader>gb", "<cmd>Gitsigns blame_line<cr>")
+map("n", "<leader>hs", "<cmd>Gitsigns stage_hunk<cr>")
+map("n", "<leader>hr", "<cmd>Gitsigns reset_hunk<cr>")
+map("n", "<leader>hS", "<cmd>Gitsigns preview_hunk<cr>")
 map("n", "<leader>gla", "<cmd>Telescope git_commits<cr>")
 map("n", "<leader>glb", "<cmd>Telescope git_bcommits<cr>")
 map("n", "<leader>o", "<cmd>SymbolsOutline<cr>")
 map("n", "<leader>pm", ":Marks<cr>")
+map("n", "<leader>pq", ":KittyPaths<cr>")
+map("n", "<leader>pp", ":ProjectOpen<cr>")
 map("n", "<leader>tF", ":ZenMode<cr>")
-map("n", "<leader>tb", ":lua require('background').toggle()<cr>")
+map("n", "<leader>tb", ":lua require('user/background').toggle()<cr>", { silent = true })
 map("n", "<leader>tf", ":Twilight<cr>")
 map("n", "<leader>w", "<c-w>")
-map("n", "<leader>wd", ":q<cr>")
-map("n", "<leader>wn", ":tabe<cr>")
-map("n", "<leader>ww", ":Windows<cr>")
+map("n", "<leader>wd", vim.cmd.q)
+map("n", "<leader>wn", vim.cmd.tabe)
+map("n", "<leader>ww", vim.cmd.Windows)
 map("n", "<leader>zF", "zMzv")
 map("n", "<left>", "<c-w>=")
 map("n", "<space>D", vim.lsp.buf.type_definition)
@@ -122,25 +143,101 @@ map("n", "<space>q", "<cmd>TroubleToggle document_diagnostics<CR>")
 map("n", "<space>q", "<cmd>TroubleToggle workspace_diagnostics<CR>")
 map("n", "<space>rn", vim.lsp.buf.rename)
 map("n", "K", vim.lsp.buf.hover)
+map("n", "[c", "<cmd>Gitsigns prev_hunk<cr>")
+map("n", "]c", "<cmd>Gitsigns next_hunk<cr>")
 map("n", "[d", vim.diagnostic.goto_prev)
 map("n", "]d", vim.diagnostic.goto_next)
-map("n", "gD", vim.lsp.buf.declaration)
+map("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
 map("n", "gO", vim.lsp.buf.document_symbol)
-map("n", "gd", vim.lsp.buf.definition)
+map("n", "gd", vim.lsp.buf.definition, { desc = "go to definition" })
 map("n", "gi", vim.lsp.buf.implementation)
+map("n", "zR", require("ufo").openAllFolds)
+map("n", "zM", require("ufo").closeAllFolds)
 map("o", "<leader>;", ":Commentary<CR>")
+-------------------------------------------------------------------------------
+-- Terminal Mode                                                             --
+-------------------------------------------------------------------------------
 map("t", "<c-[>", "<c-\\><c-n>")
+-------------------------------------------------------------------------------
+-- Visual Mode                                                               --
+-------------------------------------------------------------------------------
 map("v", "<", "<gv")
 map("v", "<c-.>", vim.lsp.buf.range_code_action)
 map("v", "<leader>;", ":Commentary<CR>")
 map("v", ">", ">gv")
+
+---@return string[]
+local function get_selected_text()
+	local _, start_row, start_col, _ = unpack(vim.fn.getpos("v"))
+	local _, end_row, end_col, _ = unpack(vim.fn.getpos("."))
+
+	if start_row > end_row or (start_row == end_row and start_col > end_col) then
+		-- Swap start and end
+		start_row, start_col, end_row, end_col = end_row, end_col, start_row, start_col
+	end
+
+	start_row = start_row - 1
+	start_col = start_col - 1
+	end_row = end_row - 1
+
+	if vim.api.nvim_get_mode().mode == "V" then
+		start_col = 0
+		end_col = -1
+	end
+
+	return vim.api.nvim_buf_get_text(0, start_row, start_col, end_row, end_col, {})
+end
+
+local function set_normal_mode()
+	feedkeys("<esc>")
+end
+
+-- Search for visually selected text
+map("v", "*", function()
+	local lines = get_selected_text()
+	local text = vim.tbl_map(function(line)
+		return vim.fn.escape(line, "\\/")
+	end, lines)
+	text = table.concat(text, "\\n")
+	text = text:gsub(t("<tab>"), "\\t")
+	text = text:gsub("%s+", "\\s\\+")
+	vim.fn.setreg("/", "\\V" .. text)
+	set_normal_mode()
+	feedkeys("//")
+end)
+
+-- Search and replace visually selected text
+map("v", "<leader>s", function()
+	local lines = get_selected_text()
+	local text = vim.tbl_map(function(line)
+		return vim.fn.escape(line, "\\/")
+	end, lines)
+	text = table.concat(text, "\\n")
+	text = text:gsub(t("<tab>"), "\\t")
+	vim.fn.setreg("/", "\\V" .. text)
+	vim.fn.setreg("0", table.concat(lines, "\n"))
+	set_normal_mode()
+	feedkeys(":s///g<left><left>")
+end)
+
+map("v", "<leader>S", function()
+	local lines = get_selected_text()
+	local text = vim.tbl_map(function(line)
+		return vim.fn.escape(line, "\\/")
+	end, lines)
+	text = table.concat(text, "\\n")
+	text = text:gsub(t("<tab>"), "\\t")
+	vim.fn.setreg("/", "\\V" .. text)
+	vim.fn.setreg("0", table.concat(lines, "\n"))
+	set_normal_mode()
+	feedkeys(":%s///gc<left><left><left>")
+end)
+
 map("x", "@@", ":normal@@<cr>")
 
 map("n", "<space>Wl", function()
 	print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-end, opts)
-
-map("n", "gr", "<cmd>TroubleToggle lsp_references<CR>", opts)
+end)
 
 -- remap to open the Telescope refactoring menu in visual mode
 map("v", "<leader>rr", function()
@@ -198,7 +295,6 @@ register({
 		e = {
 			name = "Config files",
 			d = { "<cmd>e ~/.config/nvim/init.lua<cr>", "Open init.lua" },
-			c = { "<cmd>PackerCompile<cr>", "Packer compile" },
 			s = { "<cmd>luafile ~/.config/nvim/after/plugin/snippets.lua<cr>", "Reload snippets" },
 			m = { "<cmd>luafile ~/.config/nvim/after/plugin/keymaps.lua<cr>", "Reload keymaps" },
 			e = { "<cmd>e .envrc<cr>", "Open envrc" },
@@ -227,13 +323,6 @@ register({
 					return ts.find_files({ cwd = fn.stdpath("data") })
 				end,
 				"Vim data files",
-			},
-			p = {
-				name = "Packer",
-				i = { "<cmd>PackerInstall<cr>", "Packer install" },
-				s = { "<cmd>PackerStatus<cr>", "Packer status" },
-				C = { "<cmd>PackerClean<cr>", "Packer clean" },
-				c = { "<cmd>PackerCompile<cr>", "Packer compile" },
 			},
 		},
 		f = {
@@ -306,6 +395,12 @@ register({
 		s = { "<CMD>UltestSummary<CR>", "Summary" },
 		S = { "<CMD>UltestStop<CR>", "Stop" },
 		c = { "<CMD>UltestClear<CR>", "Clear" },
+		-- f = { function () require("neotest").run.run(vim.fn.expand("%:.")) end, "File" },
+		-- t = { function () require("neotest").run.run() end, "Nearest" },
+		-- o = { function () require("neotest").output.open() end, "Output" },
+		-- a = { function () require("neotest").run.attach() end, "Attach" },
+		-- s = { function () require("neotest").summary.toggle() end, "Summary" },
+		-- S = { function () require("neotest").run.stop() end, "Stop" },
 	},
 }, { prefix = "<leader>" })
 
@@ -324,6 +419,29 @@ local function keymap(opts)
 		callback = opts.callback,
 	})
 end
+
+local function altPair(globA, globB)
+	keymap({
+		pattern = { globA },
+		callback = function(args)
+			mapAlternate(args.file, glob2re(globA), glob2capture(globB))
+		end,
+	})
+
+	keymap({
+		pattern = { globB },
+		callback = function(args)
+			mapAlternate(args.file, glob2re(globB), glob2capture(globA))
+		end,
+	})
+end
+
+keymap({
+	pattern = { "*_spec.lua" },
+	callback = function(args)
+		map("n", "<leader>tt", "<plug>PlenaryTestFile", {})
+	end,
+})
 
 keymap({
 	pattern = { "*.lua" },
@@ -361,7 +479,7 @@ keymap({
 	end,
 })
 
--- Lua
+-- Racket
 keymap({
 	pattern = { "*.rkt" },
 	callback = function(args)
@@ -376,17 +494,5 @@ keymap({
 	end,
 })
 
--- Lua
-keymap({
-	pattern = { "src/*.hs" },
-	callback = function(args)
-		mapAlternate(args.file, globToRegex("src/*.hs"), globToCapture("test/Spec/*.hs"))
-	end,
-})
-
-keymap({
-	pattern = { "test/Spec/*.hs" },
-	callback = function(args)
-		mapAlternate(args.file, globToRegex("test/Spec/*.hs"), globToCapture("src/*.hs"))
-	end,
-})
+-- Haskell
+altPair("src/*.hs", "test/*Spec.hs")

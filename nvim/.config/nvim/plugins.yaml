@@ -1,0 +1,104 @@
+packages:
+  start:
+    # Indirect
+    - nvim-lua/plenary.nvim
+    - ryanoasis/vim-devicons
+    - kyazdani42/nvim-web-devicons
+
+    - bogado/file-line
+    - dkendal/gruvbox
+    - lewis6991/impatient.nvim
+    - folke/which-key.nvim
+    - L3MON4D3/LuaSnip
+
+    - pwntester/octo.nvim
+
+    # Debugging
+    - mfussenegger/nvim-dap
+
+    # Search
+    - { name: "junegunn/fzf", sh: "./install --all" }
+    - { name: "nvim-telescope/telescope-fzf-native.nvim", sh: "make" }
+    - nvim-telescope/telescope.nvim
+
+    # Tpope
+    - tpope/vim-abolish
+    - tpope/vim-commentary
+    - tpope/vim-eunuch
+    - tpope/vim-fugitive
+    - tpope/vim-repeat
+    - tpope/vim-rhubarb
+    - tpope/vim-rsi
+    - tpope/vim-scriptease
+    - tpope/vim-sleuth
+    - tpope/vim-speeddating
+    - tpope/vim-unimpaired
+    - tpope/vim-vinegar
+    - github/copilot.vim
+
+    # Treesitter
+    - nvim-treesitter/nvim-treesitter
+    - nvim-treesitter/nvim-treesitter-textobjects
+    - nvim-treesitter/playground
+    - rrethy/nvim-treesitter-textsubjects
+    - p00f/nvim-ts-rainbow
+
+    # LSP
+    - lsp-status.nvim
+    - neovim/nvim-lspconfig
+    - nvim-lua/lsp-status.nvim
+    - onsails/lspkind-nvim
+
+    # CMP
+    - hrsh7th/nvim-cmp
+    - saadparwaiz1/cmp_luasnip
+    - hrsh7th/cmp-buffer
+    - hrsh7th/cmp-calc
+    - hrsh7th/cmp-emoji
+    - hrsh7th/cmp-nvim-lsp
+    - hrsh7th/cmp-nvim-lua
+    - hrsh7th/cmp-path
+
+    - blankname/vim-fish
+    - bakpakin/fennel.vim
+    - earthly/earthly.vim
+    - elixir-editors/vim-elixir
+    - google/vim-jsonnet
+    - jamessan/vim-gnupg
+
+    - vim-test/vim-test
+
+    # rcarriga
+    - rcarriga/vim-ultest
+    - rcarriga/neotest
+    - rcarriga/neotest-vim-test
+    - antoinemadec/FixCursorHold.nvim
+    - rcarriga/nvim-notify
+
+    - KabbAmine/vCoolor.vim
+    - chrisbra/Colorizer
+    - artnez/vim-wipeout
+    - fgsch/vim-varnish
+    - glepnir/galaxyline.nvim
+    - godlygeek/tabular
+    - machakann/vim-sandwich
+    - pld-linux/vim-syntax-vcl
+    - rktjmp/lush.nvim
+    - simrat39/symbols-outline.nvim
+    - tweekmonster/startuptime.vim
+    - wlangstroth/vim-racket
+    - AndrewRadev/splitjoin.vim
+    - ThePrimeagen/refactoring.nvim
+    - chrisbra/NrrwRgn
+    - folke/trouble.nvim
+    - folke/twilight.nvim
+    - folke/zen-mode.nvim
+    - ggandor/lightspeed.nvim
+    - j-hui/fidget.nvim
+    - jose-elias-alvarez/null-ls.nvim
+    - junegunn/fzf.vim
+    - lewis6991/gitsigns.nvim
+    - lukas-reineke/indent-blankline.nvim
+    - mattn/emmet-vim
+    - mg979/vim-visual-multi
+    - jose-elias-alvarez/typescript.nvim

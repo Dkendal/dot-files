@@ -10,6 +10,7 @@ M.ft_opts = {
 	Earthfile = "-d shell",
 	yaml = "-d shell",
 	lua = "-d ada-box",
+	haskell = "-d ada-box",
 	fennel = "-d lisp",
 	elixir = "-d shell",
 }
@@ -68,8 +69,8 @@ function M.toggle()
 end
 
 function M.init()
-	vim.keymap.set("v", "<leader>ib", ":lua require('boxes').enable()<cr>", {})
-	vim.keymap.set("v", "<leader>iB", ":lua require('boxes').disable()<cr>", {})
+	vim.keymap.set("v", "<leader>ib", ":lua require('user/boxes').enable()<cr>", {})
+	vim.keymap.set("v", "<leader>iB", ":lua require('user/boxes').disable()<cr>", {})
 end
 
 M.init()

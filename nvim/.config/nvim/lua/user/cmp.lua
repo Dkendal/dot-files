@@ -6,15 +6,15 @@ local function format(_, vim_item)
 	return vim_item
 end
 
-local config = {
+cmp.setup({
 	snippet = {
 		expand = function(args)
 			require("luasnip").lsp_expand(args.body)
 		end,
 	},
 	window = {
-		-- completion = cmp.config.window.bordered(),
-		-- documentation = cmp.config.window.bordered(),
+		completion = cmp.config.window.bordered(),
+		documentation = cmp.config.window.bordered(),
 	},
 	mapping = {
 		["<C-y>"] = cmp.mapping.confirm({ select = true }),
@@ -32,12 +32,21 @@ local config = {
 		{ name = "nvim_lsp" },
 		{ name = "nvim_lua" },
 		{ name = "luasnip" },
+		{ name = "nvim_lsp_signature_help" },
 		{ name = "path" },
 		{ name = "emoji" },
-		{ name = "buffer" },
-		{ name = "calc" },
+		-- { name = "buffer" },
+		-- { name = "calc" },
 	},
-}
+})
+
+cmp.setup.cmdline("/", {
+	mapping = cmp.mapping.preset.cmdline(),
+	sources = {
+		{ name = "nvim_lsp_document_symbol" } ,
+		{ name = "buffer" } ,
+	},
+})
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline(":", {
@@ -48,5 +57,3 @@ cmp.setup.cmdline(":", {
 		{ name = "cmdline" },
 	}),
 })
-
-cmp.setup(config)
