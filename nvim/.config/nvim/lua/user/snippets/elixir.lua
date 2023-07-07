@@ -22,7 +22,37 @@ local fmta = require("luasnip.extras.fmt").fmta
 local types = require("luasnip.util.types")
 local conds = require("luasnip.extras.expand_conditions")
 
--- Javascript
 ls.add_snippets("elixir", {
-	parse("i", "IO.inspect($1)")
+	parse("i", "IO.inspect($1)", {}),
+	parse("<<", "<%= $0 %>", {}),
+	parse("<", "<% $0 %>", {}),
+	parse(
+		"<for",
+		[[
+			<%= for ${1:elem} <- ${2:enum} do %>
+				${0}
+			<% end %>
+		]],
+		{}
+	),
+	parse(
+		"<inputs_for",
+		[[
+			<div :for={${1:form} <- Phoenix.HTML.Form.inputs_for(${2:@form}, ${3:assoc})}>
+				<%= Phoenix.HTML.Form.hidden_inputs_for(${1:form}) %>
+
+				${0}
+			</div>
+		]],
+		{}
+	),
+	parse(
+		"<if",
+		[[
+			<%= if ${1:true} do %>
+				${0}
+			<% end %>
+		]],
+		{}
+	),
 }, { key = "elixir" })

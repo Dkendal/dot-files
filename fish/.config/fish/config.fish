@@ -1,38 +1,42 @@
-set -x BAT_THEME gruvbox-dark
-set -x GOPATH ~/src
-set -x NNN_USE_EDITOR 1
-set -x pure_color_mute yellow
-set -x DENO_INSTALL ~/.deno
-
-bass source /etc/profile.d/nix.sh
-
-fish_add_path ~/.local/bin
-fish_add_path ~/bin
-fish_add_path $GOPATH/bin
-fish_add_path ~/code/github.com/apenwarr/redo/bin
-fish_add_path ~/.fzf/bin
-fish_add_path ~/argbash/argbash-2.9.0/bin
-fish_add_path ~/.dprint/bin
-fish_add_path $DENO_INSTALL/bin
-fish_add_path ~/.fly/bin/flyctl
-
 set -x GPG_TTY (tty)
+
+function fish_safe_bass_source -a file
+  if test -r $file
+    bass source $file
+  end
+end
+
+function fish_user_init_env
+  set -gx GOPATH ~/src
+  set -gx NNN_USE_EDITOR 1
+  set -gx pure_color_mute yellow
+  set -gx DELTA_PAGER 'less -r'
+  set -gx EDITOR (command -v nvim)
+
+  fish_add_path ~/.local/bin
+  fish_add_path ~/bin
+  fish_add_path ~/.cargo/bin
+  fish_add_path /opt/homebrew/bin
+end
+
+function fish_set_lua_paths
+  set -xU LUA_PATH (luarocks path --lr-path)
+  set -xU LUA_CPATH (luarocks path --lr-cpath)
+end
 
 function fish_user_init_abbrs
   echo -n Setting abbreviations...
 
-  abbr -a -- cat bat
   abbr -a -- ci 'hub ci-status -v'
   abbr -a -- ci 'open (hub ci-status -v | cut -f3)'
   abbr -a -- cio 'open (hub ci-status -v | cut -f3)'
-  abbr -a -- ddus 'dev down; and dev up; and dev s'
   abbr -a -- dus 'dev up; and dev s'
   abbr -a -- g git
   abbr -a -- gC 'git commit --verbose --no-verify'
   abbr -a -- ga 'git add'
-  abbr -a -- gb 'git branch'
+  abbr -a -- gb 'git switch'
   abbr -a -- gbX 'git branch -D'
-  abbr -a -- gbc 'git checkout -b'
+  abbr -a -- gbc 'git switch -c'
   abbr -a -- gbx 'git branch -d'
   abbr -a -- gc 'git commit --verbose'
   abbr -a -- gcF 'git commit --verbose --amend'
@@ -41,24 +45,21 @@ function fish_user_init_abbrs
   abbr -a -- gco 'git checkout'
   abbr -a -- gdd 'git difftool --no-symlinks --dir-diff'
   abbr -a -- gff 'git pull --ff-only'
-  abbr -a -- gfr 'git pull --rebase'
+  abbr -a -- gfr 'git pull --rebase --autostash'
   abbr -a -- giA 'git add --patch'
   abbr -a -- giR 'git reset --patch'
   abbr -a -- gia 'git add'
   abbr -a -- gid 'git diff --cached'
   abbr -a -- gir 'git reset'
-  abbr -a -- glg 'git lg'
-  abbr -a -- glg 'git log --graph --oneline --boundary'
+  abbr -a -- glg 'git log --graph --oneline --boundary @{u}..@'
   abbr -a -- gmb 'git merge-base origin/master @'
   abbr -a -- gp 'git push'
   abbr -a -- gpf 'git push --force-with-lease'
   abbr -a -- gr 'git rebase'
   abbr -a -- gri 'git rebase -i'
   abbr -a -- gs 'git show'
-  # abbr -a -- gs 'git stash --keep-index --include-untracked'
-  abbr -a -- gS 'git stash'
+  abbr -a -- gS 'git stash push'
   abbr -a -- gsa 'git stash apply'
-  abbr -a -- gsp 'git stash pop'
   abbr -a -- gwd 'git diff'
   abbr -a -- gwip 'git add -A; and git commit --no-verify -m wip'
   abbr -a -- gws 'git status --short'
@@ -68,6 +69,9 @@ function fish_user_init_abbrs
   abbr -a -- td 'tmux attach -d -t'
   abbr -a -- yws 'yarn workspace'
   abbr -a stripansi "sed -E 's/\x1b\[[0-9;]*m//g'"
+
+  abbr -a n "nvim --listen ~/.cache/nvim/server.pipe"
+  abbr -a nr "nvim --server ~/.cache/nvim/server.pipe --remote"
 
   echo 'Done'
 end
@@ -86,26 +90,35 @@ function fish_user_key_bindings
   bind -M normal \co edit_command_buffer
 end
 
-if [ -d ~/.asdf ]
-  source ~/.asdf/asdf.fish
-  asdf exec direnv hook fish | source;
-  alias direnv 'asdf exec direnv'
+if type -fq rtx
+  rtx activate fish | source
 end
 
-if test -z "$LUA_PATH"
-  echo "setting LUA_PATH"
-  set -xU LUA_PATH (luarocks path --lr-path)
-  echo "setting LUA_CPATH"
-  set -xU LUA_CPATH (luarocks path --lr-cpath)
+if type -fq starship
+  starship init fish | source
 end
 
-if command --query zoxide
-  zoxide init fish | source
+# Lazy load zoxide
+function z
+  if type -fq zoxide
+    zoxide init fish | source
+  end
+  z $argv
 end
 
-if [ "$TERM" = "xterm-kitty" ]
+if type -fq direnv
+  direnv hook fish | source
+end
+
+if type -fq kitty
   kitty + complete setup fish | source
-  set -x KITTY_LISTEN_ON unix:@mykitty
+end
+
+if set -q KITTY_INSTALLATION_DIR
+  # Manual kitty shell integration
+  set --global KITTY_SHELL_INTEGRATION enabled
+  source "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_conf.d/kitty-shell-integration.fish"
+  set --prepend fish_complete_path "$KITTY_INSTALLATION_DIR/shell-integration/fish/vendor_completions.d"
 end
 
 if [ -n "$INSIDE_EMACS" ]
@@ -114,6 +127,11 @@ if [ -n "$INSIDE_EMACS" ]
   set EDITOR "emacsclient -n"
 end
 
-bass source '/snap/google-cloud-sdk/current/path.bash.inc'
+# Multi-user install
+# fish_safe_bass_source /etc/profile.d/nix.sh
+# Single-user install
+# fish_safe_bass_source $HOME/.nix-profile/etc/profile.d/nix.sh
+fish_safe_bass_source $HOME/.local/share/google-cloud-sdk/path.bash.inc
+fish_safe_bass_source $HOME/.ghcup/env
 
-source ("/usr/local/bin/starship" init fish --print-full-init | psub)
+fzf_key_bindings

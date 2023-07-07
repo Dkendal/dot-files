@@ -8,19 +8,22 @@ function rgi -w rg
 	set -l max 'x = ({2} + $FZF_PREVIEW_LINES / 2); y = $LINES; if (x > y) x else y'
 
 	set -l preview '
-		[ -z {1} ]
-		&& echo "n/a"
-		|| bat {1}
-			--map-syntax '$syntax_map'
-			--force-colorization
-			--paging never
-			--style snip
-			--highlight-line {2}
-			--line-range
-			$(echo "'$min'" | tr -d "\'" | bc):$(echo "'$max'" | tr -d "\'" | bc)
+		if [ -z {1} ]; then
+			echo "n/a"
+			exit 0
+		fi
+
+		bat {1} \\
+			--map-syntax '$syntax_map' \\
+			--force-colorization \\
+			--paging never \\
+			--style snip,header \\
+			--highlight-line {2} \\
+			--line-range \\
+			$(echo "'$min'" | tr -d "\'" | bc):$(echo "'$max'" | tr -d "\'" | bc);
 	'
 
-	set -l preview (string replace --all --regex '[\t\n]+' ' ' $preview)
+	# set -l preview (string replace --all --regex '[\t\n]+' ' ' $preview)
 
 	begin
 		if [ -n "$argv" ]
@@ -28,7 +31,7 @@ function rgi -w rg
 		else
 		  echo ''
 		end
-	end | fzf --disabled --query "$argv" --multi --ansi \
+	end | fzf --query "$argv" --multi --ansi \
 	--delimiter ':' \
 	--preview $preview \
 	--bind 'alt-a:toggle-all' \

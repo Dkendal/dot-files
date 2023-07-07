@@ -1,6 +1,6 @@
 [user]
 	email = dylankendal@gmail.com
-	name = Dylan Kendal
+	name = Dylan C. Kendal
 	signingkey = CD2E62F5AA5337F72F36F063620883772E7853CA
 
 [rerere]
@@ -10,40 +10,49 @@
 	editor = nvim
 	excludesfile = ~/.gitignore_global
 	autocrlf = false
-	; pager = diff-so-fancy | less --tabs=4 -RFX
 	pager = delta
 	commitGraph = true
 
 [delta]
 	features = side-by-side line-numbers decoration
+	navigate = true
+	hyperlinks = true
+
+[delta "clean"]
+	navigate = false
+	hyperlinks = false
+	line-numbers = false
 
 [pretty]
 	terse = %C(yellow)%h %C(green)(%ar) - %C(reset)%s %C(blue)[%an] %C(red)%d%C(reset)%n
 
 [alias]
-	sed ="!git grep -z --full-name -l '.' | xargs -0 sed"
-	b = branch --sort=committerdate -vv
+	b ="!git --no-pager branch --sort=committerdate -vv"
+        bb = "!git branch --sort -committerdate --color=always | fzf --ansi --no-sort --tiebreak=index --preview 'sha=$(echo {} | cut -b3-); git --no-pager range-diff --right-only --color=always main@{upstream}...$sha' --bind \"ctrl-u:preview-page-up,ctrl-d:preview-page-down\""
 	clean-branches="!git branch --merged | cut -c2- | xargs git branch -d"
-	p = push
-	ws = status --short
-	pf = push --force-with-lease
-	fr = pull --rebase
 	current-branch = rev-parse --abbrev-ref HEAD
+	d = "!git diff $(git forked-master)..@"
+	dw = "!git diff --word-diff $(git forked-master)..@"
 	forked-master = merge-base --fork-point origin/master @
+	fr = pull --rebase
+	ignore = "update-index --skip-worktree"
 	l = log --oneline
 	lG = log --graph --pretty=terse --all
 	ld = log $(git merge-base --fork-point origin/master @)..@ --pretty=terse
 	lg = log --pretty=terse
+	p = push
+	pf = push --force-with-lease
 	ri = rebase --interactive
 	rim ="!git rebase --interactive $(git forked-master)"
 	root = rev-parse --show-toplevel
+	sed ="!git grep -z --full-name -l '.' | xargs -0 sed"
 	ts ="!git commit -m \"$(whoami) | $(hostname) | $(date)\""
-	yolo = push --force-with-lease
-	d = "!git diff $(git forked-master)..@"
-	dw = "!git diff --word-diff $(git forked-master)..@"
-	wip = "!git add -A; and git commit --no-verify -m wip"
-	ignore = "update-index --skip-worktree"
 	unignore = "update-index --no-skip-worktree"
+	wip = "!git add -A; and git commit --no-verify -m wip"
+	ws = status --short
+	yolo = push --force-with-lease
+
+
 [color]
 	status = auto
 	ui = true
@@ -88,6 +97,5 @@
 	defaultBranch = main
 [pull]
 	ff = only
-[maintenance]
-	repo = /home/dylan/code/github.com/Dkendal/headlessapp.store
-	repo = /home/dylan/src/builder-internal/worktree/main
+[ghq]
+	root = ~/src/

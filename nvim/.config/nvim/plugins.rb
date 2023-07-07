@@ -19,7 +19,14 @@ def add(name:, kind:, sh: false, lockfile:)
   source = nil
 
   if ! File.exists?(path) then
-    `git clone https://github.com/#{name} #{path} --depth=1`
+    url =
+      if name =~ /^http/
+        name
+      else
+        "https://github.com/#{name}"
+      end
+
+    `git clone #{url} #{path} --depth=1`
 
     if old_sha
       Dir.chdir(path) { `git reset --hard #{old_sha}` }
@@ -38,7 +45,7 @@ def add(name:, kind:, sh: false, lockfile:)
   elsif old_sha
     sha = get_sha(path)
     if old_sha != sha
-      throw "#{name} doesn't match locked sha"
+      puts "WARN: #{name} doesn't match locked sha: #{old_sha} => #{sha}"
     end
   end
 

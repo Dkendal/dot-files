@@ -85,36 +85,36 @@ ls.add_snippets("javascript", {
 	s("l", fmt("let {} = ", i(1))),
 
 	-- Pipe
-	parse("|>", "pipe(${1:$TM_SELECTED_TEXT})"),
+	parse("|>", "pipe(${1:$TM_SELECTED_TEXT})", {}),
 
 	-- jest.beforeEach
-	parse("jbe", "beforeEach(() => {\n${TM_SELECTED_TEXT:$1}\n})"),
+	parse("jbe", "beforeEach(() => {\n${TM_SELECTED_TEXT:$1}\n})", {}),
 
 	-- jest.afterEach
-	parse("jae", "afterEach(() => {\n${TM_SELECTED_TEXT:$1}\n})"),
+	parse("jae", "afterEach(() => {\n${TM_SELECTED_TEXT:$1}\n})", {}),
 
 	-- jest.beforeAll
-	parse("jba", "beforeAll(() => {\n${TM_SELECTED_TEXT:$1}\n})"),
+	parse("jba", "beforeAll(() => {\n${TM_SELECTED_TEXT:$1}\n})", {}),
 
 	-- jest.afterAll
-	parse("jaa", "afterAll(() => {\n${TM_SELECTED_TEXT:$1}\n})"),
+	parse("jaa", "afterAll(() => {\n${TM_SELECTED_TEXT:$1}\n})", {}),
 
 	-- Typedoc
-	parse("@type", "/** @type {$1} */"),
-	parse("@const", "/** @const */"),
+	parse("@type", "/** @type {$1} */", {}),
+	parse("@const", "/** @const */", {}),
 
-	parse("de", [[require("debug").enable("${1:*}")]]),
-	parse("rd", [[const ${1:log} = require("debug")("${2:TM_FILENAME}");]]),
-	parse("cp", [[require("console-probe").probe(${1:$TM_SELECTED_TEXT})]]),
-	parse("ls", [[require("console-probe").ls(${1:$TM_SELECTED_TEXT})]]),
-	parse("ls", [[require("console-probe").yaml(${1:$TM_SELECTED_TEXT})]]),
-	parse("json", [[require("console-probe").json(${1:$TM_SELECTED_TEXT})]]),
-	parse("ifr", [[if ($1) return ${2:$TM_SELECTED_TEXT}]]),
+	parse("de", [[require("debug").enable("${1:*}")]], {}),
+	parse("rd", [[const ${1:log} = require("debug")("${2:TM_FILENAME}");]], {}),
+	parse("cp", [[require("console-probe").probe(${1:$TM_SELECTED_TEXT})]], {}),
+	parse("ls", [[require("console-probe").ls(${1:$TM_SELECTED_TEXT})]], {}),
+	parse("ls", [[require("console-probe").yaml(${1:$TM_SELECTED_TEXT})]], {}),
+	parse("json", [[require("console-probe").json(${1:$TM_SELECTED_TEXT})]], {}),
+	parse("ifr", [[if ($1) return ${2:$TM_SELECTED_TEXT}]], {}),
 
 	-- Fp-ts
-	parse("fmap", [[${1:E}.map(x => { ${2:return x} })]]),
-	parse("chain", [[${1:E}.chain(x => { ${2:return x} })]]),
-	parse("pt", [[x => { require("console-probe").ls(${1:x}); return x }]]),
+	parse("fmap", [[${1:E}.map(x => { ${2:return x} })]], {}),
+	parse("chain", [[${1:E}.chain(x => { ${2:return x} })]], {}),
+	parse("pt", [[x => { require("console-probe").ls(${1:x}); return x }]], {}),
 
 	-- Class
 	s(

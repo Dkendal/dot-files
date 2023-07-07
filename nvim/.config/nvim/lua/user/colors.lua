@@ -18,6 +18,7 @@ end
 
 function M.callback()
 	local Normal = get_hl("Normal", true)
+	local StatusLine = get_hl("StatusLine", true)
 	local SignColumn = get_hl("SignColumn", true)
 
 	local Normal__bg = tocolor(Normal.background)
@@ -42,25 +43,10 @@ function M.callback()
 	set_hl(0, "NormalFloat", { background = bg.hex })
 	set_hl(0, "FloatBorder", { background = bg.hex, foreground = fg })
 	set_hl(0, "LspDiagnosticsDefaultHint", { link = "GruvboxBg4" })
-	set_hl(0, "DiagnosticSignError", { background = SignColumn.background })
-	set_hl(0, "DiagnosticSignInfo", { background = SignColumn.background })
-	set_hl(0, "DiagnosticSignWarn", { background = SignColumn.background })
-	set_hl(0, "DiagnosticSignOther", { background = SignColumn.background })
-	set_hl(0, "DiagnosticSignHint", { background = SignColumn.background })
 
-	set_hl(0, "DiagnosticError", { foreground = Red.hex, background = bg.mix(Red, 20).saturation(100).darken(80).hex })
-	set_hl(
-		0,
-		"DiagnosticInfo",
-		{ foreground = LightBlue.hex, background = bg.mix(LightBlue, 20).saturation(100).darken(80).hex }
-	)
-	set_hl(
-		0,
-		"DiagnosticWarn",
-		{ foreground = Orange.hex, background = bg.mix(Orange, 20).saturation(100).darken(80).hex }
-	)
-	set_hl(0, "DiagnosticOther", {})
-	set_hl(0, "DiagnosticHint", { foreground = LightGrey.hex })
+	for _, name in ipairs({ "Error", "Info", "Warn", "Other", "Hint" }) do
+		set_hl(0, "DiagnosticSign" .. name, { background = SignColumn.background })
+	end
 
 	local function setDiffHl(from, color, dark, light)
 		dark = 80 + (dark or 0)
@@ -83,11 +69,43 @@ function M.callback()
 	setDiffHl("Change", "#FFFF00")
 	setDiffHl("Text", "#FFFF00", -5, -10)
 	setDiffHl("Delete", "#FF0000")
+
+	-- StatusLine
+	for _, conf in pairs(require("nvim-web-devicons").get_icons()) do
+		set_hl(0, string.format("StatusLineDevIcon%s", conf.name), {
+			foreground = conf.color,
+			background = StatusLine.foreground,
+		})
+	end
+
+	for _, name in
+		ipairs({
+			"DiagnosticHint",
+			"DiagnosticError",
+			"DiagnosticWarn",
+			"DiagnosticInfo",
+		})
+	do
+		local foreground = get_hl(name, true).foreground
+		set_hl(0, string.format("StatusLine%s", name), {
+			foreground = foreground,
+			background = StatusLine.foreground,
+		})
+	end
+
+	for _, value in ipairs({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }) do
+		set_hl(0, string.format("StatusLine%s", value), {
+			foreground = tocolor(StatusLine.background).darken(value * 10).hex,
+			background = tocolor(StatusLine.foreground).darken(value * 10).hex,
+		})
+	end
 end
 
 function M.init()
 	vim.g.gruvbox_contrast_dark = "hard"
-	vim.cmd.colorscheme "gruvbox"
+	vim.cmd.colorscheme("gruvbox")
+
+	M.callback()
 
 	autocmd("Colorscheme", {
 		group = group,

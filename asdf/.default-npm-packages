@@ -3,3 +3,6 @@ prettier
 typescript
 yarn
 import-sort-cli
+typescript-language-server
+vscode-json-languageserver
+yaml-language-server

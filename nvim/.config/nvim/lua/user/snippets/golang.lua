@@ -23,8 +23,8 @@ local types = require("luasnip.util.types")
 local conds = require("luasnip.extras.expand_conditions")
 
 ls.add_snippets("go", {
-	parse("pf", 'fmt.Printf("$1")'),
-	parse("pl", 'fmt.Println("$1")'),
-	parse("pp", 'fmt.Printf("%+v\\n", $1)'),
-	parse("f", "func $1($2) $3 {\n $4\n }"),
+	parse("pf", 'fmt.Printf("$1")', {}),
+	parse("pl", 'fmt.Println("$1")', {}),
+	parse("pp", 'fmt.Printf("%+v\\n", $1)', {}),
+	parse("f", "func $1($2) $3 {\n $4\n }", {}),
 }, { key = "go" })

@@ -22,9 +22,17 @@ local fmta = require("luasnip.extras.fmt").fmta
 local types = require("luasnip.util.types")
 local conds = require("luasnip.extras.expand_conditions")
 
-require "user/snippets/javascript"
-require "user/snippets/elixir"
-require "user/snippets/golang"
+for _, lang in ipairs({
+	"typescript",
+	"javascript",
+	"elixir",
+	"heex",
+	"golang",
+	"lua",
+	"rust",
+}) do
+	require("user/snippets/" .. lang)
+end
 
 local function camel_case(txt)
 	txt = string.gsub(txt, "^(%u)", function(char)
@@ -128,7 +136,7 @@ ls.add_snippets("haskell", {
 				describe "does the thing" $ do
 				  {}
 			]],
-			{i(0)}
+			{ i(0) }
 		)
 	),
 	s(
@@ -142,84 +150,5 @@ ls.add_snippets("haskell", {
 		)
 	),
 }, { key = "haskell" })
-
-ls.add_snippets("lua", {
-	-- Local
-	s("l", fmt("local {} = {}", { i(1), i(2) })),
-	-- Pipe
-	parse("|>", "pipe(${TM_SELECTED_TEXT:$1})"),
-	-- Local assignment
-	s(
-		"la",
-		fmt("local {} = {}", {
-			f(function(args)
-				local txt = args[1][1]
-				local tokens = vim.split(txt, ".", { plain = true })
-				local var_name = tokens[#tokens]
-				if #var_name > 0 then
-					return var_name
-				end
-				return args[1]
-			end, { 1 }),
-			i(1),
-		})
-	),
-	-- Return
-	s("r", t("return ")),
-	-- Require
-	s(
-		"req",
-		fmt('local {} = require("{}")', {
-			f(function(args)
-				local txt = args[1][1]
-				local tokens = vim.split(txt, ".", { plain = true })
-				local var_name = tokens[#tokens]
-				if #var_name > 0 then
-					return var_name
-				end
-				return args[1]
-			end, { 1 }),
-			i(1),
-		})
-	),
-	-- Function
-	s(
-		"f",
-		fmt(
-			[[
-			function {}({})
-				{}
-			end
-			]],
-			{ i(1), i(2), i(0) }
-		)
-	),
-	-- Local function
-	s(
-		"lf",
-		fmt(
-			[[
-			local function {}({})
-				{}
-			end
-			]],
-			{ i(1), i(2), i(0) }
-		)
-	),
-	parse("p", "vim.pretty_print($1)"),
-	parse("pp", "vim.notify(vim.inspect($1))"),
-	-- Pcall
-	s(
-		"pcall",
-		fmt(
-			[[
-			pcall(function ()
-				{}
-			end)
-			]],
-			{ i(0) }
-		)
-	),
-}, { key = "lua" })
 
 ls.filetype_extend("lua", { "c" })

@@ -1,3 +1,5 @@
-function http_server -d "Start a simple webserver";
-    ruby -rwebrick -e'WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => Dir.pwd).start'
+function http_server -d "Start a simple webserver" -a port;
+	set -l port (expr "$port" \| "8000")
+
+	ruby -run -ehttpd . -p "$port"
 end

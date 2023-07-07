@@ -22,5 +22,4 @@ local fmta = require("luasnip.extras.fmt").fmta
 local types = require("luasnip.util.types")
 local conds = require("luasnip.extras.expand_conditions")
 
--- Javascript
-ls.add_snippets("elixir", {}, { key = "elixir" })
+ls.add_snippets("lang", {}, { key = "lang" })

@@ -155,11 +155,14 @@
    'org-babel-load-languages
    '((dot . t)
      (sql . t)
+     (ruby . t)
      (shell . t)))
 
   (require 'ol)
 
   (org-link-set-parameters "gh" :follow #'my/org-github-follow)
+  (org-link-set-parameters "builder" :follow #'my/org-builder-follow)
+  (org-link-set-parameters "google-drive" :follow #'my/org-builder-follow)
   ;; (org-link-set-parameters "jira" :follow #'my/org-jira-follow)
   )
 
@@ -204,6 +207,10 @@
   :custom
   (org-roam-directory "~/notes")
   (org-roam-index-file "~/notes/index.org")
+  (org-roam-file-exclude-regexp ".*/\.st.*/.*")
+  (org-roam-node-display-template
+   (concat "${title:*} "
+           (propertize "${tags:10}" 'face 'org-tag)))
 
   (org-roam-dailies-capture-templates
    '(("d" "default" entry
@@ -274,6 +281,10 @@
   (org-jira-custom-jqls
    '((:jql "assignee = currentUser() AND NOT status in (CLOSED, DONE) order by updated DESC"
            :filename "my-work"))))
+
+(use-package desktop
+  :config
+  (desktop-save-mode 1))
 
 (use-package company-emoji
   :ensure t
@@ -517,6 +528,13 @@
   (let ((url (concat "https://github.com/" term)))
     (browse-url url))) 
 
+(defun my/org-builder-follow (term _)
+  ;; "Open a link to a builder entry"
+  ;; ;; (pcase (split-string term "/")
+  ;; ;;     )
+  (let ((url (concat "https://builder.io/" term)))
+    (browse-url url))) 
+
 
 
 ;;; Hooks
@@ -623,7 +641,7 @@
 
 ;;; Faces
 (set-face-attribute 'default nil :height global-face-height)
-(set-face-attribute 'default nil :font "Input Mono")
+(set-face-attribute 'default nil :font "Cascadia Code")
 
 ;;;; OS window UI
 (cond
@@ -690,8 +708,11 @@
   "C--" 'my/dec-global-face-height
   "C-=" 'my/reset-global-face-height
   "C-u" 'evil-scroll-page-up
+  "C-\\" 'my/indent-buffer
   "M-/" 'swiper-thing-at-point
   "M-u" 'universal-argument
+  "C-i" 'evil-jump-forward
+  "C-o" 'evil-jump-backward
   "SPC ;" 'evil-commentary-line
   "SPC C c" 'org-capture
   "SPC m g" 'magit-status
@@ -700,6 +721,15 @@
   "] b" 'evil-next-buffer
   "] e" 'move-line-down
   "g O" 'counsel-outline
+
+  "SPC n i" 'org-roam-jump-to-index
+  "SPC n c" 'org-roam-capture
+  "SPC n D" 'org-roam-db-sync
+  "SPC n f" 'org-roam-node-find
+  "SPC n d d" 'org-roam-dailies-find-date
+  "SPC n d t" 'org-roam-dailies-find-today
+  "SPC n d T" 'org-roam-dailies-find-tomorrow
+  "SPC n d y" 'org-roam-dailies-find-yesterday
   ;;
   )
 
@@ -733,8 +763,13 @@
 ;; reference: https://www.spacemacs.org/layers/+emacs/org/README.html#org
 (nmap
   'org-mode-map
+  ;; Evil mode bindings
+  "C-i" 'evil-jump-forward
+  "C-o" 'evil-jump-backward
+
   "SPC m :" 'org-set-tags-command
   "SPC m A" 'org-archive-subtree
+  "SPC m r" 'org-redisplay-inline-images
   "SPC m P" 'org-set-property
   "SPC m ^" 'org-sort
   "SPC m b" org-babel-map
@@ -747,6 +782,7 @@
   "SPC m s" 'org-sort
   "SPC m t i" 'org-toggle-inline-images
   "SPC m t l" 'org-toggle-link-display
+  "SPC m t c" 'org-toggle-checkbox
   "SPC m R" 'org-refile
   "SPC m y" 'org-store-link
 
@@ -790,7 +826,7 @@
   ;; Org roam
   "SPC n :" 'org-roam-tag-add
   "SPC n ;" 'org-roam-tag-delete
-  "SPC n I" 'org-roam-insert-immediate
+  "SPC n I" 'org-roam-node-immediate
   "SPC n g" 'org-roam-graph
   "SPC n i" 'org-roam-insert
   "SPC n l" 'org-roam
@@ -807,7 +843,7 @@
   )
 
 (imap 'org-mode-map
-  "M-i" 'org-roam-insert)
+  "M-i" 'org-roam-node-insert)
 
 ;;;; Org-agenda-mode
 (general-define-key
@@ -827,15 +863,7 @@
 ;;;; Org-Roam
 (nmap 'org-roam-mode-map
   "[ f" 'org-roam-dailies-find-previous-note
-  "] f" 'org-roam-dailies-find-next-note
-  "SPC n i" 'org-roam-jump-to-index
-  "SPC n c" 'org-roam-capture
-  "SPC n D" 'org-roam-db-build-cache
-  "SPC n f" 'org-roam-find-file
-  "SPC n d d" 'org-roam-dailies-find-date
-  "SPC n d t" 'org-roam-dailies-find-today
-  "SPC n d T" 'org-roam-dailies-find-tomorrow
-  "SPC n d y" 'org-roam-dailies-find-yesterday)
+  "] f" 'org-roam-dailies-find-next-note)
 
 
 ;;;; Text formatting
@@ -960,7 +988,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(org-agenda-files
-   '("~/notes/gtd.org" "~/notes/tickler.org" "~/notes/someday.org" "~/notes/20210224170635-builder_documentation_list.org" "~/notes/20210507143046-builder_on_call.org" "~/.org-jira/my-work.org" "~/notes/20210215102829-builder_io.org" "~/notes/20210225223856-jsx_lite.org" "~/notes/index.org" "~/notes/20210225183538-headless_app_store.org"))
+   '("/home/dylan/notes/someday.org" "/home/dylan/notes/gtd.org" "/home/dylan/notes/tickler.org" "/home/dylan/.org-jira/my-work.org" "/home/dylan/notes/index.org"))
  '(org-log-into-drawer t)
  '(org-src-lang-modes
    '(("C" . c)
@@ -998,9 +1026,9 @@
 "
        ("\\section{%s}" "" "\\section*{%s}" "")
        ("%s \\begin{entrydesc}"
-	(\, "\\end{entrydesc}")
-	(\, "%s \\begin{entrydesc}")
-	(\, "\\end{entrydesc}"))
+        (\, "\\end{entrydesc}")
+        (\, "%s \\begin{entrydesc}")
+        (\, "\\end{entrydesc}"))
        ("\\subsubsection{%s}" "" "\\subsubsection{%s}" "")
        ("\\paragraph{%s}" . "\\paragraph*{%s}")
        ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
@@ -1011,9 +1039,9 @@
 "
        ("\\section{%s}" "" "\\section*{%s}" "")
        ("%s egin{entrydesc}"
-	(\, "nd{entrydesc}")
-	(\, "%s egin{entrydesc}")
-	(\, "nd{entrydesc}"))
+        (\, "nd{entrydesc}")
+        (\, "%s egin{entrydesc}")
+        (\, "nd{entrydesc}"))
        ("\\subsubsection{%s}" "" "\\subsubsection{%s}" "")
        ("\\paragraph{%s}" . "\\paragraph*{%s}")
        ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
@@ -1125,12 +1153,12 @@
        ("\\subsection{%s}" . "\\subsection*{%s}")
        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
      (org-todo-keywords quote
-			((sequence "TODO" "BLOCKED" "DONE")))
+                        ((sequence "TODO" "BLOCKED" "DONE")))
      (org-download-image-dir . "./images"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t nil))))
+ '(default ((t (:inherit nil :extend nil :stipple nil :background "#282828" :foreground "#fdf4c1" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 128 :width normal :foundry "SAJA" :family "Cascadia Code")))))
 (put 'narrow-to-region 'disabled nil)

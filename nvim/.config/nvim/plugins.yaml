@@ -5,8 +5,10 @@ packages:
     - ryanoasis/vim-devicons
     - kyazdani42/nvim-web-devicons
 
-    - bogado/file-line
     - dkendal/gruvbox
+    - catppuccin/nvim
+
+    - bogado/file-line
     - lewis6991/impatient.nvim
     - folke/which-key.nvim
     - L3MON4D3/LuaSnip
@@ -48,6 +50,7 @@ packages:
     - neovim/nvim-lspconfig
     - nvim-lua/lsp-status.nvim
     - onsails/lspkind-nvim
+    - jose-elias-alvarez/null-ls.nvim
 
     # CMP
     - hrsh7th/nvim-cmp
@@ -59,14 +62,23 @@ packages:
     - hrsh7th/cmp-nvim-lua
     - hrsh7th/cmp-path
 
+    # Lang
     - blankname/vim-fish
     - bakpakin/fennel.vim
     - earthly/earthly.vim
     - elixir-editors/vim-elixir
     - google/vim-jsonnet
+    - wlangstroth/vim-racket
+    - jose-elias-alvarez/typescript.nvim
+    - pld-linux/vim-syntax-vcl
+
     - jamessan/vim-gnupg
 
     - vim-test/vim-test
+
+    - folke/trouble.nvim
+    - folke/twilight.nvim
+    - folke/zen-mode.nvim
 
     # rcarriga
     - rcarriga/vim-ultest
@@ -82,23 +94,24 @@ packages:
     - glepnir/galaxyline.nvim
     - godlygeek/tabular
     - machakann/vim-sandwich
-    - pld-linux/vim-syntax-vcl
     - rktjmp/lush.nvim
     - simrat39/symbols-outline.nvim
     - tweekmonster/startuptime.vim
-    - wlangstroth/vim-racket
     - AndrewRadev/splitjoin.vim
     - ThePrimeagen/refactoring.nvim
     - chrisbra/NrrwRgn
-    - folke/trouble.nvim
-    - folke/twilight.nvim
-    - folke/zen-mode.nvim
-    - ggandor/lightspeed.nvim
+
     - j-hui/fidget.nvim
-    - jose-elias-alvarez/null-ls.nvim
+    - ggandor/lightspeed.nvim
     - junegunn/fzf.vim
+
     - lewis6991/gitsigns.nvim
     - lukas-reineke/indent-blankline.nvim
+
     - mattn/emmet-vim
+
     - mg979/vim-visual-multi
-    - jose-elias-alvarez/typescript.nvim
+
+    - luukvbaal/stabilize.nvim
+
+    - anuvyklack/hydra.nvim

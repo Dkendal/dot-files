@@ -3,9 +3,7 @@ require("neodev").setup({})
 local lspconfig = require("lspconfig")
 local lsp_status = require("lsp-status")
 
-vim.diagnostic.config({
-	virtual_text = false,
-})
+vim.diagnostic.config({ virtual_text = false })
 
 require("user.lsp.completion_icons").setup()
 require("user.lsp.floating_window_decoration").setup()
@@ -29,7 +27,7 @@ local function mk_capabilities()
 	return t
 end
 
--- vim.lsp.set_log_level(1)
+vim.lsp.set_log_level(2)
 
 lsp_status.config({
 	indicator_errors = "",
@@ -46,10 +44,9 @@ lsp_status.register_progress()
 -- after the language server attaches to the current buffer
 local on_attach = function(client, opts)
 	lsp_status.on_attach(client)
-	-- require("lsp-inlayhints").on_attach(client, opts)
 
 	if client.name == "tsserver" then
-		client.server_capabilities.document_formatting = false -- 0.7 and earlier
+		client.server_capabilities.document_formatting = false      -- 0.7 and earlier
 		client.server_capabilities.documentFormattingProvider = false -- 0.8 and later
 	end
 end
@@ -65,8 +62,13 @@ local opts = {
 	capabilities = capabilities,
 }
 
+lspconfig.denols.setup(assign(opts, {
+	root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
+}))
+
 lspconfig.tsserver.setup(assign(opts, {
 	verbose = true,
+	root_dir = lspconfig.util.root_pattern("package.json"),
 	settings = {
 		typescript = {
 			inlayHints = {
@@ -83,6 +85,37 @@ lspconfig.tsserver.setup(assign(opts, {
 			},
 		},
 	},
+	commands = {
+		RenameFile = {
+			function()
+				local old_name = vim.api.nvim_buf_get_name(0)
+
+				vim.ui.input({
+					prompt = "New name: ",
+					default = old_name,
+				}, function(name)
+					if name then
+						vim.lsp.buf.execute_command({
+							command = "_typescript.applyRenameFile",
+							arguments = { { sourceUri = old_name, targetUri = name } },
+							title = "",
+						})
+					end
+				end)
+			end,
+			description = "Organize Imports",
+		},
+		OrganizeImports = {
+			function()
+				vim.lsp.buf.execute_command({
+					command = "_typescript.organizeImports",
+					arguments = { vim.api.nvim_buf_get_name(0) },
+					title = "",
+				})
+			end,
+			description = "Organize Imports",
+		},
+	},
 	flags = { debounce_text_changes = 500 },
 }))
 
@@ -94,6 +127,8 @@ lspconfig.racket_langserver.setup({
 	single_file_support = true,
 })
 
+lspconfig.svelte.setup(assign(opts, {}))
+
 lspconfig.pyright.setup(assign(opts, {
 	cmd = {
 		"/home/dylan/.asdf/installs/nodejs/16.4.2/bin/node",
@@ -103,11 +138,6 @@ lspconfig.pyright.setup(assign(opts, {
 }))
 
 lspconfig.jsonls.setup(assign(opts, {
-	cmd = {
-		"/home/dylan/.asdf/installs/nodejs/16.4.2/bin/node",
-		"/home/dylan/.asdf/installs/nodejs/16.4.2/.npm/bin/vscode-json-language-server",
-		"--stdio",
-	},
 	settings = {
 		json = {
 			schemas = {
@@ -143,12 +173,25 @@ lspconfig.jsonls.setup(assign(opts, {
 					fileMatch = { ".github/workflows/*.yaml", ".github/workflows/*.yml" },
 					url = "https://json.schemastore.org/github-workflow.json",
 				},
+				{
+					fileMatch = {
+						".github/workflows/actions/action.yaml",
+						".github/workflows/actions/action.yml",
+					},
+					url = "https://json.schemastore.org/github-action.json",
+				},
 			},
 		},
 	},
 }))
 
-lspconfig.yamlls.setup(assign(opts, {}))
+lspconfig.yamlls.setup(assign(opts, {
+	settings = {
+		yaml = {
+			keyOrdering = false,
+		},
+	},
+}))
 
 lspconfig.gopls.setup(assign(opts, {}))
 
@@ -158,7 +201,7 @@ local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
-lspconfig.sumneko_lua.setup({
+lspconfig.lua_ls.setup({
 	settings = {
 		Lua = {
 			runtime = {
@@ -175,7 +218,6 @@ lspconfig.sumneko_lua.setup({
 				-- Make the server aware of Neovim runtime files
 				library = vim.api.nvim_get_runtime_file("", true),
 			},
-			-- Do not send telemetry data containing a randomized but unique identifier
 			telemetry = {
 				enable = false,
 			},
@@ -300,14 +342,68 @@ lspconfig.hls.setup(assign(opts, {
 	},
 }))
 
+-- Ruby
+lspconfig.ruby_ls.setup(assign(opts, {}))
+
+lspconfig.sorbet.setup(assign(opts, {}))
+
+lspconfig.standardrb.setup(assign(opts, {}))
+
 lspconfig.clangd.setup(assign(opts, {}))
 
+-- Markdown
 lspconfig.marksman.setup(assign(opts, {}))
 
+-- Elixir
 lspconfig.elixirls.setup(assign(opts, {
-	cmd = { "/home/dylan/.elixir-ls/release/language_server.sh" },
+	cmd = { "elixir-ls" },
 }))
 
+-- HTML
+
+lspconfig.tailwindcss.setup({
+	init_options = {
+		userLanguages = {
+			elixir = "phoenix-heex",
+			eruby = "erb",
+			heex = "phoenix-heex",
+			svelte = "html",
+		},
+	},
+	settings = {
+		includeLanguages = {
+			typescript = "javascript",
+			typescriptreact = "javascript",
+			["html-eex"] = "html",
+			["phoenix-heex"] = "html",
+			heex = "html",
+			eelixir = "html",
+			elm = "html",
+			erb = "html",
+			svelte = "html",
+		},
+		tailwindCSS = {
+			experimental = {
+				classRegex = {
+					[[class= "([^"]*)]],
+					[[class: "([^"]*)]],
+					'~H""".*class="([^"]*)".*"""',
+				},
+			},
+		},
+	},
+})
+
+lspconfig.emmet_ls.setup(assign(opts, {
+	filetypes = { "html", "heex", "typescriptreact" },
+}))
+
+-- Nix
+lspconfig.nil_ls.setup(assign(opts, {}))
+
+lspconfig.rnix.setup(assign(opts, {}))
+
+-- Null-LS
 local null_ls = require("null-ls")
 
 local h = require("null-ls.helpers")
@@ -338,43 +434,58 @@ local dprint = {
 	}),
 }
 
+local pg_format = {
+	name = "pg_format",
+	method = null_ls.methods.FORMATTING,
+	filetypes = { "sql" },
+	generator = h.formatter_factory({
+		command = "pg_format",
+		args = {
+			"--key-newline",
+			"--comma-start",
+			"--comma-break",
+			"--keyword-case=1",
+			"--keyword-case=1",
+			"--type-case=1",
+			"--function-case=1",
+			"--wrap-after=120",
+		},
+		to_stdin = true,
+	}),
+}
+
+local sqlfmt = {
+	name = "sqlfmt",
+	method = null_ls.methods.FORMATTING,
+	filetypes = { "sql" },
+	generator = h.formatter_factory({
+		command = "sqlfmt",
+		args = {
+			"--no-simplify",
+			"--casemode=lower",
+		},
+		to_stdin = true,
+	}),
+}
+
 null_ls.setup({
 	root_dir = require("null-ls.utils").root_pattern(".git", "package.json"),
 	debug = true,
 	sources = {
-		-- null_ls.builtins.completion.spell,
-
-		-- null_ls.builtins.diagnostics.codespell,
-
-		-- null_ls.builtins.diagnostics.alex,
-		-- null_ls.builtins.diagnostics.proselint,
 		null_ls.builtins.diagnostics.shellcheck,
 		null_ls.builtins.diagnostics.fish,
+		-- null_ls.builtins.diagnostics.sqlfluff.with({ extra_args = { "--dialect", "postgres" } }),
+		-- pg_format,
+		sqlfmt,
+		require("nvim-kitty").diagnostics,
 		null_ls.builtins.diagnostics.luacheck.with({ extra_args = { "--globals", "vim" } }),
-
-		-- null_ls.builtins.diagnostics.eslint_d.with({
-		-- 	deboune = 1000,
-		-- }),
-
-		-- null_ls.builtins.code_actions.gitrebase,
-		-- null_ls.builtins.code_actions.gitsigns,
-		null_ls.builtins.code_actions.refactoring,
-
-		-- null_ls.builtins.formatting.raco_fmt,
 		null_ls.builtins.formatting.shellharden,
 		null_ls.builtins.formatting.shfmt,
+		null_ls.builtins.formatting.mix,
 		null_ls.builtins.formatting.stylua,
 		null_ls.builtins.formatting.fixjson,
-
-		null_ls.builtins.formatting.pg_format,
-		-- null_ls.builtins.formatting.sqlfluff.with({
-		-- 	extra_args = { "--dialect", "bigquery" },
-		-- }),
-
-		-- dprint,
 		null_ls.builtins.formatting.prettier.with({
 			only_local = "node_modules/.bin",
 		}),
-		-- null_ls.builtins.formatting.prettier_d_slim,
 	},
 })

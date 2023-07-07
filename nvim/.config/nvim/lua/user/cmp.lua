@@ -18,11 +18,12 @@ cmp.setup({
 	},
 	mapping = {
 		["<C-y>"] = cmp.mapping.confirm({ select = true }),
+		["<C-return>"] = cmp.mapping.confirm({ select = true }),
 		["<C-g>"] = cmp.mapping.abort(),
 		["<C-c>"] = cmp.mapping.abort(),
 		["<C-n>"] = cmp.mapping.select_next_item(),
 		["<C-p>"] = cmp.mapping.select_prev_item(),
-		["<C-Space>"] = cmp.mapping.complete(),
+		["<C-Space>"] = cmp.mapping.complete({}),
 		["<C-d>"] = cmp.mapping.scroll_docs(-4),
 		["<C-u>"] = cmp.mapping.scroll_docs(4),
 		["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
@@ -38,22 +39,4 @@ cmp.setup({
 		-- { name = "buffer" },
 		-- { name = "calc" },
 	},
-})
-
-cmp.setup.cmdline("/", {
-	mapping = cmp.mapping.preset.cmdline(),
-	sources = {
-		{ name = "nvim_lsp_document_symbol" } ,
-		{ name = "buffer" } ,
-	},
-})
-
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline(":", {
-	mapping = cmp.mapping.preset.cmdline(),
-	sources = cmp.config.sources({
-		{ name = "path" },
-	}, {
-		{ name = "cmdline" },
-	}),
 })

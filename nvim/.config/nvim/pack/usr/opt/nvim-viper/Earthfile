@@ -1,6 +1,0 @@
-VERSION 0.6
-
-tup:
-  FROM alpine:latest
-  GIT CLONE https://github.com/gittup/tup.git /tup
-  RUN cd tup && ./bootstrap.sh

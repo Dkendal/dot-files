@@ -1,4 +1,35 @@
-#!/home/dylan/.asdf/installs/ruby/3.0.0/bin/ruby
+#!/usr/bin/env ruby
+
+# Script to resize the current window to the center of the screen
+# and remove any maximization flags.
+# The script should toggle between three different sizes, but all are centered.
+@state_dir = File.expand_path("~/.local/share/wm-center")
+@state_path = File.join(@state_dir, "state")
+
+def resize_win(x:, y:, width:, height:)
+  `wmctrl -r :ACTIVE: -b remove,maximized_horz && wmctrl -r :ACTIVE: -b remove,maximized_vert && wmctrl -r :ACTIVE: -e 1,#{x},#{y},#{width},#{height}`
+end
+
+def get_window_geometry
+  # Output:
+  # WINDOW=31457312
+  # X=998
+  # Y=120
+  # WIDTH=2064
+  # HEIGHT=1224
+  # SCREEN=0
+  out = `xdotool getwindowfocus getwindowgeometry --shell`
+  out = out.split("\n")
+  out = out.map { |o| o.split("=") }
+  # convert keys to lowercase symbols
+  # convert values to integers
+  out = out.map { |o| [o[0].downcase.to_sym, o[1].to_i] }
+  # convert to hash
+  out = out.to_h
+  out.delete(:window)
+  out.delete(:screen)
+  out
+end
 
 NORTH_WEST = 1
 NORTH = 2
@@ -11,39 +42,87 @@ SOUTH = 8
 SOUTH_EAST = 9
 STATIC = 10
 
-displays = `wmctrl -d`
-displays = displays.split("\n")
-displays = displays.map { |d| d.split(/\s+/) }
+def get_new_geometry(gw, gh, x_co, y_co)
+  center_x = gw / 2
+  center_y = gh / 2
 
-current = displays.find do |display|
-  case display
-  in [String, "*", *rest]
-    true
+  x = (center_x - (gw * x_co) / 2).to_i
+  width = (gw * x_co).to_i
+
+  y = (center_y - (gh * y_co) / 2).to_i
+  height = (gh * y_co).to_i
+
+  return {x:, y:, width:, height:}
+end
+
+def coeffients(state)
+  case state
+  when 0
+    return 0.5, 0.8
+  when 1
+    return 0.5, 1
   else
-    false
+    return 0.7, 1
   end
 end
 
-case current
-  in [_, "*", "DG:", _, "VP:", _, "WA:", _, geometry, *rest]
-  gw, gh = geometry.split("x")
-  gw = gw.to_i
-  gh = gh.to_i
+# Write state to a file at $HOME/.local/share/wm-center/state
+def set_state(state)
+  Dir.mkdir(@state_dir) unless Dir.exist?(@state_dir)
 
-  n = 5
-
-  w = gw / 2
-  h = gh / 2
-
-  x = gw / n
-  x2 = (gw / n) * (n - 2)
-
-  # Maximize vert instead
-  y = 0
-  y2 = gh
-
-  # y = gh / n
-  # y2 = (gh / n) * (n - 2)
-
-  _ = `wmctrl -r :ACTIVE: -b remove,maximized_horz && wmctrl -r :ACTIVE: -b remove,maximized_vert && wmctrl -r :ACTIVE: -e 1,#{x},#{y},#{x2},#{y2}`
+  File.open(@state_path, "w") do |f|
+    f.write(state)
+  end
 end
+
+def get_state()
+  Dir.mkdir(@state_dir) unless Dir.exist?(@state_dir)
+
+  if File.exist?(@state_path) then
+    File.open(@state_path, "r") do |f|
+      f.read.to_i
+    end
+  end
+end
+
+def main
+  # Get a list of all the displays
+  displays = `wmctrl -d`
+  displays = displays.split("\n")
+  displays = displays.map { |d| d.split(/\s+/) }
+
+  # Find the current display
+  current = displays.find do |display|
+    case display
+    in [String, "*", *rest]
+      true
+    else
+      false
+    end
+  end
+
+
+  case current
+  in [_, "*", "DG:", _, "VP:", _, "WA:", _, geometry, *rest]
+    gw, gh = geometry.split("x")
+
+    gw = gw.to_i
+    gh = gh.to_i
+
+    state = (get_state() + 1) % 3
+    set_state(state)
+
+    x_co, y_co = coeffients(state)
+
+    geo = get_window_geometry()
+    mvarg = get_new_geometry(gw, gh, x_co, y_co)
+
+    puts mvarg
+    puts geo
+    puts state
+
+    resize_win(**mvarg)
+  end
+end
+
+main()
