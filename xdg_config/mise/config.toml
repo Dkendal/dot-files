@@ -1,0 +1,8 @@
+[alias]
+
+[alias.nodejs]
+neovim = "16"
+
+[tools]
+usage = "latest"
+ruby = "latest"

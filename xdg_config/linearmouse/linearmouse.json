@@ -1,0 +1,56 @@
+{
+  "$schema" : "https:\/\/schema.linearmouse.app\/0.10.0",
+  "schemes" : [
+    {
+      "scrolling" : {
+        "reverse" : {
+          "vertical" : false
+        },
+        "acceleration" : {
+          "vertical" : 1
+        },
+        "distance" : {
+          "vertical" : "auto"
+        },
+        "speed" : {
+          "vertical" : 0
+        }
+      },
+      "if" : {
+        "device" : {
+          "serialNumber" : "08-65-18-b9-de-22",
+          "productName" : "Magic Trackpad",
+          "category" : "trackpad",
+          "vendorID" : "0x4c",
+          "productID" : "0x265"
+        }
+      },
+      "pointer" : {
+        "acceleration" : 1.5,
+        "speed" : 0.07
+      }
+    },
+    {
+      "pointer" : {
+        "disableAcceleration" : true,
+        "acceleration" : 1
+      },
+      "scrolling" : {
+        "reverse" : {
+          "vertical" : true
+        }
+      },
+      "if" : {
+        "device" : {
+          "category" : "mouse",
+          "vendorID" : "0x25a7",
+          "productID" : "0xfa7c",
+          "productName" : "Xlite Mini Wireless"
+        }
+      },
+      "buttons" : {
+        "universalBackForward" : false
+      }
+    }
+  ]
+}

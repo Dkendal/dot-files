@@ -1,3 +1,0 @@
-#!/usr/bin/env ruby
-
-puts ARGV[0].unpack('U*').map(&:chr).join.downcase.gsub(/\W/, '_')

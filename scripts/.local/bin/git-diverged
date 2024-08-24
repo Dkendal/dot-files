@@ -1,4 +1,0 @@
-#!/bin/bash
-ahead=`git log $2..$1 --pretty=oneline | wc -l`
-behind=`git log $1..$2 --pretty=oneline | wc -l`
-echo "$1 ahead $ahead commits, behind $behind commits, of $2"

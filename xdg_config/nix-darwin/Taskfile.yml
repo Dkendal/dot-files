@@ -1,0 +1,5 @@
+version: '3'
+
+tasks:
+  switch: darwin-rebuild switch --flake ~/.config/nix-darwin
+  edit: $EDITOR ~/.config/nix-darwin/flake.nix

@@ -1,0 +1,108 @@
+[include]
+	path = "~/.local/share/git/config"
+
+[rerere]
+	enabled = true
+
+[core]
+	editor = nvim
+	excludesfile = ~/.config/git/ignore
+	autocrlf = false
+	pager = delta
+	commitGraph = true
+	fsmonitor = true
+	untrackedCache = true
+
+[feature]
+	manyFiles = true
+
+[delta]
+	features = side-by-side line-numbers decoration
+	navigate = true
+	hyperlinks = true
+
+[delta "clean"]
+	navigate = false
+	hyperlinks = false
+	line-numbers = false
+
+[pretty]
+	terse = %C(yellow)%h %C(green)(%ar) - %C(reset)%s %C(blue)[%an] %C(red)%d%C(reset)%n
+
+[alias]
+	b ="!git --no-pager branch --sort=committerdate -vv"
+	changelog= "log --pretty='- %s' 'origin/main..@'"
+	clean-branches="!git branch --merged | cut -c2- | xargs git branch -d"
+	current-branch = rev-parse --abbrev-ref HEAD
+	d = "!git diff $(git forked-master)..@"
+	dw = "!git diff --word-diff $(git forked-master)..@"
+	forked-master = merge-base --fork-point origin/master @
+	fr = pull --rebase
+	ignore = "update-index --skip-worktree"
+	l = log --oneline
+	lG = log --graph --pretty=terse --all
+	ld = log $(git merge-base --fork-point origin/master @)..@ --pretty=terse
+	lg = log --pretty=terse
+	p = push
+	pf = push --force-with-lease
+	ri = rebase --interactive
+	rim ="!git rebase --interactive $(git forked-master)"
+	root = rev-parse --show-toplevel
+	sed ="!git grep -z --full-name -l '.' | xargs -0 sed"
+	ts ="!git commit -m \"$(whoami) | $(hostname) | $(date)\""
+	unignore = "update-index --no-skip-worktree"
+	wip = "!git add -A; and git commit --no-verify -m wip"
+	ws = status --short
+	yolo = push --force-with-lease
+        bb = "!git branch --sort -committerdate --color=always | fzf --ansi --no-sort --tiebreak=index --preview 'sha=$(echo {} | cut -b3-); git --no-pager range-diff --right-only --color=always main@{upstream}...$sha' --bind \"ctrl-u:preview-page-up,ctrl-d:preview-page-down\""
+
+
+[color]
+	status = auto
+	ui = true
+[push]
+	default = current
+[merge]
+	conflictstyle = diff3
+	tool = vimdiff
+[rebase]
+	autosquash = true
+	instructionFormat = "(%cr) - %s [%an]"
+[filter "remove-trailing-whitespace"]
+	clean = sed -E 's/[[:space:]]*$//'
+	smudge = cat
+[include]
+	path = ~/.gitconfig_local
+[diff]
+	algorithm = patience
+[mergetool "vimdiff"]
+	cmd = nvim -d $LOCAL $REMOTE $MERGED
+	prompt = false
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[mergetool]
+	path = nvim
+[commit]
+	gpgsign = true
+[gpg]
+	; program = gpg
+	format = ssh
+[protocol]
+	version = 2
+[log]
+	date = local
+[gc]
+	writeCommitGraph = true
+[github]
+	user = dkendal
+[init]
+	defaultBranch = main
+[pull]
+	ff = only
+[ghq]
+	root = ~/src/
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign

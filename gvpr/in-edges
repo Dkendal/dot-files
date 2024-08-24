@@ -1,6 +1,0 @@
-N[name==ARGV[0]] {
-	edge_t e;
-	for (e = fstin($); e = nxtin(e);) {
-		print(e);
-	}
-}

@@ -1,2 +1,0 @@
-#!/bin/bash
-inotifywait @"./.git/" @"./vendor/" --exclude "~$" -rmq -e close_write ${1} --format "%w%f"

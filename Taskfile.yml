@@ -1,0 +1,10 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  link:
+    desc: Link xdg config directories
+    cmds:
+      - ./setup.nu
+    silent: true

@@ -1,0 +1,5 @@
+.rgignore
+.fdignore
+node_modules
+deps
+_build
