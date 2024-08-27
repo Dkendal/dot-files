@@ -1,2 +1,2 @@
-./xdg_config/fish/fish_variables
-./nix-installer
+nix-installer
+xdg_config/fish/fish_variables
