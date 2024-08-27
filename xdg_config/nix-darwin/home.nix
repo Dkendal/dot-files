@@ -38,7 +38,6 @@ in
       value.source = config.lib.file.mkOutOfStoreSymlink "${dotFilesDir}/xdg_config/${name}";
     })
     [
-      "JetBrains"
       "kitty"
       "fish"
       "nvim"
