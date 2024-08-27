@@ -18,7 +18,7 @@ in
         local repo_path=$2
         if [ ! -d "$repo_path" ]; then
           echo "Cloning $repo_name"
-          git clone "$repo_name" "$repo_path"
+          ${pkgs.git}/bin/git clone "$repo_name" "$repo_path"
         else
           echo "Skipping $repo_name: already cloned"
         fi

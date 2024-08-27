@@ -162,22 +162,7 @@
           };
         };
 
-        # system.keyboard = {
-        #   remapCapsLockToEscape = true;
-        #   swapLeftCtrlAndFn = true;
-        # };
-
         system.activationScripts = {
-          neovim.text = ''
-            if ! test -d ~/src/dkendal/nvim-kitty; then;
-              ${pkgs.git}/bin/git clone git@github.com:Dkendal/nvim-kitty.git
-            fi;
-
-            if ! test -d ~/src/dkendal/nvim-treeclimber; then;
-              ${pkgs.git}/bin/git clone git@github.com:Dkendal/nvim-treeclimber.git
-            fi;
-          '';
-
           rustup.text = ''
             ${pkgs.rustup}/bin/rustup toolchain install nightly --allow-downgrade --profile minimal --component clippy
           '';
