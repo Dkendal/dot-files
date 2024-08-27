@@ -201,6 +201,7 @@
         fonts = {
           fontDir.enable = true;
           fonts = with pkgs; [
+            proggyfonts
             noto-fonts
             (nerdfonts.override {
               fonts = [
@@ -214,20 +215,29 @@
       };
     in
     {
-      # Build darwin flake using:
-      # $ darwin-rebuild build --flake .#Titania
-      darwinConfigurations."dylan" = nix-darwin.lib.darwinSystem {
-        modules = [
-          configuration
-          home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.dylan = import ./home.nix;
-          }
-        ];
-      };
+      # Personal computer
+      darwinConfigurations."Titania" =
+        let
+          user = "dylan";
+          specialArgs = {
+            user = user;
+          };
+        in
+        nix-darwin.lib.darwinSystem {
+          specialArgs = specialArgs;
+          modules = [
+            configuration
+            home-manager.darwinModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "before-home-manager";
+              home-manager.users.${user} = import ./home.nix;
+            }
+          ];
+        };
 
+      # Work computer
       darwinConfigurations."dylankendal-mbp" =
         let
           user = "dylan.kendal";
@@ -243,6 +253,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "before-home-manager";
               home-manager.users.${user} = import ./home.nix;
             }
           ];

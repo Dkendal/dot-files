@@ -1,3 +1,5 @@
+--#selene: allow(mixed_table)
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 if not vim.loop.fs_stat(lazypath) then
@@ -11,7 +13,8 @@ if not vim.loop.fs_stat(lazypath) then
 	})
 end
 
-function Reload(mod)
+-- selene: allow(global_usage)
+function _G.Reload(mod)
 	package.loaded[mod] = nil
 	return require(mod)
 end
@@ -19,9 +22,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local safe_require = require("user.package").safe_require
-local util = require("user.util")
-local map = util.map
-local set_hl = vim.api.nvim_set_hl
 
 vim.g.mapleader = "<space>"
 
@@ -368,7 +368,7 @@ local plugins = {
 		init = function()
 			vim.fn.jobstart({ "mise", "where", "nodejs@20" }, {
 				stdout_buffered = true,
-				on_stdout = function(j, d, e)
+				on_stdout = function(_j, d, _e)
 					local path = vim.trim(table.concat(d, ""))
 					if type(path) == "string" and path ~= "" then
 						vim.g.copilot_node_command = path .. "/bin/node"
@@ -385,9 +385,6 @@ local plugins = {
 	},
 	{
 		"vim-scripts/file-line",
-	},
-	{
-		"junegunn/fzf.vim",
 	},
 	{
 		"lewis6991/gitsigns.nvim",
@@ -473,6 +470,10 @@ local plugins = {
 				local setup = configs["setup"]
 
 				setup({
+					auto_install = true,
+					sync_install = true,
+					ignore_install = {},
+					modules = {},
 					ensure_installed = {},
 					query_linter = {
 						enable = true,
@@ -552,7 +553,6 @@ local plugins = {
 
 			require("ufo").setup({
 				fold_virt_text_handler = ufo_handler,
-
 				provider_selector = function(bufnr, filetype, buftype)
 					return { "treesitter", "indent" }
 				end,
@@ -617,32 +617,25 @@ local plugins = {
 			telescope.load_extension("fzf")
 		end,
 		keys = {
-			{ "<leader>ff",      "<cmd>Telescope find_files find_command={'fd'}<cr>", desc = "Find files" },
-			{ "gO",              "<cmd>Telescope lsp_document_symbols<cr>",           desc = "Document symbols" },
-			{ "<m-o>",           "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",  desc = "Workspace symbols" },
-			{ "<leader>q",       "<cmd>Telescope diagnostics<cr>",                    desc = "Diagnostics" },
-			{ "<c-s-o>",         "<cmd>Telescope lsp_document_symbols<cr>",           desc = "Document symbols" },
-			{ "<m-o>",           "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",  desc = "Workspace symbols" },
-			{ "<leader>/",       "<cmd>Telescope live_grep<cr>",                      desc = "Live grep" },
-			{ "<leader><space>", "<cmd>Telescope commands<cr>",                       desc = "Commands" },
-			{ "<leader>bb",      "<cmd>Telescope buffers<cr>",                        desc = "Buffers" },
-			{ "<leader>fr",      "<cmd>Telescope oldfiles<CR>",                       desc = "Recent files" },
-			{ "<leader>gla",     "<cmd>Telescope git_commits<cr>",                    desc = "Git commits" },
-			{ "<leader>glb",     "<cmd>Telescope git_bcommits<cr>",                   desc = "Git bcommits" },
-			{ "<leader>fer",     ":Telescope reloader<cr>",                           desc = "Reload config" },
-			{ "<leader>pf",      "<cmd>Telescope git_files<cr>",                      desc = "Git files" },
-			{ "<leader>pg",      "<cmd>Telescope git_status<cr>",                     desc = "Git Status" },
-			{ "<M-O>",           "<cmd>Telescope jumplist<cr>",                       desc = "Jumplist" },
-			{ "<leader>ss",      "<cmd>Telescope current_buffer_fuzzy_find<cr>",      desc = "Search current buffer" },
-			{ "<leader>hh",      "<cmd>Telescope help_tags<cr>",                      desc = "Help tags" },
-			{ "<leader>hm",      "<cmd>Telescope man_pages<cr>",                      desc = "Man Pages" },
-			{ "<leader>hdh",     "<cmd>Telescope highlights<cr>",                     desc = "Describe: Hightlights" },
-			{ "<leader>hdm",     "<cmd>Telescope keymaps<cr>",                        desc = "Describe: Keymaps" },
-			{ "<leader>lsd",     "<cmd>Telescope lsp_document_symbols<cr>",           desc = "LSP: Document symbols" },
-			{ "<leader>lsw",     "<cmd>Telescope lsp_workspace_symbols<cr>",          desc = "LSP: Workspace Symbols" },
-			{ "<leader>lsW",     "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",  desc = "LSP: Dynamic Workspace Symbols" },
-			{ "<leader>li",      "<cmd>Telescope lsp_incoming_calls<cr>",             desc = "LSP: Incoming calls" },
-			{ "<leader>lo",      "<cmd>Telescope lsp_outgoing_calls<cr>",             desc = "LSP: Outgoing calls" },
+			{ "gO",          "<cmd>Telescope lsp_document_symbols<cr>",          desc = "Document symbols" },
+			{ "<m-o>",       "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Workspace symbols" },
+			{ "<leader>q",   "<cmd>Telescope diagnostics<cr>",                   desc = "Diagnostics" },
+			{ "<c-s-o>",     "<cmd>Telescope lsp_document_symbols<cr>",          desc = "Document symbols" },
+			{ "<m-o>",       "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Workspace symbols" },
+			{ "<leader>bb",  "<cmd>Telescope buffers<cr>",                       desc = "Buffers" },
+			{ "<leader>fr",  "<cmd>Telescope oldfiles<CR>",                      desc = "Recent files" },
+			{ "<leader>gla", "<cmd>Telescope git_commits<cr>",                   desc = "Git commits" },
+			{ "<leader>glb", "<cmd>Telescope git_bcommits<cr>",                  desc = "Git bcommits" },
+			{ "<leader>fer", ":Telescope reloader<cr>",                          desc = "Reload config" },
+			{ "<leader>pf",  "<cmd>Telescope git_files<cr>",                     desc = "Git files" },
+			{ "<leader>pg",  "<cmd>Telescope git_status<cr>",                    desc = "Git Status" },
+			{ "<M-O>",       "<cmd>Telescope jumplist<cr>",                      desc = "Jumplist" },
+			{ "<leader>ss",  "<cmd>Telescope current_buffer_fuzzy_find<cr>",     desc = "Search current buffer" },
+			{ "<leader>lsd", "<cmd>Telescope lsp_document_symbols<cr>",          desc = "LSP: Document symbols" },
+			{ "<leader>lsw", "<cmd>Telescope lsp_workspace_symbols<cr>",         desc = "LSP: Workspace Symbols" },
+			{ "<leader>lsW", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "LSP: Dynamic Workspace Symbols" },
+			{ "<leader>li",  "<cmd>Telescope lsp_incoming_calls<cr>",            desc = "LSP: Incoming calls" },
+			{ "<leader>lo",  "<cmd>Telescope lsp_outgoing_calls<cr>",            desc = "LSP: Outgoing calls" },
 		},
 	},
 	{
@@ -957,21 +950,35 @@ local plugins = {
 		},
 	},
 	{
-		"nvim-orgmode/orgmode",
-		event = "VeryLazy",
-		filetypes = { "org" },
-		config = function()
-			require("orgmode").setup({
-				org_agenda_files = "~/Documents/org-mode/**/*",
-				org_default_notes_file = "~/Documents/org-mode/refile.org",
-			})
-		end,
-	},
-	{
 		"ibhagwan/fzf-lua",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
+		keys = {
+			{ "<leader>ff",      "<cmd>FzfLua files<cr>" },
+			{ "<leader>/",       "<cmd>FzfLua grep<cr>" },
+			{ "<leader>?",       "<cmd>FzfLua live_grep<cr>" },
+			{ "<leader><space>", "<cmd>FzfLua commands<cr>" },
+			{ "<leader>hdm",     "<cmd>FzfLua keymaps<cr>" },
+			{ "<leader>hh",      "<cmd>FzfLua helptags<cr>" },
+			{ "<leader>hdh",     "<cmd>FzfLua highlights<cr>" },
+			{ "<leader>hm",      "<cmd>FzfLua manpages<cr>" },
+		},
 		config = function()
-			require("fzf-lua").setup({})
+			require("fzf-lua").setup({
+				keymap = {
+					builtin = {
+						["<PageDown>"] = "preview-page-down",
+						["<PageUp>"]   = "preview-page-up",
+						["<Home>"]     = "preview-up",
+						["<End>"]      = "preview-down",
+					},
+					fzf = {
+						["pgdn"] = "preview-page-down",
+						["pgup"] = "preview-page-up",
+						["home"] = "preview-up",
+						["end"]  = "preview-down",
+					},
+				}
+			})
 		end
 	}
 }
@@ -983,7 +990,6 @@ require("lazy").setup(plugins, opts)
 require("user/boxes")
 require("user/background").init()
 require("user/statusline").setup()
--- TODO break up into keys entries
 require("user/keymaps").setup()
 require("user/commands")
 require("user/projects")

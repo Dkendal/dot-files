@@ -1,5 +1,12 @@
 version: '3'
 
 tasks:
-  switch: darwin-rebuild switch --flake ~/.config/nix-darwin
-  edit: $EDITOR ~/.config/nix-darwin/flake.nix
+	switch: darwin-rebuild switch --flake ~/.config/nix-darwin
+	edit: $EDITOR ~/.config/nix-darwin/flake.nix
+	nix-installer: curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- {{.CLI_ARGS}}
+	install:nix-darwin: ./install-nix-darwin
+	bootstrap:
+		cmds:
+			- curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+			- { task: install:nix-darwin }
+			

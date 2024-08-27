@@ -416,7 +416,7 @@ local function setup()
 
 	config.typst_lsp.setup(with_defaults({}))
 
-	config.biome.setup(with_defaults({}))
+	-- config.biome.setup(with_defaults({}))
 
 	config.ast_grep.setup(with_defaults({}))
 end

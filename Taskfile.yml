@@ -3,8 +3,6 @@
 version: '3'
 
 tasks:
-  link:
-    desc: Link xdg config directories
+  check:
     cmds:
-      - ./setup.nu
-    silent: true
+      - trufflehog --no-update filesystem ./

@@ -6,23 +6,6 @@ function fish_safe_bass_source -a file
   end
 end
 
-# function fish_user_init_env
-#   set -gx GOPATH ~/src
-#   set -gx NNN_USE_EDITOR 1
-#   set -gx pure_color_mute yellow
-#   set -gx DELTA_PAGER 'less -r'
-#   set -gx EDITOR (command -v nvim)
-#
-#   fish_add_path ~/.local/bin
-#   fish_add_path ~/bin
-#   fish_add_path ~/.cargo/bin
-#   fish_add_path ~/.local/share/dotnet
-#   fish_add_path ~/.dotnet/tools
-#   fish_add_path /run/current-system/sw/bin
-#   fish_add_path /opt/homebrew/bin
-#   fish_add_path /Applications/Godot.app/Contents/MacOS/
-# end
-
 function fish_set_user_abbr
   # Abbreviations
   abbr -a -- ci 'hub ci-status -v'
