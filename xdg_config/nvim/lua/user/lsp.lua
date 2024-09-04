@@ -410,7 +410,17 @@ local function setup()
 		filetypes = { "html", "heex", "elixir", "typescriptreact", "svelte" },
 	}))
 
-	config.nil_ls.setup(with_defaults({}))
+	config.nil_ls.setup(with_defaults({
+		settings = {
+			["nil"] = {
+				formatting = {
+					command = {
+						"nixpkgs-fmt"
+					}
+				}
+			}
+		}
+	}))
 
 	config.rnix.setup(with_defaults({}))
 
@@ -418,7 +428,7 @@ local function setup()
 
 	-- config.biome.setup(with_defaults({}))
 
-	config.ast_grep.setup(with_defaults({}))
+	-- config.ast_grep.setup(with_defaults({}))
 end
 
 return {

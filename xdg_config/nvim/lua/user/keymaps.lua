@@ -331,53 +331,23 @@ function M.setup()
 			end, { silent = true, buffer = true })
 		end,
 	})
-
-	-- Typescript / Javascript
-	keymap({
-		pattern = { "*.ts", "*.tsx", "*.js", "*.jsx" },
-		callback = function(args)
-			map_alternate(args.file, "(.+).([jt]sx?)", "%1.test.%2")
-		end,
-	})
-
-	keymap({
-		pattern = { "*.test.ts", "*.test.tsx", "*.js", "*.jsx" },
-		callback = function(args)
-			map_alternate(args.file, "(.+).test.([jt]sx?)", "%1.%2")
-		end,
-	})
-
-	-- Racket
-	keymap({
-		pattern = { "*.rkt" },
-		callback = function(args)
-			map_alternate(args.file, "(.+).rkt", "%1-test.rkt")
-		end,
-	})
-
-	keymap({
-		pattern = { "*-test.rkt" },
-		callback = function(args)
-			map_alternate(args.file, "(.+)-test.rkt", "%1.rkt")
-		end,
-	})
-
-	-- Haskell
-	alternate_pair("src/*.hs", "test/*Spec.hs")
-
-	-- Elixir
-	alternate_pair("lib/*.ex", "test/*_test.exs")
-
-	alternate_pair("lib/*/live/*.ex", "lib/*/live/*.html.heex")
-
-	-- Ruby
-	alternate_pair("app/*.rb", "test/*_test.rb")
-	alternate_pair("test/*_test.rb", "app/*.rb")
-
-	-- Lua
-	alternate_pair("lua/*.lua", "tests/*_spec.lua")
+	--
+	-- -- Typescript / Javascript
+	-- keymap({
+	-- 	pattern = { "*.ts", "*.tsx", "*.js", "*.jsx" },
+	-- 	callback = function(args)
+	-- 		map_alternate(args.file, "(.+).([jt]sx?)", "%1.test.%2")
+	-- 	end,
+	-- })
+	--
+	-- keymap({
+	-- 	pattern = { "*.test.ts", "*.test.tsx", "*.js", "*.jsx" },
+	-- 	callback = function(args)
+	-- 		map_alternate(args.file, "(.+).test.([jt]sx?)", "%1.%2")
+	-- 	end,
+	-- })
 end
 
-alternatives.setup()
+-- alternatives.setup()
 
 return M
