@@ -200,20 +200,6 @@ local plugins = {
 		end,
 	},
 	{
-		dir = "~/src/dkendal/nvim-kitty",
-		opts = {},
-		rocks = {
-			"lpeg-label"
-		},
-		keys = {
-			{ "<leader>pq", "<plug>(kitty-paths)" },
-		},
-	},
-	{
-		dir = "~/src/dkendal/nvim-treeclimber",
-		opts = {},
-	},
-	{
 		"L3MON4D3/LuaSnip",
 		config = function()
 			safe_require("user/snippets")
@@ -591,10 +577,6 @@ local plugins = {
 		},
 	},
 	{
-		"simrat39/symbols-outline.nvim",
-		opts = {},
-	},
-	{
 		"godlygeek/tabular",
 	},
 	{
@@ -605,7 +587,7 @@ local plugins = {
 				build = "make",
 			},
 		},
-		config = function(plugin)
+		config = function()
 			local telescope = require("telescope")
 			local themes = require("telescope.themes")
 			telescope.setup({
@@ -619,18 +601,15 @@ local plugins = {
 		keys = {
 			{ "gO",          "<cmd>Telescope lsp_document_symbols<cr>",          desc = "Document symbols" },
 			{ "<m-o>",       "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Workspace symbols" },
-			{ "<leader>q",   "<cmd>Telescope diagnostics<cr>",                   desc = "Diagnostics" },
 			{ "<c-s-o>",     "<cmd>Telescope lsp_document_symbols<cr>",          desc = "Document symbols" },
 			{ "<m-o>",       "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Workspace symbols" },
 			{ "<leader>bb",  "<cmd>Telescope buffers<cr>",                       desc = "Buffers" },
-			{ "<leader>fr",  "<cmd>Telescope oldfiles<CR>",                      desc = "Recent files" },
 			{ "<leader>gla", "<cmd>Telescope git_commits<cr>",                   desc = "Git commits" },
 			{ "<leader>glb", "<cmd>Telescope git_bcommits<cr>",                  desc = "Git bcommits" },
 			{ "<leader>fer", ":Telescope reloader<cr>",                          desc = "Reload config" },
 			{ "<leader>pf",  "<cmd>Telescope git_files<cr>",                     desc = "Git files" },
 			{ "<leader>pg",  "<cmd>Telescope git_status<cr>",                    desc = "Git Status" },
 			{ "<M-O>",       "<cmd>Telescope jumplist<cr>",                      desc = "Jumplist" },
-			{ "<leader>ss",  "<cmd>Telescope current_buffer_fuzzy_find<cr>",     desc = "Search current buffer" },
 			{ "<leader>lsd", "<cmd>Telescope lsp_document_symbols<cr>",          desc = "LSP: Document symbols" },
 			{ "<leader>lsw", "<cmd>Telescope lsp_workspace_symbols<cr>",         desc = "LSP: Workspace Symbols" },
 			{ "<leader>lsW", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "LSP: Dynamic Workspace Symbols" },
@@ -667,9 +646,13 @@ local plugins = {
 	{
 		"folke/trouble.nvim",
 		opts = {},
+		maps = {
+			{ "<leader>xx", "<cmd>Trouble diagnostics<cr>" },
+			{ "<leader>xQ", "<cmd>Trouble quickfix<cr>" },
+			{ "<leader>cs", "<cmd>Trouble symbols<cr>" },
+			{ "<leader>cS", "<cmd>Trouble definitions<cr>" },
+		}
 	},
-	{ "folke/twilight.nvim", opts = { dimming = { alpha = 0.4 } } },
-	{ "folke/zen-mode.nvim", opts = { dimming = { alpha = 0.4 } } },
 	{
 		"numToStr/Comment.nvim",
 		opts = {
@@ -919,7 +902,7 @@ local plugins = {
 	},
 	{
 		"chentoast/marks.nvim",
-		config = function(opts)
+		config = function()
 			require("marks").setup({})
 
 			vim.api.nvim_create_autocmd({ "ColorScheme" }, {
@@ -961,6 +944,16 @@ local plugins = {
 			{ "<leader>hh",      "<cmd>FzfLua helptags<cr>" },
 			{ "<leader>hdh",     "<cmd>FzfLua highlights<cr>" },
 			{ "<leader>hm",      "<cmd>FzfLua manpages<cr>" },
+			{ "<leader>fr",      "<cmd>FzfLua oldfiles<CR>" },
+			{ "<leader>sgg",     "<cmd>FzfLua grep_curbuf<CR>" },
+			{ "<leader>sg",      "<cmd>FzfLua grep<CR>" },
+			{ "<leader>sg",      "<cmd>FzfLua grep<CR>" },
+			{ "<leader>sgq",     "<cmd>FzfLua grep_quickfix<CR>" },
+			{ "<leader>sgv",     "<cmd>FzfLua grep_visual<CR>" },
+			{ "gd",              "<cmd>FzfLua lsp_definitions<CR>" },
+			{ "gD",              "<cmd>FzfLua lsp_declarations<CR>" },
+			{ "<leader>ss",      "<cmd>FzfLua lsp_document_symbol<CR>" },
+			{ "<leader>sS",      "<cmd>FzfLua lsp_workspace_symbols<CR>" },
 		},
 		config = function()
 			require("fzf-lua").setup({
@@ -980,7 +973,52 @@ local plugins = {
 				}
 			})
 		end
-	}
+	},
+	{
+		dir = "~/src/dkendal/nvim-kitty",
+		opts = {},
+		rocks = {
+			"lpeg-label"
+		},
+		keys = {
+			{ "<leader>pq", "<plug>(kitty-paths)" },
+		},
+	},
+	{
+		dir = "~/src/dkendal/nvim-treeclimber",
+		opts = {},
+	},
+	{
+		dir = "~/src/dkendal/nvim-alternate",
+		lazy = false,
+		opts = {
+			pairs = {
+				-- Haskell
+				{ "src/*.hs",        "test/*Spec.hs" },
+				-- Elixir
+				{ "lib/*.ex",        "test/*_test.exs" },
+				{ "lib/*/live/*.ex", "lib/*/live/*.html.heex" },
+				-- Ruby
+				{ "app/*.rb",        "test/*_test.rb" },
+				{ "test/*_test.rb",  "app/*.rb" },
+				-- Lua
+				{ "lua/*.lua",       "tests/*_spec.lua" },
+				{
+					{ "*.ts", "*.tsx", "*.js", "*.jsx" },
+					"(.+).([jt]sx?)",
+					"%1.test.%2"
+				},
+				{
+					{ "*.test.ts", "*.test.tsx", "*.js", "*.jsx" },
+					"(.+).test.([jt]sx?)",
+					"%1.%2"
+				},
+			}
+		},
+		keys = {
+			{ "<leader>pa", "<plug>(alternate-edit)" }
+		}
+	},
 }
 
 local opts = {}
