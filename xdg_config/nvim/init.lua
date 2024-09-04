@@ -934,6 +934,7 @@ local plugins = {
 	},
 	{
 		"ibhagwan/fzf-lua",
+		lazy = false,
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		keys = {
 			{ "<leader>ff",      "<cmd>FzfLua files<cr>" },
