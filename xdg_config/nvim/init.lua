@@ -26,6 +26,7 @@ local safe_require = require("user.package").safe_require
 vim.g.mapleader = "<space>"
 
 vim.cmd.filetype("plugin", "indent", "on")
+
 vim.cmd.syntax("on")
 
 vim.filetype.add({
@@ -934,11 +935,12 @@ local plugins = {
 	},
 	{
 		"ibhagwan/fzf-lua",
+		lazy = false,
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		keys = {
 			{ "<leader>ff",      "<cmd>FzfLua files<cr>" },
-			{ "<leader>/",       "<cmd>FzfLua grep<cr>" },
-			{ "<leader>?",       "<cmd>FzfLua live_grep<cr>" },
+			{ "<leader>?",       "<cmd>FzfLua grep<cr>" },
+			{ "<leader>/",       "<cmd>FzfLua live_grep<cr>" },
 			{ "<leader><space>", "<cmd>FzfLua commands<cr>" },
 			{ "<leader>hdm",     "<cmd>FzfLua keymaps<cr>" },
 			{ "<leader>hh",      "<cmd>FzfLua helptags<cr>" },
@@ -1033,7 +1035,8 @@ require("user/commands")
 require("user/projects")
 require("user/search_and_replace")
 
-vim.cmd.colorscheme("gruvbox")
+-- vim.cmd.colorscheme("gruvbox")
+vim.cmd.colorscheme("catppuccin-frappe")
 require("user/colors")
 
 vim.o.exrc = true
