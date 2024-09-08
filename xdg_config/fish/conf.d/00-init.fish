@@ -1,5 +1,13 @@
 set -x GPG_TTY (tty)
 
+if test -d /Applications/kitty.app/Contents/MacOS/
+  fish_add_path /Applications/kitty.app/Contents/MacOS/
+end
+
+if test -d /opt/homebrew/bin
+  fish_add_path /opt/homebrew/bin
+end
+
 function fish_safe_bass_source -a file
   if test -r $file
     bass source $file
