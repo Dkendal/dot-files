@@ -511,7 +511,7 @@ local plugins = {
 		config = function()
 			local ufo_handler = function(virtText, lnum, endLnum, width, truncate)
 				local newVirtText = {}
-				local suffix = ("  %d "):format(endLnum - lnum)
+				local suffix = (" 󰁂 %d "):format(endLnum - lnum)
 				local sufWidth = vim.fn.strdisplaywidth(suffix)
 				local targetWidth = width - sufWidth
 				local curWidth = 0
@@ -538,6 +538,12 @@ local plugins = {
 			end
 
 			require("ufo").setup({
+				preview = {
+					win_config = {
+						border = { '', '─', '', '', '', '─', '', '' },
+						winblend = 0
+					},
+				},
 				fold_virt_text_handler = ufo_handler,
 				provider_selector = function(bufnr, filetype, buftype)
 					return { "treesitter", "indent" }
@@ -937,6 +943,8 @@ local plugins = {
 		lazy = false,
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		keys = {
+			{ "<leader>fel",     "<cmd>FzfLua files cwd=" .. vim.fn.stdpath("config") .. "<cr>" },
+			{ "<leader>feL",     "<cmd>FzfLua files cwd=" .. vim.fn.stdpath("data") .. "<cr>" },
 			{ "<leader>ff",      "<cmd>FzfLua files<cr>" },
 			{ "<leader>/",       "<cmd>FzfLua grep<cr>" },
 			{ "<leader>?",       "<cmd>FzfLua live_grep<cr>" },
@@ -1034,8 +1042,37 @@ require("user/commands")
 require("user/projects")
 require("user/search_and_replace")
 
-vim.cmd.colorscheme("gruvbox")
-require("user/colors")
+
+--- Enable persistant colorscheme changes
+--- @param default_colorscheme string
+--- @param default_background "dark" | "light"
+--- @return nil
+local function enable_persistant_colorscheme_changes(default_colorscheme, default_background)
+	local data = vim.fn.stdpath("data")
+	assert(type(data) == "string", "data is not a string")
+	local colorscheme_file = vim.fs.joinpath(data, "colorscheme")
+
+	if vim.fn.filereadable(colorscheme_file) == 1 then
+		local color_data = vim.fn.readfile(colorscheme_file)
+		assert(type(color_data) == "table", "data is not a table")
+		assert(#color_data == 2, "data is not the correct length")
+		vim.o.background = color_data[1]
+		vim.cmd("colorscheme " .. color_data[2])
+	else
+		vim.o.background = default_background
+		vim.cmd("colorscheme " .. default_colorscheme)
+	end
+
+	vim.api.nvim_create_autocmd({ "ColorScheme" }, {
+		pattern = "*",
+		callback = function()
+			assert(type(data) == "string", "data is not a string")
+			vim.fn.writefile({ vim.o.background, vim.g.colors_name }, colorscheme_file)
+		end,
+	})
+end
+
+enable_persistant_colorscheme_changes("gruvbox", "light")
 
 vim.o.exrc = true
 vim.o.secure = true

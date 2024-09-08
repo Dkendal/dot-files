@@ -288,13 +288,6 @@ function M.setup()
 	map("n", "<leader>fee", ":e .envrc<cr>", { desc = "Edit envrc" })
 	map("n", "<leader>feE", ":e .tool-versions<cr>", { desc = "Edit tool-versions" })
 	map("n", "<leader>fer", ":Telescope reloader<cr>", { desc = "Reload config" })
-	map("n", "<leader>fel", find_config_files, { desc = "Vim config files" })
-	map("n", "<leader>feL", find_data_files, { desc = "Data config files" })
-	map("n", "<leader>feL", grep_data_files, { desc = "Search Vim data" })
-
-	map("n", "<leader>ff", find_files, { desc = "Find files" })
-
-	map("n", "<leader>fF", find_hidden_files, { desc = "Find files w/ hidden" })
 	map("n", "<leader>gD", "<cmd>Gvdiffsplit!<cr>", { desc = "3-way diff" })
 	map("n", "<leader>gs", "<cmd>G<cr>", { desc = "Git status" })
 

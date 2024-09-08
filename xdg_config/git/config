@@ -68,6 +68,7 @@
 [rebase]
 	autosquash = true
 	instructionFormat = "(%cr) - %s [%an]"
+	updateRefs = true
 [filter "remove-trailing-whitespace"]
 	clean = sed -E 's/[[:space:]]*$//'
 	smudge = cat

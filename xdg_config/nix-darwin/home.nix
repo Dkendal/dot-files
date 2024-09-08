@@ -32,6 +32,8 @@ in
     '';
   };
 
+  xdg.enable = true;
+
   # Symlink non home-manager config files
   xdg.configFile = builtins.listToAttrs (map
     (name: {
