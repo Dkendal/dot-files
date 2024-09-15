@@ -81,6 +81,7 @@
             duckdb
             xsv
             ollama
+            oterm
           ];
 
         homebrew = {
