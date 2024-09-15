@@ -81,6 +81,9 @@
             duckdb
             xsv
             ollama
+            oterm
+            git-absorb
+            sapling
           ];
 
         homebrew = {
@@ -114,6 +117,7 @@
           };
         };
 
+
         # Auto upgrade nix package and the daemon service.
         services.nix-daemon.enable = true;
 
@@ -134,6 +138,7 @@
 
         # The platform the configuration will be used on.
         nixpkgs.hostPlatform = "aarch64-darwin";
+        nixpkgs.config.allowUnfree = true;
 
         programs.zsh.enable = true;
         programs.bash.enable = true;

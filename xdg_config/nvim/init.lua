@@ -1,101 +1,18 @@
 --#selene: allow(mixed_table)
 
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-
-if not vim.loop.fs_stat(lazypath) then
-	vim.fn.system({
-		"git",
-		"clone",
-		"--filter=blob:none",
-		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable", -- latest stable release
-		lazypath,
-	})
-end
-
--- selene: allow(global_usage)
-function _G.Reload(mod)
-	package.loaded[mod] = nil
-	return require(mod)
-end
-
-vim.opt.rtp:prepend(lazypath)
-
-local safe_require = require("user.package").safe_require
-
-vim.g.mapleader = "<space>"
-
-vim.cmd.filetype("plugin", "indent", "on")
-vim.cmd.syntax("on")
-
-vim.filetype.add({
-	filename = {
-		[".swcrc"] = "json"
-	}
+local init_files = vim.fs.find(function(name, path)
+	return name:match(".*%.lua")
+end, {
+	type = "file",
+	limit = math.huge,
+	path = vim.fs.joinpath(vim.fn.stdpath("config"), "init.d")
 })
 
-if vim.g.neovide then
-	vim.g.guifont = "CaskaydiaCove Nerd Font Mono:16"
-	vim.o.linespace = 2
-	vim.g.neovide_cursor_animation_length = 0.01
+for _, file in ipairs(init_files) do
+	dofile(file)
 end
 
-vim.o.shell = "bash"
-vim.o.cedit = "<C-O>"
-vim.o.cinoptions = "1s,(0,W2,m1"
-vim.o.makeef = "errors.err"
-vim.o.clipboard = "unnamedplus,unnamed"
-vim.o.grepprg = "rg --vimgrep"
-vim.o.includeexpr = "asubstitute(v:fname,'[ab]/','./','g')"
-vim.o.hidden = true
-vim.o.timeoutlen = 400
-vim.o.showbreak = "\226\134\179"
-vim.o.wrap = false
-vim.o.breakindent = true
-vim.o.colorcolumn = "80"
-vim.o.list = true
-vim.o.mouse = "a"
-vim.o.synmaxcol = 3000
-vim.o.undofile = true
-vim.o.backup = true
-vim.o.backupdir = vim.fn.stdpath("data") .. "/backup"
-vim.o.wildignorecase = true
-vim.o.wildmenu = true
-vim.o.wildmode = "longest:full,full"
-vim.o.expandtab = true
-vim.o.lazyredraw = true
-vim.o.hlsearch = true
-vim.o.ignorecase = true
-vim.o.inccommand = "split"
-vim.o.incsearch = true
-vim.o.magic = true
-vim.o.smartcase = true
-vim.o.shiftwidth = 2
-vim.o.tabstop = 2
-vim.o.termguicolors = true
-vim.o.completeopt = "menu,menuone,noselect"
-vim.o.signcolumn = "yes:1"
-vim.o.cp = false
-vim.o.cmdheight = 0
-vim.o.laststatus = 3
-vim.o.encoding = "UTF-8"
-
--- Disable netrw
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
--- Folding
-vim.o.foldlevel = 99
-vim.o.foldlevelstart = 99
-vim.o.foldcolumn = "1"
-vim.o.foldenable = true
-vim.o.foldexpr = "nvim_treesitter#foldexpr()"
-
-vim.wo.number = true
-vim.g.vimsyn_embed = "lmpPr"
-vim.g.mapleader = " "
-vim.g.maplocalleader = ","
-vim.g.netrw_banner = 0
+local safe_require = require("user.package").safe_require
 
 vim.cmd.packadd("cfilter")
 
@@ -946,8 +863,8 @@ local plugins = {
 			{ "<leader>fel",     "<cmd>FzfLua files cwd=" .. vim.fn.stdpath("config") .. "<cr>" },
 			{ "<leader>feL",     "<cmd>FzfLua files cwd=" .. vim.fn.stdpath("data") .. "<cr>" },
 			{ "<leader>ff",      "<cmd>FzfLua files<cr>" },
-			{ "<leader>/",       "<cmd>FzfLua grep<cr>" },
-			{ "<leader>?",       "<cmd>FzfLua live_grep<cr>" },
+			{ "<leader>?",       "<cmd>FzfLua grep<cr>" },
+			{ "<leader>/",       "<cmd>FzfLua live_grep<cr>" },
 			{ "<leader><space>", "<cmd>FzfLua commands<cr>" },
 			{ "<leader>hdm",     "<cmd>FzfLua keymaps<cr>" },
 			{ "<leader>hh",      "<cmd>FzfLua helptags<cr>" },
@@ -962,6 +879,7 @@ local plugins = {
 			{ "gd",              "<cmd>FzfLua lsp_definitions<CR>" },
 			{ "gD",              "<cmd>FzfLua lsp_declarations<CR>" },
 			{ "<leader>ss",      "<cmd>FzfLua lsp_document_symbol<CR>" },
+			{ "<leader>sS",      "<cmd>FzfLua lsp_workspace_symbols<CR>" },
 			{ "<leader>sS",      "<cmd>FzfLua lsp_workspace_symbols<CR>" },
 		},
 		config = function()
@@ -1041,7 +959,6 @@ require("user/keymaps").setup()
 require("user/commands")
 require("user/projects")
 require("user/search_and_replace")
-
 
 --- Enable persistant colorscheme changes
 --- @param default_colorscheme string
