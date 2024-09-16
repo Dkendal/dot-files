@@ -1,15 +1,16 @@
-local F = require("strings").interpolate
-
+local fmt = string.format
+local join = vim.fs.joinpath
+local HOME = vim.env.HOME
 local M = {}
 
-local vim_config = F("${home}/.local/share/nvim/background.vim", { home = vim.env.HOME })
-local kitty_config = F("${home}/.config/kitty/colors.conf", { home = vim.env.HOME })
+local vim_config = join(HOME, ".local/share/nvim/background.vim")
+local kitty_config = join(HOME, ".config/kitty/colors.conf")
 local theme = "gruvbox"
 
 -- Toggle the background color of the shell (Kitty)
 local function shell_toggle(color)
-	local conf = F("~/.config/kitty/colors/${theme}.${color}.conf", { theme = theme, color = color })
-	local cmd = F("kitty @ set-colors --all --configured ${conf}", { conf = conf })
+	local conf = fmt("~/.config/kitty/colors/%s.%s.conf", theme, color)
+	local cmd = fmt("kitty @ set-colors --all --configured %s", conf)
 	os.execute(cmd)
 end
 
@@ -29,29 +30,31 @@ function M.toggle()
 	local file = io.open(vim_config, "w+")
 
 	if file == nil then
-		local msg = F([[Failed to open "${file}"]], { file = vim_config })
+		local msg = fmt([[Failed to open "%s"]], vim_config)
 		error(msg)
 	end
 
-	file:write(F([[set background=${background}]], { background = background }))
+	file:write(fmt([[set background=%s]], background))
 	file:close()
 
 	local file = io.open(kitty_config, "w+")
 
 	if file == nil then
-		local msg = F([[Failed to open "${file}"]], { file = kitty_config })
+		local msg = fmt([[Failed to open "%s"]], kitty_config)
 		error(msg)
 	end
 
 	vim.cmd("silent ! fish -c 'set -Ux BAT_THEME gruvbox-" .. background .. "'")
 
-	file:write(F([[include colors/${theme}.${background}.conf]], { background = background, theme = theme }))
+	file:write(fmt([[include colors/%s.%s.conf]], background, theme))
 	file:close()
 end
 
 function M.init()
 	-- Persist background color between sessions
-	vim.cmd("source " .. vim_config)
+	if vim.fn.filereadable(vim_config) == 1 then
+		vim.cmd("source " .. vim_config)
+	end
 end
 
 return M

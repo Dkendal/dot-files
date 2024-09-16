@@ -267,26 +267,6 @@ local plugins = {
 		end,
 	},
 	{
-		"github/copilot.vim",
-		init = function()
-			vim.fn.jobstart({ "mise", "where", "nodejs@20" }, {
-				stdout_buffered = true,
-				on_stdout = function(_j, d, _e)
-					local path = vim.trim(table.concat(d, ""))
-					if type(path) == "string" and path ~= "" then
-						vim.g.copilot_node_command = path .. "/bin/node"
-					end
-				end,
-			})
-
-			vim.g.copilot_filetypes = {
-				markdown = true,
-				Prompt = false,
-				TelescopePrompt = false,
-			}
-		end,
-	},
-	{
 		"vim-scripts/file-line",
 	},
 	{
@@ -946,6 +926,118 @@ local plugins = {
 			{ "<leader>pa", "<plug>(alternate-edit)" }
 		}
 	},
+	{
+		"David-Kunz/gen.nvim",
+		opts = {
+			host = "titan.local",
+			port = 11434
+		}
+	},
+	{
+		"olimorris/codecompanion.nvim",
+		config = function()
+			require("codecompanion").setup({
+				strategies = {
+					chat = {
+						adapter = "deepseek_coder_v2",
+					},
+					inline = {
+						adapter = "deepseek_coder_v2",
+					},
+					agent = {
+						adapter = "deepseek_coder_v2",
+					},
+				},
+				adapters = {
+					openai = nil,
+					ahtropic = nil,
+					copilot = nil,
+					deepseek_coder_v2 = function()
+						return require("codecompanion.adapters").extend("ollama", {
+							name = "Deep Seek Coder v2",
+							schema = {
+								model = {
+									default = "deepseek-coder-v2:latest",
+								},
+								num_ctx = {
+									default = 4096,
+								},
+								num_predict = {
+									default = -1,
+								},
+							},
+							env = {
+								url = "http://titan.local:11434",
+							},
+							headers = {
+								["Content-Type"] = "application/json",
+							},
+							parameters = {
+								sync = true,
+							},
+						})
+					end,
+				},
+			})
+		end,
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-treesitter/nvim-treesitter",
+			"hrsh7th/nvim-cmp", -- Optional: For using slash commands and variables in the chat buffer
+			"echasnovski/mini.diff",
+			{
+				"stevearc/dressing.nvim", -- Optional: Improves the default Neovim UI
+				opts = {},
+			},
+			"nvim-telescope/telescope.nvim", -- Optional: For using slash commands
+		},
+	}
+
+	-- {
+	-- 	"yetone/avante.nvim",
+	-- 	event = "VeryLazy",
+	-- 	lazy = false,
+	-- 	version = false, -- set this if you want to always pull the latest change
+	-- 	opts = {
+	-- 		-- add any opts here
+	-- 	},
+	-- 	-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+	-- 	build = "make",
+	-- 	-- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+	-- 	dependencies = {
+	-- 		"stevearc/dressing.nvim",
+	-- 		"nvim-lua/plenary.nvim",
+	-- 		"MunifTanjim/nui.nvim",
+	-- 		--- The below dependencies are optional,
+	-- 		"nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+	-- 		"zbirenbaum/copilot.lua",    -- for providers='copilot'
+	-- 		{
+	-- 			-- support for image pasting
+	-- 			"HakonHarnes/img-clip.nvim",
+	-- 			event = "VeryLazy",
+	-- 			opts = {
+	-- 				-- recommended settings
+	-- 				default = {
+	-- 					embed_image_as_base64 = false,
+	-- 					prompt_for_file_name = false,
+	-- 					drag_and_drop = {
+	-- 						insert_mode = true,
+	-- 					},
+	-- 					-- -- required for Windows users
+	-- 					-- use_absolute_path = true,
+	-- 				},
+	-- 			},
+	-- 		},
+	-- 		{
+	-- 			-- Make sure to set this up properly if you have lazy=true
+	-- 			'MeanderingProgrammer/render-markdown.nvim',
+	-- 			opts = {
+	-- 				file_types = { "markdown", "Avante" },
+	-- 			},
+	-- 			ft = { "markdown", "Avante" },
+	-- 		},
+	-- 	},
+	-- }
 }
 
 local opts = {}
