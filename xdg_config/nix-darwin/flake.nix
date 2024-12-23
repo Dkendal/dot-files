@@ -13,88 +13,89 @@
   outputs = inputs@{ self, nix-darwin, nixpkgs, nixpkgs-stable, home-manager, ... }:
     let
       overlay = find: prev: {
-          go-task = nixpkgs-stable.legacyPackages.${prev.system}.go-task;
+        go-task = nixpkgs-stable.legacyPackages.${prev.system}.go-task;
       };
       configuration = { pkgs, user, ... }: {
         # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
         environment.systemPackages = with pkgs;
           [
-            eza
-            graphviz
-            du-dust
-            fswatch
-            glow
             act
-            lazygit
-            lazydocker
-            curl
-            goose
-            delta
-            dprint
+            ast-grep
+            cmake
+            colima
             coreutils
-            uutils-coreutils-noprefix
+            curl
+            darwin.trash
+            delta
+            devenv
+            docker
+            docker-compose
+            dprint
+            du-dust
+            duckdb
             entr
+            eza
             fd
+            fennel-ls
+            fnlfmt
+            fswatch
+            fx
             git
-            gron
+            git-absorb
+            glow
             gnupg
             go-task
+            goose
             gpg-tui
+            graphviz
+            gron
+            gum
             hledger
             hledger-ui
             hledger-web
             htop
             hugo
+            imagemagick
             jq
+            jujutsu
+            lazydocker
+            lazygit
+            luajitPackages.fennel
+            luajitPackages.teal-language-server
+            luajitPackages.tl
+            mise
             moreutils
+            neovim
+            nodePackages.prettier
+            nushell
+            ollama
+            oterm
             pandoc
             pgcli
             pgformatter
             postgresql
             pv
             ranger
+            rclone
             restic
             ripgrep
+            rustup
+            sapling
             sd
+            tailspin
             tig
             tree-sitter
-            wget
-            xh
-            yq
-            zoxide
-            nushell
-            neovim
-            ast-grep
-            nodePackages.prettier
+            trufflehog
+            uutils-coreutils-noprefix
+            uv
             viddy
             visidata
-            mise
-            cmake
-            tailspin
-            rustup
-            trufflehog
-            devenv
-            colima
-            docker
-            docker-compose
-            imagemagick
-            fx
-            darwin.trash
-            gum
-            duckdb
+            wget
+            xh
             xsv
-            ollama
-            oterm
-            git-absorb
-            sapling
-            luajitPackages.fennel
-            luajitPackages.tl
-            luajitPackages.teal-language-server
-            fennel-ls
-            fnlfmt
-            jujutsu
-            rclone
+            yq
+            zoxide
           ];
 
         homebrew = {
@@ -111,9 +112,9 @@
           casks = [
             "1password-cli"
             "alt-tab"
-            "font-caskaydia-cove-nerd-font"
             "linearmouse"
             "mitmproxy"
+            "ghostty"
           ];
           brews = [
             "trdsql"
@@ -196,7 +197,7 @@
         # $ darwin-rebuild changelog
         system.stateVersion = 4;
 
-        environment.shells = [ pkgs.fish ];
+        environment.shells = [ pkgs.fish "/usr/local/bin/fish" ];
 
         environment.variables = {
           EDITOR = "${pkgs.neovim}/bin/nvim";
@@ -206,12 +207,8 @@
           packages = with pkgs; [
             proggyfonts
             noto-fonts
-            (nerdfonts.override {
-              fonts = [
-                "CascadiaCode"
-                "FiraCode"
-              ];
-            })
+            nerd-fonts.caskaydia-cove
+            nerd-fonts.fira-code
           ];
         };
 

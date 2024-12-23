@@ -1,12 +1,19 @@
 version: '3'
 
+vars:
+  nix_profile: dylankendal-mbp
+
 tasks:
-	switch: darwin-rebuild switch --flake ~/.config/nix-darwin
-	edit: $EDITOR ~/.config/nix-darwin/flake.nix
-	nix-installer: curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- {{.CLI_ARGS}}
-	install:nix-darwin: ./install-nix-darwin
-	bootstrap:
-		cmds:
-			- curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
-			- { task: install:nix-darwin }
-			
+  switch: nix run --extra-experimental-features nix-command --extra-experimental-features flakes nix-darwin -- switch --flake "$(readlink -f ~/.config/nix-darwin)"#{{.nix_profile}}
+
+  edit: $EDITOR ~/.config/nix-darwin/flake.nix
+
+  nix-installer: curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- {{.CLI_ARGS}}
+
+  install:nix-darwin: ./install-nix-darwin
+
+  bootstrap:
+    cmds:
+      - curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+      - { task: install:nix-darwin }
+
