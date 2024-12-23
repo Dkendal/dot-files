@@ -375,6 +375,10 @@ ls.add_snippets("javascript", {
 	s("esli", t("// eslint-disable-next-line")),
 	parse("ex", "expect($1)"),
 	parse("te", "toEqual($1)"),
+	parse("@fw", "require('fs').writeFileSync('/tmp/scratch', $1, 'utf-8')"),
+	parse("@fwj", "require('fs').writeFileSync('/tmp/scratch.json', JSON.stringify($1, null, 2), 'utf-8')"),
+	parse("ni", "throw new Error('not implemented');"),
+	parse("todo", "throw new Error('todo');"),
 
 	parse(
 		"@uvu.file",

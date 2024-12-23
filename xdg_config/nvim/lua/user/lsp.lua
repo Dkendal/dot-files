@@ -36,7 +36,8 @@ end
 local function setup()
 	require("neodev").setup({})
 
-	local config = require("lspconfig")
+	local lspconfig = require("lspconfig")
+	local util = lspconfig.util
 
 	vim.diagnostic.config({ virtual_text = false })
 
@@ -44,72 +45,39 @@ local function setup()
 	require("user.lsp.floating_window_decoration").setup()
 
 	-- Servers config
-	config.denols.setup(with_defaults({
-		root_dir = config.util.root_pattern("deno.json", "deno.jsonc"),
+	lspconfig.denols.setup(with_defaults({
+		root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
 	}))
 
-	config.tsserver.setup(with_defaults({
-		verbose = true,
-		filetypes = {
-			"javascript",
-			"javascriptreact",
-			"javascript.jsx",
-			"typescript",
-			"typescriptreact",
-			"typescript.tsx",
-		},
-		root_dir = config.util.root_pattern("package.json"),
-		settings = {
-			typescript = {
-				inlayHints = {
-					enumMemberValues = true,
-					functionLikeReturnTypes = true,
-					parameterNames = true,
-					parameterTypes = true,
-					propertyDeclarationTypes = true,
-					variableTypes = true,
-				},
-				preferences = {
-					importModuleSpecifierPreference = "relative",
-					provideRefactorNotApplicableReason = true,
-				},
-			},
-		},
-		commands = {
-			RenameFile = {
-				function()
-					local old_name = vim.api.nvim_buf_get_name(0)
+	-- lspconfig.ts_ls.setup(with_defaults({
+	-- 	filetypes = {
+	-- 		"javascript",
+	-- 		"javascriptreact",
+	-- 		"javascript.jsx",
+	-- 		"typescript",
+	-- 		"typescriptreact",
+	-- 		"typescript.tsx",
+	-- 	},
+	-- 	root_dir = lspconfig.util.root_pattern("package.json"),
+	-- 	on_attach = function(client, bufnr)
+	-- 		local is_deno = util.root_pattern('deno.json', 'import_map.json', 'deno.jsonc')(vim.fn.getcwd())
+	--
+	-- 		if is_deno then
+	-- 			client.stop()
+	-- 			return
+	-- 		end
+	--
+	-- 		client.server_capabilities.document_formatting = false
+	-- 		client.server_capabilities.documentFormattingProvider = false
+	-- 	end,
+	-- 	settings = {
+	-- 		codeActionsOnSave = {
+	-- 			source = { organizeImports = true }
+	-- 		},
+	-- 	}
+	-- }))
 
-					vim.ui.input({
-						prompt = "New name: ",
-						default = old_name,
-					}, function(name)
-						if name then
-							vim.lsp.buf.execute_command({
-								command = "_typescript.applyRenameFile",
-								arguments = { { sourceUri = old_name, targetUri = name } },
-								title = "",
-							})
-						end
-					end)
-				end,
-				description = "Organize Imports",
-			},
-			OrganizeImports = {
-				function()
-					vim.lsp.buf.execute_command({
-						command = "_typescript.organizeImports",
-						arguments = { vim.api.nvim_buf_get_name(0) },
-						title = "",
-					})
-				end,
-				description = "Organize Imports",
-			},
-		},
-		flags = { debounce_text_changes = 500 },
-	}))
-
-	config.rust_analyzer.setup(with_defaults({
+	lspconfig.rust_analyzer.setup(with_defaults({
 		settings = {
 			["rust-analyzer"] = {
 				checkOnSave = {
@@ -119,19 +87,19 @@ local function setup()
 		},
 	}))
 
-	config.pest_ls.setup(with_defaults({}))
+	lspconfig.pest_ls.setup(with_defaults({}))
 
-	config.racket_langserver.setup({
+	lspconfig.racket_langserver.setup({
 		cmd = { "racket", "--lib", "racket-langserver" },
 		filetypes = { "racket", "scheme" },
 		single_file_support = true,
 	})
 
-	config.svelte.setup(with_defaults({}))
+	lspconfig.svelte.setup(with_defaults({}))
 
-	config.pyright.setup(with_defaults({}))
+	lspconfig.pyright.setup(with_defaults({}))
 
-	config.jsonls.setup(with_defaults({
+	lspconfig.jsonls.setup(with_defaults({
 		settings = {
 			json = {
 				schemas = {
@@ -195,7 +163,7 @@ local function setup()
 		},
 	}))
 
-	config.yamlls.setup(with_defaults({
+	lspconfig.yamlls.setup(with_defaults({
 		settings = {
 			yaml = {
 				keyOrdering = false,
@@ -203,15 +171,15 @@ local function setup()
 		},
 	}))
 
-	config.gopls.setup(with_defaults({}))
+	lspconfig.gopls.setup(with_defaults({}))
 
-	config.teal_ls.setup(with_defaults({}))
+	lspconfig.teal_ls.setup(with_defaults({}))
 
 	local lua_runtime_path = vim.split(package.path, ";")
 	table.insert(lua_runtime_path, "lua/?.lua")
 	table.insert(lua_runtime_path, "lua/?/init.lua")
 
-	config.lua_ls.setup({
+	lspconfig.lua_ls.setup({
 		settings = {
 			Lua = {
 				runtime = {
@@ -238,138 +206,141 @@ local function setup()
 		},
 	})
 
-	config.taplo.setup({})
+	lspconfig.fennel_ls.setup({})
 
-	config.terraformls.setup({})
+	lspconfig.taplo.setup({})
 
-	config.hls.setup(with_defaults({
-		settings = {
-			haskell = {
-				checkParents = "CheckOnSave",
-				checkProject = true,
-				maxCompletions = 40,
-				formattingProvider = "fourmolu",
-				plugin = {
-					rename = {
-						globalOn = true,
-						config = {
-							crossModule = false,
+	lspconfig.terraformls.setup({})
+
+	lspconfig.hls.setup(with_defaults(
+		{
+			settings = {
+				haskell = {
+					checkParents = "CheckOnSave",
+					checkProject = true,
+					maxCompletions = 40,
+					formattingProvider = "fourmolu",
+					plugin = {
+						rename = {
+							globalOn = true,
+							config = {
+								crossModule = false,
+							},
 						},
-					},
-					["ghcide-completions"] = {
-						globalOn = true,
-						config = {
-							autoExtendOn = true,
-							snippetsOn = true,
+						["ghcide-completions"] = {
+							globalOn = true,
+							config = {
+								autoExtendOn = true,
+								snippetsOn = true,
+							},
 						},
-					},
-					class = {
-						globalOn = true,
-					},
-					refineImports = {
-						codeActionsOn = true,
-						codeLensOn = true,
-					},
-					splice = {
-						globalOn = true,
-					},
-					pragmas = {
-						completionOn = true,
-						codeActionsOn = true,
-					},
-					changeTypeSignature = {
-						globalOn = true,
-					},
-					qualifyImportedNames = {
-						globalOn = true,
-					},
-					alternateNumberFormat = {
-						globalOn = true,
-					},
-					hlint = {
-						codeActionsOn = true,
-						diagnosticsOn = true,
-						config = {
-							flags = {},
+						class = {
+							globalOn = true,
 						},
-					},
-					["ghcide-code-actions-fill-holes"] = {
-						globalOn = true,
-					},
-					haddockComments = {
-						globalOn = true,
-					},
-					importLens = {
-						codeActionsOn = true,
-						codeLensOn = true,
-					},
-					retrie = {
-						globalOn = true,
-					},
-					["ghcide-type-lenses"] = {
-						globalOn = true,
-						config = {
-							mode = "always",
+						refineImports = {
+							codeActionsOn = true,
+							codeLensOn = true,
 						},
-					},
-					["ghcide-code-actions-imports-exports"] = {
-						globalOn = true,
-					},
-					["ghcide-hover-and-symbols"] = {
-						symbolsOn = true,
-						hoverOn = true,
-					},
-					eval = {
-						globalOn = true,
-						config = {
-							diff = true,
-							exception = false,
+						splice = {
+							globalOn = true,
 						},
-					},
-					tactics = {
-						codeActionsOn = true,
-						codeLensOn = true,
-						hoverOn = true,
-						config = {
-							auto_gas = 4,
-							max_use_ctor_actions = 5,
-							proofstate_styling = true,
-							timeout_duration = 2,
-							hole_severity = nil,
+						pragmas = {
+							completionOn = true,
+							codeActionsOn = true,
 						},
-					},
-					callHierarchy = {
-						globalOn = true,
-					},
-					["ghcide-code-actions-type-signatures"] = {
-						globalOn = true,
-					},
-					["ghcide-code-actions-bindings"] = {
-						globalOn = true,
-					},
-					moduleName = {
-						globalOn = true,
+						changeTypeSignature = {
+							globalOn = true,
+						},
+						qualifyImportedNames = {
+							globalOn = true,
+						},
+						alternateNumberFormat = {
+							globalOn = true,
+						},
+						hlint = {
+							codeActionsOn = true,
+							diagnosticsOn = true,
+							config = {
+								flags = {},
+							},
+						},
+						["ghcide-code-actions-fill-holes"] = {
+							globalOn = true,
+						},
+						haddockComments = {
+							globalOn = true,
+						},
+						importLens = {
+							codeActionsOn = true,
+							codeLensOn = true,
+						},
+						retrie = {
+							globalOn = true,
+						},
+						["ghcide-type-lenses"] = {
+							globalOn = true,
+							config = {
+								mode = "always",
+							},
+						},
+						["ghcide-code-actions-imports-exports"] = {
+							globalOn = true,
+						},
+						["ghcide-hover-and-symbols"] = {
+							symbolsOn = true,
+							hoverOn = true,
+						},
+						eval = {
+							globalOn = true,
+							config = {
+								diff = true,
+								exception = false,
+							},
+						},
+						tactics = {
+							codeActionsOn = true,
+							codeLensOn = true,
+							hoverOn = true,
+							config = {
+								auto_gas = 4,
+								max_use_ctor_actions = 5,
+								proofstate_styling = true,
+								timeout_duration = 2,
+								hole_severity = nil,
+							},
+						},
+						callHierarchy = {
+							globalOn = true,
+						},
+						["ghcide-code-actions-type-signatures"] = {
+							globalOn = true,
+						},
+						["ghcide-code-actions-bindings"] = {
+							globalOn = true,
+						},
+						moduleName = {
+							globalOn = true,
+						},
 					},
 				},
 			},
-		},
-	}))
+		}))
 
-	config.standardrb.setup(with_defaults({}))
+	lspconfig.standardrb.setup(with_defaults({}))
 
-	config.clangd.setup(with_defaults({}))
+	lspconfig.clangd.setup(with_defaults({}))
 
-	config.marksman.setup(with_defaults({}))
+	lspconfig.marksman.setup(with_defaults({}))
 
-	config.elixirls.setup(with_defaults({
-		cmd = { "elixir-ls" },
-	}))
+	lspconfig.elixirls.setup(with_defaults({}))
+	-- config.nextls.setup(with_defaults({}))
+	-- config.lexical.setup(with_defaults({}))
 
-	config.gdscript.setup(with_defaults({}))
+	lspconfig.gdscript.setup(with_defaults({}))
 
-	config.omnisharp.setup(with_defaults({}))
+	lspconfig.omnisharp.setup(with_defaults({}))
 
-	config.tailwindcss.setup({
+	lspconfig.tailwindcss.setup({
 		init_options = {
 			userLanguages = {
 				elixir = "phoenix-heex",
@@ -402,15 +373,15 @@ local function setup()
 		},
 	})
 
-	config.gleam.setup(with_defaults({}))
+	lspconfig.gleam.setup(with_defaults({}))
 
-	config.bashls.setup(with_defaults({}))
+	lspconfig.bashls.setup(with_defaults({}))
 
-	config.emmet_ls.setup(with_defaults({
-		filetypes = { "html", "heex", "elixir", "typescriptreact", "svelte" },
+	lspconfig.emmet_ls.setup(with_defaults({
+		filetypes = { "html", "heex", "typescriptreact", "svelte" },
 	}))
 
-	config.nil_ls.setup(with_defaults({
+	lspconfig.nil_ls.setup(with_defaults({
 		settings = {
 			["nil"] = {
 				formatting = {
@@ -422,13 +393,9 @@ local function setup()
 		}
 	}))
 
-	config.rnix.setup(with_defaults({}))
+	lspconfig.rnix.setup(with_defaults({}))
 
-	config.typst_lsp.setup(with_defaults({}))
-
-	-- config.biome.setup(with_defaults({}))
-
-	-- config.ast_grep.setup(with_defaults({}))
+	lspconfig.efm.setup(with_defaults({}))
 end
 
 return {

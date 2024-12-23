@@ -1,5 +1,9 @@
 set -x GPG_TTY (tty)
 
+if test -d ~/.local/bin
+  fish_add_path ~/.local/bin
+end
+
 if test -d /Applications/kitty.app/Contents/MacOS/
   fish_add_path /Applications/kitty.app/Contents/MacOS/
 end

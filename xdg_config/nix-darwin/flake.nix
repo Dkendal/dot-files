@@ -3,21 +3,24 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, ... }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, nixpkgs-stable, home-manager, ... }:
     let
+      overlay = find: prev: {
+          go-task = nixpkgs-stable.legacyPackages.${prev.system}.go-task;
+      };
       configuration = { pkgs, user, ... }: {
         # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
         environment.systemPackages = with pkgs;
           [
             eza
-            nmap
             graphviz
             du-dust
             fswatch
@@ -30,6 +33,7 @@
             delta
             dprint
             coreutils
+            uutils-coreutils-noprefix
             entr
             fd
             git
@@ -84,6 +88,13 @@
             oterm
             git-absorb
             sapling
+            luajitPackages.fennel
+            luajitPackages.tl
+            luajitPackages.teal-language-server
+            fennel-ls
+            fnlfmt
+            jujutsu
+            rclone
           ];
 
         homebrew = {
@@ -139,6 +150,7 @@
         # The platform the configuration will be used on.
         nixpkgs.hostPlatform = "aarch64-darwin";
         nixpkgs.config.allowUnfree = true;
+        nixpkgs.overlays = [ overlay ];
 
         programs.zsh.enable = true;
         programs.bash.enable = true;
@@ -191,8 +203,7 @@
         };
 
         fonts = {
-          fontDir.enable = true;
-          fonts = with pkgs; [
+          packages = with pkgs; [
             proggyfonts
             noto-fonts
             (nerdfonts.override {

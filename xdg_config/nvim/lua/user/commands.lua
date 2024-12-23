@@ -58,3 +58,40 @@ vim.cmd([[iabbr dnt don't]])
 vim.cmd([[iabbr abbr abbreviation]])
 vim.cmd([[iabbr abbrs abbreviations]])
 vim.cmd([[iabbr descr description]])
+
+
+-- Command to call the function
+vim.api.nvim_create_user_command('ReloadModule', function()
+	-- Get the current buffer's file path
+	local current_file = vim.fn.expand('%:p')
+
+	-- Check if the current file is a Lua file
+	if not current_file:match('%.lua$') then
+		print("Current file is not a Lua file.")
+		return
+	end
+
+	-- Extract the module name from the file path
+	local module_name = current_file:match('^.+/lua/(.+)%.lua$')
+
+	if not module_name then
+		print("Could not determine module name from file path.")
+		return
+	end
+
+	-- Replace path separators with dots
+	module_name = module_name:gsub('/', '.')
+
+	-- Unload the module
+	package.loaded[module_name] = nil
+
+	-- Attempt to reload the module
+	local success, result = pcall(require, module_name)
+
+	if success then
+		print("Successfully reloaded module: " .. module_name)
+	else
+		print("Failed to reload module: " .. module_name)
+		print("Error: " .. result)
+	end
+end, {})

@@ -116,6 +116,21 @@ ls.add_snippets("elixir", {
 		]],
 		{}
 	),
+	parse(
+		"focus",
+		[[@tag focus: true]],
+		{}
+	),
+	parse(
+		"v4",
+		[[Faker.UUID.v4()]],
+		{}
+	),
+	parse(
+		"ext",
+		[[external_id: Faker.UUID.v4()]],
+		{}
+	),
 	-- Expand to a new module definition, auto infer the module name from the path.
 	ls.snippet(
 		"defm",

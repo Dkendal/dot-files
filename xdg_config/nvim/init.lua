@@ -136,30 +136,15 @@ local plugins = {
 
 			local h = require("null-ls.helpers")
 
-			local sqlfmt = {
-				name = "sqlfmt",
-				method = null_ls.methods.FORMATTING,
-				filetypes = { "sql" },
-				generator = h.formatter_factory({
-					command = "sqlfmt",
-					args = {
-						"--no-simplify",
-						"--casemode=lower",
-					},
-					to_stdin = true,
-				}),
-			}
-
 			null_ls.setup({
 				root_dir = require("null-ls.utils").root_pattern(".git", "package.json"),
 				debug = true,
 				sources = {
 					-- Diagnostics
 					null_ls.builtins.diagnostics.fish,
-					-- null_ls.builtins.diagnostics.shellcheck,
-					null_ls.builtins.diagnostics.selene,
+					null_ls.builtins.diagnostics.codespell,
+					-- null_ls.builtins.diagnostics.selene,
 					-- Formatting
-					sqlfmt,
 					null_ls.builtins.formatting.shellharden,
 					null_ls.builtins.formatting.erb_format,
 					null_ls.builtins.formatting.black,
@@ -222,13 +207,24 @@ local plugins = {
 			"hrsh7th/cmp-nvim-lsp-document-symbol",
 			"hrsh7th/cmp-nvim-lua",
 			"hrsh7th/cmp-path",
+			"zbirenbaum/copilot-cmp",
 			"saadparwaiz1/cmp_luasnip",
-			"onsails/lspkind.nvim",
+			{
+				"onsails/lspkind.nvim",
+				config = function()
+					require("lspkind").init({
+						Copilot = "",
+					})
+
+					vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
+				end,
+			},
 			"neovim/nvim-lspconfig",
 		},
 		config = function()
 			local cmp = require("cmp")
 			local lspkind = require("lspkind")
+
 
 			cmp.setup({
 				snippet = {
@@ -252,16 +248,20 @@ local plugins = {
 					["<C-u>"] = cmp.mapping.scroll_docs(4),
 					-- ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
 				},
+				experimental = {
+					ghost_text = true,
+				},
 				formatting = {
 					format = lspkind.cmp_format(),
 				},
 				sources = {
-					{ name = "nvim_lsp" },
-					{ name = "nvim_lua" },
-					{ name = "luasnip" },
-					{ name = "nvim_lsp_signature_help" },
-					{ name = "path" },
-					{ name = "emoji" },
+					{ name = "nvim_lsp_signature_help", group_index = 1 },
+					{ name = "copilot",                 group_index = 2 },
+					{ name = "nvim_lsp",                group_index = 2 },
+					{ name = "nvim_lua",                group_index = 2 },
+					{ name = "luasnip",                 group_index = 2 },
+					{ name = "path",                    group_index = 3 },
+					{ name = "emoji",                   group_index = 3 },
 				},
 			})
 		end,
@@ -487,6 +487,8 @@ local plugins = {
 		dependencies = {
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
+				"Marskey/telescope-sg",
+				"debugloop/telescope-undo.nvim",
 				build = "make",
 			},
 		},
@@ -496,10 +498,20 @@ local plugins = {
 			telescope.setup({
 				extensions = {
 					fzf = {},
+					ast_grep = {
+						command = {
+							"sg",
+							"--json=stream",
+						},                 -- must have --json=stream
+						grep_open_files = false, -- search in opened files
+						lang = nil,        -- string value, specify language for ast-grep `nil` for default
+					}
 				},
 				defaults = themes.get_ivy({}),
 			})
 			telescope.load_extension("fzf")
+			telescope.load_extension("undo")
+			telescope.load_extension("kitty")
 		end,
 		keys = {
 			{ "gO",          "<cmd>Telescope lsp_document_symbols<cr>",          desc = "Document symbols" },
@@ -830,37 +842,55 @@ local plugins = {
 		},
 	},
 	{
-		"elihunter173/dirbuf.nvim",
-		opts = {
-			write_cmd = "DirbufSync -confirm",
+		"https://github.com/stevearc/oil.nvim",
+		dependencies = {
+			"echasnovski/mini.icons",
+			"nvim-tree/nvim-web-devicons"
 		},
+		---@module 'oil'
+		---@type oil.SetupOpts
+		opts = {},
+		keys = {
+			{ "-", "<CMD>Oil<CR>", desc = "Open parent directory" }
+		}
 	},
 	{
 		"ibhagwan/fzf-lua",
 		lazy = false,
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		keys = {
+			{ "<leader>hdc",     "<cmd>FzfLua colorschemes<cr>" },
+			{ "<leader>:",       "<cmd>FzfLua command_history<cr>",                             desc = "Command History" },
+			{ "<leader>sc",      "<cmd>FzfLua command_history<cr>",                             desc = "Command History" },
+			{ "<leader><space>", "<cmd>FzfLua commands<cr>" },
+			{ "<leader>sd",      "<cmd>FzfLua diagnostics_document<cr>",                        desc = "Document Diagnostics" },
+			{ "<leader>sD",      "<cmd>FzfLua diagnostics_workspace<cr>",                       desc = "Workspace Diagnostics" },
 			{ "<leader>fel",     "<cmd>FzfLua files cwd=" .. vim.fn.stdpath("config") .. "<cr>" },
 			{ "<leader>feL",     "<cmd>FzfLua files cwd=" .. vim.fn.stdpath("data") .. "<cr>" },
 			{ "<leader>ff",      "<cmd>FzfLua files<cr>" },
+			{ "<leader>sg",      "<cmd>FzfLua grep<CR>" },
 			{ "<leader>?",       "<cmd>FzfLua grep<cr>" },
-			{ "<leader>/",       "<cmd>FzfLua live_grep<cr>" },
-			{ "<leader><space>", "<cmd>FzfLua commands<cr>" },
-			{ "<leader>hdm",     "<cmd>FzfLua keymaps<cr>" },
-			{ "<leader>hh",      "<cmd>FzfLua helptags<cr>" },
-			{ "<leader>hdh",     "<cmd>FzfLua highlights<cr>" },
-			{ "<leader>hm",      "<cmd>FzfLua manpages<cr>" },
-			{ "<leader>fr",      "<cmd>FzfLua oldfiles<CR>" },
 			{ "<leader>sgg",     "<cmd>FzfLua grep_curbuf<CR>" },
-			{ "<leader>sg",      "<cmd>FzfLua grep<CR>" },
-			{ "<leader>sg",      "<cmd>FzfLua grep<CR>" },
 			{ "<leader>sgq",     "<cmd>FzfLua grep_quickfix<CR>" },
 			{ "<leader>sgv",     "<cmd>FzfLua grep_visual<CR>" },
-			{ "gd",              "<cmd>FzfLua lsp_definitions<CR>" },
+			{ "<leader>hh",      "<cmd>FzfLua helptags<cr>" },
+			{ "<leader>hdh",     "<cmd>FzfLua highlights<cr>",                                  desc = "Highlights" },
+			{ "<leader>sj",      "<cmd>FzfLua jumps<cr>",                                       desc = "Jumplist" },
+			{ "<leader>hdm",     "<cmd>FzfLua keymaps<cr>" },
+			{ "<leader>sk",      "<cmd>FzfLua keymaps<cr>",                                     desc = "Key Maps" },
+			{ "<leader>/",       "<cmd>FzfLua live_grep<cr>" },
+			{ "<leader>sl",      "<cmd>FzfLua loclist<cr>",                                     desc = "Location List" },
 			{ "gD",              "<cmd>FzfLua lsp_declarations<CR>" },
+			{ "gd",              "<cmd>FzfLua lsp_definitions<CR>" },
 			{ "<leader>ss",      "<cmd>FzfLua lsp_document_symbol<CR>" },
+			{ "gI",              "<cmd>FzfLua lsp_implementations<CR>" },
+			{ "gr",              "<cmd>FzfLua lsp_references<CR>" },
+			{ "gy",              "<cmd>FzfLua lsp_typedefs<CR>" },
 			{ "<leader>sS",      "<cmd>FzfLua lsp_workspace_symbols<CR>" },
-			{ "<leader>sS",      "<cmd>FzfLua lsp_workspace_symbols<CR>" },
+			{ "<leader>hm",      "<cmd>FzfLua manpages<cr>" },
+			{ "<leader>sm",      "<cmd>FzfLua marks<cr>",                                       desc = "Jump to Mark" },
+			{ "<leader>fr",      "<cmd>FzfLua oldfiles<CR>",                                    desc = "Old Files" },
+			{ "<leader>sR",      "<cmd>FzfLua resume<cr>",                                      desc = "Resume" },
 		},
 		config = function()
 			require("fzf-lua").setup({
@@ -880,6 +910,17 @@ local plugins = {
 				}
 			})
 		end
+	},
+	{
+		dir = "~/src/dkendal/fzf-lua-sapling",
+		opts = {},
+		dependencies = {
+			"ibhagwan/fzf-lua"
+		},
+		keys = {
+			-- { "<leader>pq", "<plug>(kitty-paths)" },
+		},
+		lazy = false,
 	},
 	{
 		dir = "~/src/dkendal/nvim-kitty",
@@ -905,6 +946,7 @@ local plugins = {
 				-- Elixir
 				{ "lib/*.ex",        "test/*_test.exs" },
 				{ "lib/*/live/*.ex", "lib/*/live/*.html.heex" },
+				{ "apps/*/lib/*.ex", "apps/*/test/*_test.exs" },
 				-- Ruby
 				{ "app/*.rb",        "test/*_test.rb" },
 				{ "test/*_test.rb",  "app/*.rb" },
@@ -929,8 +971,13 @@ local plugins = {
 	{
 		"David-Kunz/gen.nvim",
 		opts = {
+			model = "llama3.1:latest",
 			host = "titan.local",
-			port = 11434
+			port = 11434,
+			-- command = function(options)
+			-- 	local body = { model = options.model, stream = true }
+			-- 	return "curl --silent --no-buffer -X POST http://" .. options.host .. ":" .. options.port .. "/api/chat -d $body"
+			-- end,
 		}
 	},
 	{
@@ -952,6 +999,31 @@ local plugins = {
 					openai = nil,
 					ahtropic = nil,
 					copilot = nil,
+					llama3 = function()
+						return require("codecompanion.adapters").extend("ollama", {
+							name = "llama3.1",
+							schema = {
+								model = {
+									default = "llama3.1:latest",
+								},
+								num_ctx = {
+									default = 4096,
+								},
+								num_predict = {
+									default = -1,
+								},
+							},
+							env = {
+								url = "http://titan.local:11434",
+							},
+							headers = {
+								["Content-Type"] = "application/json",
+							},
+							parameters = {
+								sync = true,
+							},
+						})
+					end,
 					deepseek_coder_v2 = function()
 						return require("codecompanion.adapters").extend("ollama", {
 							name = "Deep Seek Coder v2",
@@ -991,53 +1063,46 @@ local plugins = {
 			},
 			"nvim-telescope/telescope.nvim", -- Optional: For using slash commands
 		},
+	},
+	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		config = function()
+			require("copilot").setup({
+				suggestion = { enabled = false },
+				panel = {
+					enabled = true,
+					auto_refresh = false,
+					keymap = {
+						jump_prev = "[[",
+						jump_next = "]]",
+						accept = "<CR>",
+						refresh = "gr",
+						open = "<M-CR>"
+					},
+					layout = {
+						position = "bottom", -- | top | left | right
+						ratio = 0.4
+					},
+				},
+			})
+		end,
+	},
+	{
+		"zbirenbaum/copilot-cmp",
+		dependencies = {
+			"zbirenbaum/copilot.lua",
+		},
+		config = function()
+			require("copilot_cmp").setup()
+		end
+	},
+	{
+		"pmizio/typescript-tools.nvim",
+		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+		opts = {},
 	}
-
-	-- {
-	-- 	"yetone/avante.nvim",
-	-- 	event = "VeryLazy",
-	-- 	lazy = false,
-	-- 	version = false, -- set this if you want to always pull the latest change
-	-- 	opts = {
-	-- 		-- add any opts here
-	-- 	},
-	-- 	-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-	-- 	build = "make",
-	-- 	-- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
-	-- 	dependencies = {
-	-- 		"stevearc/dressing.nvim",
-	-- 		"nvim-lua/plenary.nvim",
-	-- 		"MunifTanjim/nui.nvim",
-	-- 		--- The below dependencies are optional,
-	-- 		"nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-	-- 		"zbirenbaum/copilot.lua",    -- for providers='copilot'
-	-- 		{
-	-- 			-- support for image pasting
-	-- 			"HakonHarnes/img-clip.nvim",
-	-- 			event = "VeryLazy",
-	-- 			opts = {
-	-- 				-- recommended settings
-	-- 				default = {
-	-- 					embed_image_as_base64 = false,
-	-- 					prompt_for_file_name = false,
-	-- 					drag_and_drop = {
-	-- 						insert_mode = true,
-	-- 					},
-	-- 					-- -- required for Windows users
-	-- 					-- use_absolute_path = true,
-	-- 				},
-	-- 			},
-	-- 		},
-	-- 		{
-	-- 			-- Make sure to set this up properly if you have lazy=true
-	-- 			'MeanderingProgrammer/render-markdown.nvim',
-	-- 			opts = {
-	-- 				file_types = { "markdown", "Avante" },
-	-- 			},
-	-- 			ft = { "markdown", "Avante" },
-	-- 		},
-	-- 	},
-	-- }
 }
 
 local opts = {}

@@ -1,0 +1,25 @@
+version: 2
+root-markers:
+  - .git/
+  - .sl/
+
+lint-debounce: 1s
+commands:
+  - command: notepad
+    arguments:
+      - ${INPUT}
+    title: メモ帳
+
+tools:
+  mix_credo: &mix_credo
+    lint-command: "mix credo suggest --format=flycheck --read-from-stdin ${INPUT}"
+    lint-stdin: true
+    lint-formats:
+      - '%f:%l:%c: %t: %m'
+      - '%f:%l: %t: %m'
+    root-markers:
+      - mix.lock
+      - mix.exs
+
+  elixir:
+    - <<: *mix_credo

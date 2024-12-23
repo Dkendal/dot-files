@@ -95,7 +95,11 @@ complete -f -c sl -n '__fish_sl_using_command pull' -s t -l tool -d 'Specify mer
 complete -f -c sl -n '__fish_sl_using_command pull' -s d -l dest -d 'Destination for rebase or update' -a '(sl bookmarks --template "{bookmark}\n")' -x
 
 # Source completion
-complete -f -c sl -n '__fish_sl_using_command pull' -a '(sl paths --template "{name}\n")' -d 'Pull source'
+function __fish_sl_source
+    sl paths | string split -f1 ' = '
+end
+
+complete -f -c sl -n '__fish_sl_using_command pull; and __fish_no_arguments' -a "(__fish_sl_source)" -d 'Pull source'
 
 # Help option
 complete -f -c sl -n '__fish_sl_using_command pull' -l help -d 'Show help for pull command'
