@@ -5,3 +5,5 @@ deps
 _build
 .sl
 tmp
+.aider*
+Taskfile.*
