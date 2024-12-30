@@ -117,16 +117,6 @@ local plugins = {
 		end,
 	},
 	{
-		"L3MON4D3/LuaSnip",
-		config = function()
-			safe_require("user/snippets")
-		end,
-		keys = {
-			{ "<leader>lsu", "<cmd>:LuaSnipUnlinkCurrent<cr>", mode = "n", desc = "Unlink current snippet" },
-			{ "<leader>lsl", "<cmd>:LuaSnipListAvailable<cr>", mode = "n", desc = "List available snippets" },
-		},
-	},
-	{
 		"nvimtools/none-ls.nvim",
 		dependencies = {
 			"williamboman/mason.nvim",
@@ -208,9 +198,9 @@ local plugins = {
 			"hrsh7th/cmp-nvim-lua",
 			"hrsh7th/cmp-path",
 			"zbirenbaum/copilot-cmp",
-			"saadparwaiz1/cmp_luasnip",
 			{
 				"onsails/lspkind.nvim",
+
 				config = function()
 					require("lspkind").init({
 						Copilot = "",
@@ -224,14 +214,9 @@ local plugins = {
 		config = function()
 			local cmp = require("cmp")
 			local lspkind = require("lspkind")
-
+			require("user/snippets").setup()
 
 			cmp.setup({
-				snippet = {
-					expand = function(args)
-						require("luasnip").lsp_expand(args.body)
-					end,
-				},
 				window = {
 					completion = cmp.config.window.bordered(),
 					documentation = cmp.config.window.bordered(),
@@ -257,9 +242,9 @@ local plugins = {
 				sources = {
 					{ name = "nvim_lsp_signature_help", group_index = 1 },
 					{ name = "copilot",                 group_index = 2 },
+					{ name = "user_snippets",           group_index = 2 },
 					{ name = "nvim_lsp",                group_index = 2 },
 					{ name = "nvim_lua",                group_index = 2 },
-					{ name = "luasnip",                 group_index = 2 },
 					{ name = "path",                    group_index = 3 },
 					{ name = "emoji",                   group_index = 3 },
 				},
@@ -986,18 +971,24 @@ local plugins = {
 			require("codecompanion").setup({
 				strategies = {
 					chat = {
-						adapter = "deepseek_coder_v2",
+						adapter = "anthropic",
 					},
 					inline = {
-						adapter = "deepseek_coder_v2",
+						adapter = "anthropic",
 					},
 					agent = {
-						adapter = "deepseek_coder_v2",
+						adapter = "anthropic",
 					},
 				},
 				adapters = {
 					openai = nil,
-					ahtropic = nil,
+					anthropic = function()
+						return require("codecompanion.adapters").extend("anthropic", {
+							env = {
+								api_key = "ANTHROPIC_API_KEY"
+							},
+						})
+					end,
 					copilot = nil,
 					llama3 = function()
 						return require("codecompanion.adapters").extend("ollama", {
