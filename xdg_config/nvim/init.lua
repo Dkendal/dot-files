@@ -78,8 +78,8 @@ local plugins = {
 					hl.set(0, "FloatBorder", { bg = float_bg, fg = float_bg.darken(10).de(30) })
 					hl.set(0, "LspDiagnosticsDefaultHint", { link = "GruvboxBg4" })
 
-					hl.set(0, "StatusLineDiagnosticWarn", { bg = StatusLine.fg, fg = colors.DarkOrange, bold = true })
 					hl.set(0, "StatusLineDiagnosticError", { bg = StatusLine.fg, fg = colors.DarkRed, bold = true })
+					hl.set(0, "StatusLineDiagnosticWarn", { bg = StatusLine.fg, fg = colors.DarkOrange, bold = true })
 					hl.set(0, "StatusLineDiagnosticHint", { bg = StatusLine.fg, fg = colors.DarkBlue, bold = true })
 					hl.set(0, "StatusLineDiagnosticInfo", { bg = StatusLine.fg, fg = colors.DarkCyan, bold = true })
 
@@ -153,7 +153,6 @@ local plugins = {
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
-			"nvim-lua/lsp-status.nvim",
 			"nvimtools/none-ls.nvim",
 			"lvimuser/lsp-inlayhints.nvim",
 			{ "ray-x/lsp_signature.nvim", opts = {} },
@@ -188,68 +187,16 @@ local plugins = {
 		},
 	},
 	{
-		"hrsh7th/nvim-cmp",
-		dependencies = {
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-calc",
-			"hrsh7th/cmp-emoji",
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-nvim-lsp-document-symbol",
-			"hrsh7th/cmp-nvim-lua",
-			"hrsh7th/cmp-path",
-			"zbirenbaum/copilot-cmp",
-			{
-				"onsails/lspkind.nvim",
-
-				config = function()
-					require("lspkind").init({
-						Copilot = "",
-					})
-
-					vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
-				end,
-			},
-			"neovim/nvim-lspconfig",
+		"Saghen/blink.cmp",
+		dependencies = 'rafamadriz/friendly-snippets',
+		version = "*",
+		--@module 'blink.cmp'
+		---@type blink.cmp.Config
+		opts = {
 		},
-		config = function()
-			local cmp = require("cmp")
-			local lspkind = require("lspkind")
-			require("user/snippets").setup()
-
-			cmp.setup({
-				window = {
-					completion = cmp.config.window.bordered(),
-					documentation = cmp.config.window.bordered(),
-				},
-				mapping = {
-					["<C-y>"] = cmp.mapping.confirm({ select = true }),
-					["<C-return>"] = cmp.mapping.confirm({ select = true }),
-					["<C-g>"] = cmp.mapping.abort(),
-					["<C-c>"] = cmp.mapping.abort(),
-					["<C-n>"] = cmp.mapping.select_next_item(),
-					["<C-p>"] = cmp.mapping.select_prev_item(),
-					["<C-Space>"] = cmp.mapping.complete({}),
-					["<C-d>"] = cmp.mapping.scroll_docs(-4),
-					["<C-u>"] = cmp.mapping.scroll_docs(4),
-					-- ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-				},
-				experimental = {
-					ghost_text = true,
-				},
-				formatting = {
-					format = lspkind.cmp_format(),
-				},
-				sources = {
-					{ name = "nvim_lsp_signature_help", group_index = 1 },
-					{ name = "copilot",                 group_index = 2 },
-					{ name = "user_snippets",           group_index = 2 },
-					{ name = "nvim_lsp",                group_index = 2 },
-					{ name = "nvim_lua",                group_index = 2 },
-					{ name = "path",                    group_index = 3 },
-					{ name = "emoji",                   group_index = 3 },
-				},
-			})
-		end,
+		sources = {
+			default = { 'lsp', 'path', 'snippets', 'buffer' },
+		},
 	},
 	{
 		"vim-scripts/file-line",
@@ -295,11 +242,6 @@ local plugins = {
 				col = 1,
 			},
 		},
-	},
-	{
-		"lukas-reineke/indent-blankline.nvim",
-		main = "ibl",
-		opts = {},
 	},
 	{
 		"rcarriga/nvim-notify",
@@ -466,82 +408,6 @@ local plugins = {
 	},
 	{
 		"godlygeek/tabular",
-	},
-	{
-		"nvim-telescope/telescope.nvim",
-		dependencies = {
-			{
-				"nvim-telescope/telescope-fzf-native.nvim",
-				"Marskey/telescope-sg",
-				"debugloop/telescope-undo.nvim",
-				build = "make",
-			},
-		},
-		config = function()
-			local telescope = require("telescope")
-			local themes = require("telescope.themes")
-			telescope.setup({
-				extensions = {
-					fzf = {},
-					ast_grep = {
-						command = {
-							"sg",
-							"--json=stream",
-						},                 -- must have --json=stream
-						grep_open_files = false, -- search in opened files
-						lang = nil,        -- string value, specify language for ast-grep `nil` for default
-					}
-				},
-				defaults = themes.get_ivy({}),
-			})
-			telescope.load_extension("fzf")
-			telescope.load_extension("undo")
-			telescope.load_extension("kitty")
-		end,
-		keys = {
-			{ "gO",          "<cmd>Telescope lsp_document_symbols<cr>",          desc = "Document symbols" },
-			{ "<m-o>",       "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Workspace symbols" },
-			{ "<c-s-o>",     "<cmd>Telescope lsp_document_symbols<cr>",          desc = "Document symbols" },
-			{ "<m-o>",       "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Workspace symbols" },
-			{ "<leader>bb",  "<cmd>Telescope buffers<cr>",                       desc = "Buffers" },
-			{ "<leader>gla", "<cmd>Telescope git_commits<cr>",                   desc = "Git commits" },
-			{ "<leader>glb", "<cmd>Telescope git_bcommits<cr>",                  desc = "Git bcommits" },
-			{ "<leader>fer", ":Telescope reloader<cr>",                          desc = "Reload config" },
-			{ "<leader>pf",  "<cmd>Telescope git_files<cr>",                     desc = "Git files" },
-			{ "<leader>pg",  "<cmd>Telescope git_status<cr>",                    desc = "Git Status" },
-			{ "<M-O>",       "<cmd>Telescope jumplist<cr>",                      desc = "Jumplist" },
-			{ "<leader>lsd", "<cmd>Telescope lsp_document_symbols<cr>",          desc = "LSP: Document symbols" },
-			{ "<leader>lsw", "<cmd>Telescope lsp_workspace_symbols<cr>",         desc = "LSP: Workspace Symbols" },
-			{ "<leader>lsW", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "LSP: Dynamic Workspace Symbols" },
-			{ "<leader>li",  "<cmd>Telescope lsp_incoming_calls<cr>",            desc = "LSP: Incoming calls" },
-			{ "<leader>lo",  "<cmd>Telescope lsp_outgoing_calls<cr>",            desc = "LSP: Outgoing calls" },
-		},
-	},
-	{
-		"debugloop/telescope-undo.nvim",
-		dependencies = { -- note how they're inverted to above example
-			{
-				"nvim-telescope/telescope.nvim",
-				dependencies = { "nvim-lua/plenary.nvim" },
-			},
-		},
-		opts = {
-			extensions = {
-				under = {},
-			},
-		},
-		config = function(_, opts)
-			local telescope = require("telescope")
-			telescope.setup(opts)
-			telescope.load_extension("undo")
-		end,
-		keys = {
-			{
-				"<leader>u",
-				"<cmd>Telescope undo<cr>",
-				desc = "Undo history",
-			},
-		},
 	},
 	{
 		"folke/trouble.nvim",
@@ -817,16 +683,6 @@ local plugins = {
 	{ "Mofiqul/vscode.nvim",  lazy = true },
 	{ "pest-parser/pest.vim", filetypes = { "pest" } },
 	{
-		"nvim-tree/nvim-tree.lua",
-		opts = {
-			update_to_buf_dir = { enable = false },
-		},
-		keys = {
-			{ "<leader>-", "<cmd>NvimTreeToggle<cr>" },
-			{ "<leader>=", "<cmd>NvimTreeFindFile<cr>" },
-		},
-	},
-	{
 		"https://github.com/stevearc/oil.nvim",
 		dependencies = {
 			"echasnovski/mini.icons",
@@ -838,74 +694,6 @@ local plugins = {
 		keys = {
 			{ "-", "<CMD>Oil<CR>", desc = "Open parent directory" }
 		}
-	},
-	{
-		"ibhagwan/fzf-lua",
-		lazy = false,
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		keys = {
-			{ "<leader>hdc",     "<cmd>FzfLua colorschemes<cr>" },
-			{ "<leader>:",       "<cmd>FzfLua command_history<cr>",                             desc = "Command History" },
-			{ "<leader>sc",      "<cmd>FzfLua command_history<cr>",                             desc = "Command History" },
-			{ "<leader><space>", "<cmd>FzfLua commands<cr>" },
-			{ "<leader>sd",      "<cmd>FzfLua diagnostics_document<cr>",                        desc = "Document Diagnostics" },
-			{ "<leader>sD",      "<cmd>FzfLua diagnostics_workspace<cr>",                       desc = "Workspace Diagnostics" },
-			{ "<leader>fel",     "<cmd>FzfLua files cwd=" .. vim.fn.stdpath("config") .. "<cr>" },
-			{ "<leader>feL",     "<cmd>FzfLua files cwd=" .. vim.fn.stdpath("data") .. "<cr>" },
-			{ "<leader>ff",      "<cmd>FzfLua files<cr>" },
-			{ "<leader>sg",      "<cmd>FzfLua grep<CR>" },
-			{ "<leader>?",       "<cmd>FzfLua grep<cr>" },
-			{ "<leader>sgg",     "<cmd>FzfLua grep_curbuf<CR>" },
-			{ "<leader>sgq",     "<cmd>FzfLua grep_quickfix<CR>" },
-			{ "<leader>sgv",     "<cmd>FzfLua grep_visual<CR>" },
-			{ "<leader>hh",      "<cmd>FzfLua helptags<cr>" },
-			{ "<leader>hdh",     "<cmd>FzfLua highlights<cr>",                                  desc = "Highlights" },
-			{ "<leader>sj",      "<cmd>FzfLua jumps<cr>",                                       desc = "Jumplist" },
-			{ "<leader>hdm",     "<cmd>FzfLua keymaps<cr>" },
-			{ "<leader>sk",      "<cmd>FzfLua keymaps<cr>",                                     desc = "Key Maps" },
-			{ "<leader>/",       "<cmd>FzfLua live_grep<cr>" },
-			{ "<leader>sl",      "<cmd>FzfLua loclist<cr>",                                     desc = "Location List" },
-			{ "gD",              "<cmd>FzfLua lsp_declarations<CR>" },
-			{ "gd",              "<cmd>FzfLua lsp_definitions<CR>" },
-			{ "<leader>ss",      "<cmd>FzfLua lsp_document_symbol<CR>" },
-			{ "gI",              "<cmd>FzfLua lsp_implementations<CR>" },
-			{ "gr",              "<cmd>FzfLua lsp_references<CR>" },
-			{ "gy",              "<cmd>FzfLua lsp_typedefs<CR>" },
-			{ "<leader>sS",      "<cmd>FzfLua lsp_workspace_symbols<CR>" },
-			{ "<leader>hm",      "<cmd>FzfLua manpages<cr>" },
-			{ "<leader>sm",      "<cmd>FzfLua marks<cr>",                                       desc = "Jump to Mark" },
-			{ "<leader>fr",      "<cmd>FzfLua oldfiles<CR>",                                    desc = "Old Files" },
-			{ "<leader>sR",      "<cmd>FzfLua resume<cr>",                                      desc = "Resume" },
-		},
-		config = function()
-			require("fzf-lua").setup({
-				keymap = {
-					builtin = {
-						["<PageDown>"] = "preview-page-down",
-						["<PageUp>"]   = "preview-page-up",
-						["<Home>"]     = "preview-up",
-						["<End>"]      = "preview-down",
-					},
-					fzf = {
-						["pgdn"] = "preview-page-down",
-						["pgup"] = "preview-page-up",
-						["home"] = "preview-up",
-						["end"]  = "preview-down",
-					},
-				}
-			})
-		end
-	},
-	{
-		dir = "~/src/dkendal/fzf-lua-sapling",
-		opts = {},
-		dependencies = {
-			"ibhagwan/fzf-lua"
-		},
-		keys = {
-			-- { "<leader>pq", "<plug>(kitty-paths)" },
-		},
-		lazy = false,
 	},
 	{
 		dir = "~/src/dkendal/nvim-kitty",
@@ -1046,13 +834,11 @@ local plugins = {
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-treesitter/nvim-treesitter",
-			"hrsh7th/nvim-cmp", -- Optional: For using slash commands and variables in the chat buffer
 			"echasnovski/mini.diff",
 			{
 				"stevearc/dressing.nvim", -- Optional: Improves the default Neovim UI
 				opts = {},
 			},
-			"nvim-telescope/telescope.nvim", -- Optional: For using slash commands
 		},
 	},
 	{
@@ -1081,28 +867,94 @@ local plugins = {
 		end,
 	},
 	{
-		"zbirenbaum/copilot-cmp",
-		dependencies = {
-			"zbirenbaum/copilot.lua",
-		},
-		config = function()
-			require("copilot_cmp").setup()
-		end
-	},
-	{
 		"pmizio/typescript-tools.nvim",
 		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 		opts = {},
+	},
+	{ "MagicDuck/grug-far.nvim" },
+	{ "j-hui/fidget.nvim",      opts = {} },
+	{
+		"folke/snacks.nvim",
+		---@type snacks.Config
+		opts = {
+			indent = {},
+			picker = {},
+			bigfile = {},
+			quickfile = {},
+			scroll = {},
+		},
+		keys = {
+			-- Scratch
+			{ "<leader>.",       function() Snacks.scratch() end,                                        desc = "Toggle Scratch Buffer" },
+			{ "<leader>S",       function() Snacks.scratch.select() end,                                 desc = "Select Scratch Buffer" },
+			-- Top Pickers & Explorer
+			{ "<leader><space>", function() Snacks.picker.smart() end,                                   desc = "Smart Find Files" },
+			{ "<leader>,",       function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
+			{ "<leader>/",       function() Snacks.picker.grep() end,                                    desc = "Grep" },
+			{ "<leader>:",       function() Snacks.picker.command_history() end,                         desc = "Command History" },
+			{ "<leader>n",       function() Snacks.picker.notifications() end,                           desc = "Notification History" },
+			{ "<leader>e",       function() Snacks.explorer() end,                                       desc = "File Explorer" },
+			-- find
+			{ "<leader>fb",      function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
+			{ "<leader>fc",      function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
+			{ "<leader>ff",      function() Snacks.picker.files() end,                                   desc = "Find Files" },
+			{ "<leader>fg",      function() Snacks.picker.git_files() end,                               desc = "Find Git Files" },
+			{ "<leader>fp",      function() Snacks.picker.projects() end,                                desc = "Projects" },
+			{ "<leader>fr",      function() Snacks.picker.recent() end,                                  desc = "Recent" },
+			-- git
+			{ "<leader>gb",      function() Snacks.picker.git_branches() end,                            desc = "Git Branches" },
+			{ "<leader>gl",      function() Snacks.picker.git_log() end,                                 desc = "Git Log" },
+			{ "<leader>gL",      function() Snacks.picker.git_log_line() end,                            desc = "Git Log Line" },
+			{ "<leader>gs",      function() Snacks.picker.git_status() end,                              desc = "Git Status" },
+			{ "<leader>gS",      function() Snacks.picker.git_stash() end,                               desc = "Git Stash" },
+			{ "<leader>gd",      function() Snacks.picker.git_diff() end,                                desc = "Git Diff (Hunks)" },
+			{ "<leader>gf",      function() Snacks.picker.git_log_file() end,                            desc = "Git Log File" },
+			-- Grep
+			{ "<leader>sb",      function() Snacks.picker.lines() end,                                   desc = "Buffer Lines" },
+			{ "<leader>sB",      function() Snacks.picker.grep_buffers() end,                            desc = "Grep Open Buffers" },
+			{ "<leader>sg",      function() Snacks.picker.grep() end,                                    desc = "Grep" },
+			{ "<leader>sw",      function() Snacks.picker.grep_word() end,                               desc = "Visual selection or word", mode = { "n", "x" } },
+			-- search
+			{ '<leader>s"',      function() Snacks.picker.registers() end,                               desc = "Registers" },
+			{ '<leader>s/',      function() Snacks.picker.search_history() end,                          desc = "Search History" },
+			{ "<leader>sa",      function() Snacks.picker.autocmds() end,                                desc = "Autocmds" },
+			{ "<leader>sb",      function() Snacks.picker.lines() end,                                   desc = "Buffer Lines" },
+			{ "<leader>sc",      function() Snacks.picker.command_history() end,                         desc = "Command History" },
+			{ "<leader>sC",      function() Snacks.picker.commands() end,                                desc = "Commands" },
+			{ "<leader>sd",      function() Snacks.picker.diagnostics() end,                             desc = "Diagnostics" },
+			{ "<leader>sD",      function() Snacks.picker.diagnostics_buffer() end,                      desc = "Buffer Diagnostics" },
+			{ "<leader>sh",      function() Snacks.picker.help() end,                                    desc = "Help Pages" },
+			{ "<leader>sH",      function() Snacks.picker.highlights() end,                              desc = "Highlights" },
+			{ "<leader>si",      function() Snacks.picker.icons() end,                                   desc = "Icons" },
+			{ "<leader>sj",      function() Snacks.picker.jumps() end,                                   desc = "Jumps" },
+			{ "<leader>sk",      function() Snacks.picker.keymaps() end,                                 desc = "Keymaps" },
+			{ "<leader>sl",      function() Snacks.picker.loclist() end,                                 desc = "Location List" },
+			{ "<leader>sm",      function() Snacks.picker.marks() end,                                   desc = "Marks" },
+			{ "<leader>sM",      function() Snacks.picker.man() end,                                     desc = "Man Pages" },
+			{ "<leader>sp",      function() Snacks.picker.lazy() end,                                    desc = "Search for Plugin Spec" },
+			{ "<leader>sq",      function() Snacks.picker.qflist() end,                                  desc = "Quickfix List" },
+			{ "<leader>sR",      function() Snacks.picker.resume() end,                                  desc = "Resume" },
+			{ "<leader>su",      function() Snacks.picker.undo() end,                                    desc = "Undo History" },
+			{ "<leader>uC",      function() Snacks.picker.colorschemes() end,                            desc = "Colorschemes" },
+			-- LSP
+			{ "gd",              function() Snacks.picker.lsp_definitions() end,                         desc = "Goto Definition" },
+			{ "gD",              function() Snacks.picker.lsp_declarations() end,                        desc = "Goto Declaration" },
+			{ "gr",              function() Snacks.picker.lsp_references() end,                          nowait = true,                     desc = "References" },
+			{ "gI",              function() Snacks.picker.lsp_implementations() end,                     desc = "Goto Implementation" },
+			{ "gy",              function() Snacks.picker.lsp_type_definitions() end,                    desc = "Goto T[y]pe Definition" },
+			{ "<leader>ss",      function() Snacks.picker.lsp_symbols() end,                             desc = "LSP Symbols" },
+			{ "<leader>sS",      function() Snacks.picker.lsp_workspace_symbols() end,                   desc = "LSP Workspace Symbols" },
+		}
 	}
+
 }
 
 local opts = {}
 
 require("lazy").setup(plugins, opts)
-
+require("user/statusline").setup()
 require("user/boxes")
 require("user/background").init()
--- require("user/statusline").setup()
 require("user/keymaps").setup()
 require("user/commands")
 require("user/projects")

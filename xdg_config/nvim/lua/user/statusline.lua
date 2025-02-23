@@ -1,18 +1,8 @@
 local M = {}
 
-local function eval_expr(s)
-	return "%{" .. s .. "}"
-end
-
-local function re_eval_expr(s)
-	return "%{%" .. s .. "%}"
-end
-
 local function hi(group, s)
-	return "%#" .. group .. "#" .. s .. "%#StatusLine#"
+	return table.concat({ "%#", group, "#", s, "%#StatusLine#" }, "")
 end
-
-local sep = "%="
 
 _G.user_status_line = {}
 
@@ -22,102 +12,79 @@ end
 
 function _G.user_status_line.macro()
 	local reg = vim.fn.reg_recording()
+
 	if reg == "" then
 		return ""
 	end
-	
-	return "[⬤" .. vim.fn.reg_recording() .. "]"
+
+	return table.concat({ "[%#MiniIconsRed#⬤", vim.fn.reg_recording(), "%#StatusLine#]" }, "")
 end
 
-function _G.user_status_line.dev_icon()
-	local ext = vim.fn.expand("%:e")
-	local icon, hl = require("nvim-web-devicons").get_icon_by_filetype(ext, { default = true })
-	return hi("StatusLine" .. hl, icon)
-end
+function _G.user_status_line.diagnostics()
+	local count = vim.diagnostic.count(0)
 
-local function spinner(idx)
-	local spinners = {
-		"⠋",
-		"⠙",
-		"⠹",
-		"⠸",
-		"⠼",
-		"⠴",
-		"⠦",
-		"⠧",
-		"⠇",
-		"⠏",
+	if vim.tbl_isempty(count) then
+		return ""
+	end
+
+	local i = 0
+	local s = {
+		"["
 	}
 
-	return spinners[idx % #spinners + 1]
-end
+	-- pre size array
+	s[14] = nil
 
-function _G.user_status_line.lsp()
-	local s = ""
-	local ls = require("lsp-status")
-	local bufnr = vim.api.nvim_get_current_buf()
-
-	local buf_diagnostics = ls.diagnostics(bufnr)
-	local buf_messages = ls.messages()
-
-	if #buf_messages > 0 then
-		local msg = buf_messages[1]
-
-		if msg.spinner then
-			s = s .. spinner(msg.spinner) .. " "
-		end
-
-		s = s .. msg.title .. " "
-
-		if msg.progress and msg.percentage then
-			s = s .. string.format("(%.0f%%%%) ", msg.percentage)
-		end
+	i = count[vim.diagnostic.severity.ERROR]
+	if i ~= nil then
+		table.insert(s, "%#StatusLineDiagnosticError#")
+		table.insert(s, "E:")
+		table.insert(s, i)
 	end
 
-	if buf_diagnostics.hints > 0 then
-		s = s .. hi("StatusLineDiagnosticHint", string.format("H:%d", buf_diagnostics.hints))
+	i = count[vim.diagnostic.severity.WARN]
+	if i ~= nil then
+		table.insert(s, "%#StatusLineDiagnosticWarn#")
+		table.insert(s, "W:")
+		table.insert(s, i)
 	end
 
-	if buf_diagnostics.errors > 0 then
-		s = s .. " " .. hi("StatusLineDiagnosticError", string.format("E:%d", buf_diagnostics.errors))
+	i = count[vim.diagnostic.severity.INFO]
+	if i ~= nil then
+		table.insert(s, "%#StatusLineDiagnosticInfo#")
+		table.insert(s, "I:")
+		table.insert(s, i)
 	end
 
-	if buf_diagnostics.warnings > 0 then
-		s = s .. " " .. hi("StatusLineDiagnosticWarn", string.format("W:%d", buf_diagnostics.warnings))
+	i = count[vim.diagnostic.severity.HINT]
+	if i ~= nil then
+		table.insert(s, "%#StatusLineDiagnosticHint#")
+		table.insert(s, "H:")
+		table.insert(s, i)
 	end
 
-	if buf_diagnostics.info > 0 then
-		s = s .. " " .. hi("StatusLineDiagnosticInfo", string.format("I:%d", buf_diagnostics.info))
-	end
+	table.insert(s, "%#StatusLine#]")
 
-	if s == "" then
-		return "✓"
-	end
-
-	return s
+	return table.concat(s, "")
 end
 
 function M.setup()
-	local s = ""
+	vim.api.nvim_create_autocmd({ "ColorScheme" }, {
+		pattern = "*",
+		callback = function()
+			local hl = require("user.highlight")
+			local colors = hl.color_map()
+			local StatusLine = hl.get(0, { name = "StatusLine" })
+			hl.set(0, "StatusLineDiagnosticError", { bg = StatusLine.bg, fg = colors.Red, bold = true })
+			hl.set(0, "StatusLineDiagnosticWarn", { bg = StatusLine.bg, fg = colors.Orange, bold = true })
+			hl.set(0, "StatusLineDiagnosticHint", { bg = StatusLine.bg, fg = colors.Blue, bold = true })
+			hl.set(0, "StatusLineDiagnosticInfo", { bg = StatusLine.bg, fg = colors.Cyan, bold = true })
+		end
+	})
 
-	s = s .. re_eval_expr("v:lua.user_status_line.mode()") .. " "
-	s = s .. re_eval_expr("v:lua.user_status_line.dev_icon()") .. " "
-	s = s .. "%f (%l,%c) %P %h%w%r"
-	-- %f = file name
-	-- %h = help buffer flag
-	-- %w = preview window flag
-	-- %r = read-only flag
-	-- %l = line number
-	-- %c = column number
-	-- %V = visual selection
-	s = s .. re_eval_expr("v:lua.user_status_line.macro()")
-	s = s .. sep .. re_eval_expr("v:lua.user_status_line.lsp()")
-	vim.o.statusline = s
-
-	local s = ""
-	s = s .. "%f"
-	s = hi("StatusLine", s)
-	vim.o.winbar = s
+	vim.o.statusline =
+	[[%{ v:lua.user_status_line.mode() } %f%s%h%r%w%q %=  %{% v:lua.user_status_line.diagnostics() %}%{% v:lua.user_status_line.macro() %} %l,%c %P]]
+	vim.o.winbar = "%#StatusLine#%f"
 end
 
 return M

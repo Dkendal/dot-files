@@ -99,6 +99,11 @@
             xan
             yq
             zoxide
+            # Language Servers
+            nil
+            efm-langserver
+            lua-language-server
+            codespell
           ];
 
         homebrew = {

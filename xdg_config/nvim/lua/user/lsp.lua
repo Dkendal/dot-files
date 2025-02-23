@@ -11,18 +11,19 @@ end
 local function with_defaults(tbl)
 	-- See link below for more default configurations
 	-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-	local lsp_status = require("lsp-status")
-	local capabilities = lsp_status.capabilities
-	local defaults = require("cmp_nvim_lsp").default_capabilities()
-
-	capabilities = vim.tbl_deep_extend("force", capabilities, defaults)
-
-	capabilities.textDocument.foldingRange = {
-		dynamicRegistration = false,
-		lineFoldingOnly = true,
+	local capabilities = {
+		textDocument = {
+			foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true
+			},
+			completion = {
+				completionItem = {
+					snippetSupport = true
+				}
+			}
+		}
 	}
-
-	capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 	local lsp_default_opts = {
 		autostart = true,
@@ -332,9 +333,9 @@ local function setup()
 
 	lspconfig.marksman.setup(with_defaults({}))
 
-	lspconfig.elixirls.setup(with_defaults({}))
+	-- lspconfig.elixirls.setup(with_defaults({}))
 	-- config.nextls.setup(with_defaults({}))
-	-- config.lexical.setup(with_defaults({}))
+	lspconfig.lexical.setup(with_defaults({}))
 
 	lspconfig.gdscript.setup(with_defaults({}))
 
