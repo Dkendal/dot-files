@@ -1102,13 +1102,13 @@ require("lazy").setup(plugins, opts)
 
 require("user/boxes")
 require("user/background").init()
-require("user/statusline").setup()
+-- require("user/statusline").setup()
 require("user/keymaps").setup()
 require("user/commands")
 require("user/projects")
 require("user/search_and_replace")
 
---- Enable persistant colorscheme changes
+--- Enable persistent colorscheme changes
 --- @param default_colorscheme string
 --- @param default_background "dark" | "light"
 --- @return nil

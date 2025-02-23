@@ -42,6 +42,13 @@ local snippets_by_filetype = {
 			]],
 		}
 	},
+	javascript = {
+		{
+			trigger = "p",
+			body = [[console.log($1);]]
+		}
+	},
+	typescript = {},
 	elixir = process_snippets(require("user.snippets.elixir")),
 	rust =
 	{
@@ -79,6 +86,8 @@ local snippets_by_filetype = {
 		}
 	}
 }
+
+vim.tbl_extend('force', snippets_by_filetype.typescript, snippets_by_filetype.javascript)
 
 local function get_buf_snips()
 	local ft = vim.bo.filetype

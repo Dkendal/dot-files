@@ -62,5 +62,9 @@ return {
 		body = [[
 				<% $0 %>
 			]],
+	},
+	{
+		trigger = "i",
+		body = [[IO.inspect($0)]],
 	}
 }

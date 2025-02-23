@@ -107,6 +107,12 @@ in
       elixir = {
         disabled = true;
       };
+      nodejs = {
+        disabled = true;
+      };
+      python = {
+        disabled = true;
+      };
     };
   };
 

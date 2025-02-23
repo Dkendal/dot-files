@@ -1,4 +1,4 @@
-set -x GPG_TTY (tty)
+# set -x GPG_TTY (tty)
 
 if test -d ~/.local/bin
   fish_add_path ~/.local/bin

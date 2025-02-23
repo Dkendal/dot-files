@@ -7,3 +7,4 @@ _build
 tmp
 .aider*
 Taskfile.*
+.datagrip

@@ -8,18 +8,21 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
   outputs = inputs@{ self, nix-darwin, nixpkgs, nixpkgs-stable, home-manager, ... }:
     let
       overlay = find: prev: {
         go-task = nixpkgs-stable.legacyPackages.${prev.system}.go-task;
+        neovim = inputs.neovim-nightly-overlay.packages.${prev.system}.default;
       };
       configuration = { pkgs, user, ... }: {
         # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
         environment.systemPackages = with pkgs;
           [
+            d2
             act
             ast-grep
             cmake
@@ -93,7 +96,7 @@
             visidata
             wget
             xh
-            xsv
+            xan
             yq
             zoxide
           ];
@@ -129,9 +132,6 @@
           };
         };
 
-
-        # Auto upgrade nix package and the daemon service.
-        services.nix-daemon.enable = true;
 
         services.tailscale.enable = true;
 
