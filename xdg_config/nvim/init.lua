@@ -17,9 +17,7 @@ local safe_require = require("user.package").safe_require
 vim.cmd.packadd("cfilter")
 
 local plugins = {
-	{
-		"catppuccin/nvim",
-	},
+	{ "catppuccin/nvim", },
 	{
 		"morhetz/gruvbox",
 		config = function()
@@ -173,9 +171,11 @@ local plugins = {
 	},
 	{
 		"nvimdev/lspsaga.nvim",
-		config = function()
-			require("lspsaga").setup({})
-		end,
+		opts = {
+			lightbulb = {
+				sign = false
+			}
+		},
 		event = "LspAttach",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter", -- optional
@@ -475,7 +475,7 @@ local plugins = {
 		end,
 	},
 	"artnez/vim-wipeout",
-	{ "folke/neodev.nvim",    opts = {} },
+	{ "folke/neodev.nvim", opts = {} },
 	{
 		"nvim-colortils/colortils.nvim",
 		opts = {
@@ -871,8 +871,8 @@ local plugins = {
 		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 		opts = {},
 	},
-	{ "MagicDuck/grug-far.nvim" },
-	{ "j-hui/fidget.nvim",      opts = {} },
+	{ "MagicDuck/grug-far.nvim", opts = {} },
+	{ "j-hui/fidget.nvim",       opts = {} },
 	{
 		"folke/snacks.nvim",
 		---@type snacks.Config
@@ -882,11 +882,14 @@ local plugins = {
 			bigfile = {},
 			quickfile = {},
 			scroll = {},
+			statuscolumn = {},
 		},
 		keys = {
 			-- Scratch
 			{ "<leader>.",       function() Snacks.scratch() end,                                        desc = "Toggle Scratch Buffer" },
 			{ "<leader>S",       function() Snacks.scratch.select() end,                                 desc = "Select Scratch Buffer" },
+			-- Spell check
+			{ "s=",              function() Snacks.picker.spelling() end,                                desc = "Correct spelling" },
 			-- Top Pickers & Explorer
 			{ "<leader><space>", function() Snacks.picker.smart() end,                                   desc = "Smart Find Files" },
 			{ "<leader>,",       function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
@@ -945,20 +948,11 @@ local plugins = {
 			{ "<leader>ss",      function() Snacks.picker.lsp_symbols() end,                             desc = "LSP Symbols" },
 			{ "<leader>sS",      function() Snacks.picker.lsp_workspace_symbols() end,                   desc = "LSP Workspace Symbols" },
 		}
-	}
-
+	},
+	{ "terrastruct/d2-vim" }
 }
 
 local opts = {}
-
-require("lazy").setup(plugins, opts)
-require("user/statusline").setup()
-require("user/boxes")
-require("user/background").init()
-require("user/keymaps").setup()
-require("user/commands")
-require("user/projects")
-require("user/search_and_replace")
 
 --- Enable persistent colorscheme changes
 --- @param default_colorscheme string
@@ -988,6 +982,15 @@ local function enable_persistant_colorscheme_changes(default_colorscheme, defaul
 		end,
 	})
 end
+
+require("lazy").setup(plugins, opts)
+require("user/statusline").setup()
+require("user/boxes")
+require("user/background").init()
+require("user/keymaps").setup()
+require("user/commands")
+require("user/projects")
+require("user/search_and_replace")
 
 enable_persistant_colorscheme_changes("gruvbox", "light")
 

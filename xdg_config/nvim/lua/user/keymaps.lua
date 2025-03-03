@@ -272,6 +272,9 @@ function M.setup()
 	map("n", "<leader>ls", "<cmd>LspStart<cr>", { desc = "LSP: Start" })
 	map("n", "<leader>lS", "<cmd>LspStart<cr>", { desc = "LSP: Stop" })
 
+	-- Ex mode
+	map('c','<M-=>', [[<c-\>eexpandcmd(getcmdline())<CR>]])
+
 	-- Toggle keymaps
 	for _, key in ipairs({ "b", "c", "d", "h", "i", "l", "n", "r", "s", "u", "v", "w", "x" }) do
 		map("n", ("<leader>T" .. key), ("yo" .. key))
