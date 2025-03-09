@@ -4,16 +4,14 @@ vars:
   nix_profile: dylankendal-mbp
 
 tasks:
-  switch: nix run --extra-experimental-features nix-command --extra-experimental-features flakes nix-darwin -- switch --flake "$(readlink -f ~/.config/nix-darwin)"#{{.nix_profile}}
+  update: nix flake update
+
+  switch: nix run --extra-experimental-features nix-command --extra-experimental-features flakes nix-darwin -- switch --flake ./
 
   edit: $EDITOR ~/.config/nix-darwin/flake.nix
 
-  nix-installer: curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- {{.CLI_ARGS}}
-
-  install:nix-darwin: ./install-nix-darwin
-
-  bootstrap:
+  clean:
     cmds:
-      - curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
-      - { task: install:nix-darwin }
+      - sudo nix-collect-garbage --delete-older-than 30d
 
+  lsg: sudo nix-env --list-generations --profile /nix/var/nix/profiles/system

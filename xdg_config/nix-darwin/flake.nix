@@ -104,6 +104,7 @@
             efm-langserver
             lua-language-server
             codespell
+            emmet-ls
           ];
 
         homebrew = {
@@ -132,20 +133,19 @@
             "autoconf"
             "openssl@1.1" # required for elixir
           ];
-          masApps = {
-            Tailscale = 1475387142;
-          };
         };
 
+        # Match the determinate installer ids
+        ids.gids.nixbld = 350;
 
-        services.tailscale.enable = true;
-
-        security.pam.enableSudoTouchIdAuth = true;
-        # nix.package = pkgs.nix;
+        security.pam.services.sudo_local.touchIdAuth = true;
 
         # Necessary for using flakes on this system.
         nix.settings.experimental-features = "nix-command flakes";
         nix.settings.trusted-users = [ "root" user ];
+
+        # 500MB
+        nix.settings.download-buffer-size = 500000000;
 
         nix.gc = {
           automatic = true;
@@ -157,6 +157,8 @@
         nixpkgs.hostPlatform = "aarch64-darwin";
         nixpkgs.config.allowUnfree = true;
         nixpkgs.overlays = [ overlay ];
+
+        # services.tailscale.enable = true;
 
         programs.zsh.enable = true;
         programs.bash.enable = true;
@@ -202,7 +204,7 @@
         # $ darwin-rebuild changelog
         system.stateVersion = 4;
 
-        environment.shells = [ pkgs.fish "/usr/local/bin/fish" ];
+        environment.shells = [ pkgs.fish ];
 
         environment.variables = {
           EDITOR = "${pkgs.neovim}/bin/nvim";
