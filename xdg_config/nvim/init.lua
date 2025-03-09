@@ -1,5 +1,6 @@
 --#selene: allow(mixed_table)
 
+-- Load init.d files
 local init_files = vim.fs.find(function(name, path)
 	return name:match(".*%.lua")
 end, {
@@ -8,16 +9,24 @@ end, {
 	path = vim.fs.joinpath(vim.fn.stdpath("config"), "init.d")
 })
 
-for _, file in ipairs(init_files) do
-	dofile(file)
-end
+table.sort(init_files)
 
-local safe_require = require("user.package").safe_require
-
-vim.cmd.packadd("cfilter")
+for _, file in ipairs(init_files) do dofile(file) end
 
 local plugins = {
-	{ "catppuccin/nvim", },
+	{
+		dir = "~/src/dkendal/nvim-kitty",
+		opts = {},
+		rocks = {
+			"lpeg-label"
+		},
+		keys = {
+			{ "<leader>pq", "<plug>(kitty-paths)" },
+		},
+	},
+
+	{ dir = "~/src/dkendal/nvim-treeclimber",    opts = {}, },
+
 	{
 		"morhetz/gruvbox",
 		config = function()
@@ -56,12 +65,6 @@ local plugins = {
 					hl.set(0, "@markup.heading.3", { link = "GruvboxYellow" })
 					hl.set(0, "@markup.heading.4", { link = "GruvboxBlue" })
 					hl.set(0, "@markup.raw.block", { link = "GruvBoxFg4" })
-
-					-- NeoTest
-					hl.set(0, "NeotestFailed", { link = "GruvboxRedSign" })
-					hl.set(0, "NeotestPassed", { link = "GruvboxGreenSign" })
-					hl.set(0, "NeotestRunning", { link = "GruvboxBlueSign" })
-					hl.set(0, "NeotestSkipped", { link = "GruvboxYellowSign" })
 
 					if background == "dark" then
 						hl.set(0, "Visual", { bg = Normal.bg.li(15).de(10) })
@@ -114,6 +117,7 @@ local plugins = {
 			})
 		end,
 	},
+
 	{
 		"nvimtools/none-ls.nvim",
 		dependencies = {
@@ -148,6 +152,7 @@ local plugins = {
 			})
 		end,
 	},
+
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
@@ -169,6 +174,7 @@ local plugins = {
 			require("user/lsp").setup()
 		end,
 	},
+
 	{
 		"nvimdev/lspsaga.nvim",
 		opts = {
@@ -186,6 +192,7 @@ local plugins = {
 			{ "<leader>o", "<cmd>Lspsaga outline<cr>" },
 		},
 	},
+
 	{
 		"Saghen/blink.cmp",
 		dependencies = 'rafamadriz/friendly-snippets',
@@ -198,9 +205,11 @@ local plugins = {
 			default = { 'lsp', 'path', 'snippets', 'buffer' },
 		},
 	},
+
 	{
 		"vim-scripts/file-line",
 	},
+
 	{
 		"lewis6991/gitsigns.nvim",
 		opts = {
@@ -243,6 +252,7 @@ local plugins = {
 			},
 		},
 	},
+
 	{
 		"rcarriga/nvim-notify",
 		opts = {
@@ -261,21 +271,10 @@ local plugins = {
 				"rrethy/nvim-treesitter-textsubjects",
 				"nvim-treesitter/nvim-treesitter-textobjects",
 			},
-			keys = {
-				{ "<leader>tl", "<cmd>Neotest run last<cr>" },
-				{ "<leader>tt", "<cmd>Neotest run file<cr>" },
-				{ "<leader>tq", "<cmd>Neotest stop<cr>" },
-				{ "<leader>to", "<cmd>Neotest output<cr>" },
-				{ "<leader>tO", "<cmd>Neotest output-panel<cr>" },
-				{ "<leader>ts", "<cmd>Neotest summary<cr>" },
-				{ "<leader>ta", "<cmd>Neotest attach<cr>" },
-			},
 			init = function()
 				local configs = require("nvim-treesitter.configs")
 
 				local parsers = require("nvim-treesitter.parsers")
-
-				local parser_configs = parsers.get_parser_configs()
 
 				local setup = configs["setup"]
 
@@ -327,6 +326,7 @@ local plugins = {
 			end,
 		},
 	},
+
 	{
 		"kevinhwang91/nvim-ufo",
 		dependencies = {
@@ -375,15 +375,8 @@ local plugins = {
 			})
 		end,
 	},
-	{
-		"nvim-lua/plenary.nvim",
-	},
-	{
-		"kevinhwang91/promise-async",
-	},
-	{
-		"AndrewRadev/splitjoin.vim",
-	},
+
+
 	{
 		"cshuaimin/ssr.nvim",
 		opts = {
@@ -406,9 +399,7 @@ local plugins = {
 			},
 		},
 	},
-	{
-		"godlygeek/tabular",
-	},
+
 	{
 		"folke/trouble.nvim",
 		opts = {},
@@ -419,6 +410,7 @@ local plugins = {
 			{ "<leader>cS", "<cmd>Trouble definitions<cr>" },
 		}
 	},
+
 	{
 		"numToStr/Comment.nvim",
 		opts = {
@@ -436,6 +428,7 @@ local plugins = {
 			},
 		},
 	},
+
 	{
 		"machakann/vim-sandwich",
 		config = function()
@@ -456,10 +449,7 @@ local plugins = {
 			vim.g["sandwich#recipes"] = t
 		end,
 	},
-	"tpope/vim-scriptease",
-	"tpope/vim-sleuth",
-	"tpope/vim-speeddating",
-	"tpope/vim-unimpaired",
+
 	{
 		"mg979/vim-visual-multi",
 		keys = {
@@ -474,8 +464,7 @@ local plugins = {
 			vim.g.vm_theme = "paper"
 		end,
 	},
-	"artnez/vim-wipeout",
-	{ "folke/neodev.nvim", opts = {} },
+
 	{
 		"nvim-colortils/colortils.nvim",
 		opts = {
@@ -521,10 +510,8 @@ local plugins = {
 			},
 		},
 	},
-	{
-		"sindrets/diffview.nvim",
-		opts = {},
-	},
+
+
 	{
 		"nvim-neotest/neotest",
 		dependencies = {
@@ -538,7 +525,6 @@ local plugins = {
 			"rouge8/neotest-rust",
 			"https://gitlab.com/HiPhish/neotest-busted.git",
 		},
-
 		config = function()
 			require("neotest").setup({
 				adapters = {
@@ -563,40 +549,37 @@ local plugins = {
 				highlights = {
 					adapter_name = "NeotestAdapterName",
 					border = "NeotestBorder",
-					dir = "NeotestDir",
+					dir = "OilDir",
 					expand_marker = "NeotestExpandMarker",
-					failed = "NeotestFailed",
-					file = "NeotestFile",
+					failed = "healthError",
+					file = "OilDir",
 					focused = "NeotestFocused",
 					indent = "NeotestIndent",
 					marked = "NeotestMarked",
 					namespace = "NeotestNamespace",
-					passed = "NeotestPassed",
-					running = "NeotestRunning",
+					passed = "healthSuccess",
+					running = "healthWarning",
 					select_win = "NeotestWinSelect",
-					skipped = "NeotestSkipped",
+					skipped = "healthWarning",
 					target = "NeotestTarget",
 					test = "NeotestTest",
 					unknown = "NeotestUnknown",
 				},
 			})
 		end,
+		keys = {
+			{ "<leader>tl", "<cmd>Neotest run last<cr>" },
+			{ "<leader>tt", "<cmd>Neotest run file<cr>" },
+			{ "<leader>tf", function() require('neotest').run.run(vim.fn.expand("%")) end, "Test whole file" },
+			{ "<leader>tq", "<cmd>Neotest stop<cr>" },
+			{ "<leader>to", "<cmd>Neotest output<cr>" },
+			{ "<leader>tO", "<cmd>Neotest output-panel<cr>" },
+			{ "<leader>ts", "<cmd>Neotest summary<cr>" },
+			{ "<leader>ta", "<cmd>Neotest attach<cr>" },
+		},
 	},
-	"tpope/vim-abolish",
-	"nvim-tree/nvim-web-devicons",
-	"ryanoasis/vim-devicons",
-	"elixir-editors/vim-elixir",
-	"tpope/vim-eunuch",
-	"blankname/vim-fish",
-	"tpope/vim-fugitive",
-	"jamessan/vim-gnupg",
-	"tpope/vim-repeat",
-	"tpope/vim-rhubarb",
-	"tpope/vim-rsi",
-	{
-		"nvim-treesitter/nvim-treesitter-context",
-		opts = {},
-	},
+
+
 	{
 		"https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
 		opts = {},
@@ -630,20 +613,15 @@ local plugins = {
 			}
 		end,
 	},
-	{
-		"https://github.com/LhKipp/nvim-nu",
-		opts = {},
-	},
+
+
 	{
 		"https://github.com/kaarmu/typst.vim",
 		ft = "typst",
 		lazy = false,
 	},
-	-- Color Space Highlights
-	{
-		"uga-rosa/ccc.nvim",
-		opts = {},
-	},
+
+
 	{
 		"folke/paint.nvim",
 		opts = {
@@ -666,6 +644,7 @@ local plugins = {
 			},
 		},
 	},
+
 	{
 		"chentoast/marks.nvim",
 		config = function()
@@ -680,8 +659,8 @@ local plugins = {
 			})
 		end,
 	},
-	{ "Mofiqul/vscode.nvim",  lazy = true },
-	{ "pest-parser/pest.vim", filetypes = { "pest" } },
+
+
 	{
 		"https://github.com/stevearc/oil.nvim",
 		dependencies = {
@@ -695,20 +674,8 @@ local plugins = {
 			{ "-", "<CMD>Oil<CR>", desc = "Open parent directory" }
 		}
 	},
-	{
-		dir = "~/src/dkendal/nvim-kitty",
-		opts = {},
-		rocks = {
-			"lpeg-label"
-		},
-		keys = {
-			{ "<leader>pq", "<plug>(kitty-paths)" },
-		},
-	},
-	{
-		dir = "~/src/dkendal/nvim-treeclimber",
-		opts = {},
-	},
+
+
 	{
 		dir = "~/src/dkendal/nvim-alternate",
 		lazy = false,
@@ -741,6 +708,7 @@ local plugins = {
 			{ "<leader>pa", "<plug>(alternate-edit)" }
 		}
 	},
+
 	{
 		"David-Kunz/gen.nvim",
 		opts = {
@@ -753,6 +721,7 @@ local plugins = {
 			-- end,
 		}
 	},
+
 	{
 		"olimorris/codecompanion.nvim",
 		config = function()
@@ -841,6 +810,7 @@ local plugins = {
 			},
 		},
 	},
+
 	{
 		"zbirenbaum/copilot.lua",
 		cmd = "Copilot",
@@ -866,13 +836,13 @@ local plugins = {
 			})
 		end,
 	},
+
 	{
 		"pmizio/typescript-tools.nvim",
 		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 		opts = {},
 	},
-	{ "MagicDuck/grug-far.nvim", opts = {} },
-	{ "j-hui/fidget.nvim",       opts = {} },
+
 	{
 		"folke/snacks.nvim",
 		---@type snacks.Config
@@ -900,6 +870,7 @@ local plugins = {
 			-- find
 			{ "<leader>fb",      function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
 			{ "<leader>fc",      function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
+			{ "<leader>fd",      function() Snacks.picker.files({ cwd = vim.fn.stdpath("data") }) end,   desc = "Find Data File" },
 			{ "<leader>ff",      function() Snacks.picker.files() end,                                   desc = "Find Files" },
 			{ "<leader>fg",      function() Snacks.picker.git_files() end,                               desc = "Find Git Files" },
 			{ "<leader>fp",      function() Snacks.picker.projects() end,                                desc = "Projects" },
@@ -949,50 +920,46 @@ local plugins = {
 			{ "<leader>sS",      function() Snacks.picker.lsp_workspace_symbols() end,                   desc = "LSP Workspace Symbols" },
 		}
 	},
-	{ "terrastruct/d2-vim" }
+
+	{ "AndrewRadev/splitjoin.vim", },
+	{ "MagicDuck/grug-far.nvim",                 opts = {} },
+	{ "Mofiqul/vscode.nvim",                     lazy = true },
+	{ "artnez/vim-wipeout", },
+	{ "blankname/vim-fish", },
+	{ "catppuccin/nvim", },
+	{ "elixir-editors/vim-elixir", },
+	{ "folke/neodev.nvim",                       opts = {} },
+	{ "godlygeek/tabular", },
+	{ "https://github.com/LhKipp/nvim-nu",       opts = {}, },
+	{ "j-hui/fidget.nvim",                       opts = {} },
+	{ "jamessan/vim-gnupg", },
+	{ "kevinhwang91/promise-async", },
+	{ "nvim-lua/plenary.nvim", },
+	{ "nvim-tree/nvim-web-devicons", },
+	{ "nvim-treesitter/nvim-treesitter-context", opts = {}, },
+	{ "pest-parser/pest.vim",                    filetypes = { "pest" } },
+	{ "ryanoasis/vim-devicons", },
+	{ "sindrets/diffview.nvim",                  opts = {}, },
+	{ "terrastruct/d2-vim", },
+	{ "tpope/vim-abolish", },
+	{ "tpope/vim-eunuch", },
+	{ "tpope/vim-fugitive", },
+	{ "tpope/vim-repeat", },
+	{ "tpope/vim-rhubarb", },
+	{ "tpope/vim-rsi", },
+	{ "tpope/vim-scriptease", },
+	{ "tpope/vim-sleuth", },
+	{ "tpope/vim-speeddating", },
+	{ "tpope/vim-unimpaired", },
+	{ "uga-rosa/ccc.nvim",                       opts = {}, },
 }
 
 local opts = {}
 
---- Enable persistent colorscheme changes
---- @param default_colorscheme string
---- @param default_background "dark" | "light"
---- @return nil
-local function enable_persistant_colorscheme_changes(default_colorscheme, default_background)
-	local data = vim.fn.stdpath("data")
-	assert(type(data) == "string", "data is not a string")
-	local colorscheme_file = vim.fs.joinpath(data, "colorscheme")
-
-	if vim.fn.filereadable(colorscheme_file) == 1 then
-		local color_data = vim.fn.readfile(colorscheme_file)
-		assert(type(color_data) == "table", "data is not a table")
-		assert(#color_data == 2, "data is not the correct length")
-		vim.o.background = color_data[1]
-		vim.cmd("colorscheme " .. color_data[2])
-	else
-		vim.o.background = default_background
-		vim.cmd("colorscheme " .. default_colorscheme)
-	end
-
-	vim.api.nvim_create_autocmd({ "ColorScheme" }, {
-		pattern = "*",
-		callback = function()
-			assert(type(data) == "string", "data is not a string")
-			vim.fn.writefile({ vim.o.background, vim.g.colors_name }, colorscheme_file)
-		end,
-	})
-end
-
 require("lazy").setup(plugins, opts)
-require("user/statusline").setup()
 require("user/boxes")
 require("user/background").init()
-require("user/keymaps").setup()
-require("user/commands")
 require("user/projects")
-require("user/search_and_replace")
-
-enable_persistant_colorscheme_changes("gruvbox", "light")
 
 vim.o.exrc = true
 vim.o.secure = true

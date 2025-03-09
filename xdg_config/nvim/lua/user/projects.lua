@@ -6,50 +6,6 @@ local function data_file()
 	return vim.fn.stdpath("data") .. "/projects.txt"
 end
 
-local function callback()
-	local dir = vim.fn.fnamemodify(vim.fn.finddir(".git"), ":p:~:h:h")
-	local path = data_file()
-	local file = io.open(path, "r")
-
-	---@type table<string, boolean>
-	local projects = {}
-
-	for line in file:lines() do
-		projects[line] = true
-	end
-
-	projects[dir] = true
-
-	io.close(file)
-
-	file = io.open(path, "w+")
-
-	for project in pairs(projects) do
-		file:write(project .. "\n")
-	end
-
-	io.close(file)
-end
-
-local function project_add_current()
-	local dir = vim.fn.fnamemodify(vim.fn.finddir(".git"), ":p:~:h:h")
-	local path = data_file()
-	local file = io.open(path, "rw")
-	local lines = {}
-
-	for line in file:lines() do
-		lines[line] = true
-	end
-
-	lines[dir] = true
-
-	for line in pairs(lines) do
-		file:write(line .. "\n")
-	end
-
-	file:close()
-end
-
 ---@return string[]
 local function get_projects()
 	local path = data_file()
@@ -216,12 +172,6 @@ function M.init()
 	vim.api.nvim_create_user_command("ProjectData", cmd_project_data, { nargs = 0 })
 	vim.api.nvim_create_user_command("ProjectList", cmd_project_list, { nargs = 0 })
 	vim.api.nvim_create_user_command("ProjectRemove", cmd_project_remove, { nargs = 1, complete = get_projects })
-
-	-- 	vim.api.nvim_create_autocmd({ "BufRead" }, {
-	-- 		group = group,
-	-- 		pattern = "*",
-	-- 		callback = cmd_project_add,
-	-- 	})
 end
 
 M.init()

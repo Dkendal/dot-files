@@ -1,5 +1,3 @@
-local M = {}
-
 local function hi(group, s)
 	return table.concat({ "%#", group, "#", s, "%#StatusLine#" }, "")
 end
@@ -68,7 +66,7 @@ function _G.user_status_line.diagnostics()
 	return table.concat(s, "")
 end
 
-function M.setup()
+local function setup()
 	vim.api.nvim_create_autocmd({ "ColorScheme" }, {
 		pattern = "*",
 		callback = function()
@@ -87,4 +85,7 @@ function M.setup()
 	vim.o.winbar = "%#StatusLine#%f"
 end
 
-return M
+vim.api.nvim_create_autocmd({ "User" }, {
+	pattern = "VeryLazy",
+	callback = setup
+})

@@ -1,5 +1,7 @@
 abbr -a -- ci 'gh pr status'
+
 abbr -a -- dus 'dev up; and dev s'
+
 abbr -a -- g git
 abbr -a -- gC 'git commit --verbose --no-verify'
 abbr -a -- gS 'git stash push'
@@ -32,18 +34,23 @@ abbr -a -- gsa 'git stash apply'
 abbr -a -- gwd 'git diff'
 abbr -a -- gwip 'git add -A; and git commit --no-verify -m wip'
 abbr -a -- gws 'git status --short'
+
 abbr -a -- kittydiff 'kitty +kitten diff'
+
 abbr -a -- ls eza
+
 abbr -a -- mt 'mix test'
 abbr -a -- mtf 'mix test --failed'
 abbr -a -- mf mix-failed
 abbr -a -- mts 'mix test --stale'
+
 abbr -a -- sed 'sed -E'
 abbr -a -- td 'tmux attach -d -t'
 abbr -a -- yws 'yarn workspace'
 abbr -a -- n 'nvim --listen ~/.cache/nvim/server.pipe'
 abbr -a -- nr 'nvim --server ~/.cache/nvim/server.pipe --remote'
 abbr -a -- stripansi sed\ -E\ \'s/\\x1b\\\[\[0-9\;\]\*m//g\'
+
 abbr -a -- ss 'sl status'
 abbr -a -- sls 'sl status'
 abbr -a -- slp 'sl pull'
@@ -54,4 +61,7 @@ abbr -a -- slc 'sl commit'
 abbr -a -- sld 'sl diff | delta'
 abbr -a -- slu 'sl unshelve'
 abbr -a -- slS 'sl shelve'
+
 abbr -a -- rg 'rg --hyperlink-format=kitty'
+
+abbr -a -- jja 'jj abandon'

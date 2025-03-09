@@ -23,13 +23,13 @@ end, { force = true, desc = "Change root to nearest .git" })
 
 command("TestNearest", function()
 	require("neotest").run.run()
-end, { force = true, desc = "" })
+end, { force = true, desc = "Test the nearest file" })
 
 command("TestFile", function()
 	require("neotest").run.run(f.expand("%"))
-end, { force = true, desc = "" })
+end, { force = true, desc = "Test this file" })
 
-vim.cmd([[command! HiTest :so $VIMRUNTIME/syntax/hitest.vim]])
+command("HiTest", ":so $VIMRUNTIME/syntax/hitest.vim", { force = true, desc = "Run highlight test" })
 
 command("StripAnsiCodes", [[:%s/\e\[[0-9;]*m//g]], { force = true, desc = "Remove all ANSI codes" })
 
@@ -61,7 +61,7 @@ vim.cmd([[iabbr descr description]])
 
 
 -- Command to call the function
-vim.api.nvim_create_user_command('ReloadModule', function()
+command('ReloadModule', function()
 	-- Get the current buffer's file path
 	local current_file = vim.fn.expand('%:p')
 
@@ -95,3 +95,17 @@ vim.api.nvim_create_user_command('ReloadModule', function()
 		print("Error: " .. result)
 	end
 end, {})
+
+function gsub(t)
+	local pattern = t.fargs[1]
+	local replacement = t.fargs[2]
+	local files = t.fargs[3]
+
+	vim.cmd.vimgrep("'" .. pattern .. "'", files)
+
+	vim.cmd.cfdo("%s/" .. pattern .. "/" .. replacement .. "/gceI")
+
+	vim.cmd.cfdo("w")
+end
+
+vim.api.nvim_create_user_command("Gsub", gsub, { nargs = "*" })

@@ -100,4 +100,4 @@ function M.ansi_colors()
 	return t
 end
 
-return M
+-- return M
