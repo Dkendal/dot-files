@@ -105,6 +105,8 @@
             lua-language-server
             codespell
             emmet-ls
+            tailwindcss-language-server
+            taplo
           ];
 
         homebrew = {

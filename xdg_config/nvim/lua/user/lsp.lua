@@ -8,37 +8,36 @@ local function on_attach(client, bufnr)
 	end
 end
 
-local function with_defaults(tbl)
-	-- See link below for more default configurations
-	-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-	local capabilities = {
-		textDocument = {
-			foldingRange = {
-				dynamicRegistration = false,
-				lineFoldingOnly = true
-			},
-			completion = {
-				completionItem = {
-					snippetSupport = true
-				}
-			}
-		}
-	}
-
-	local lsp_default_opts = {
-		autostart = true,
-		on_attach = on_attach,
-		capabilities = capabilities,
-	}
-
-	return vim.tbl_extend("force", lsp_default_opts, tbl)
-end
-
 local function setup()
 	require("neodev").setup({})
 
 	local lspconfig = require("lspconfig")
 	local util = lspconfig.util
+
+
+	lspconfig.util.default_config = vim.tbl_extend(
+		"force",
+		lspconfig.util.default_config,
+		{
+			autostart = true,
+			on_attach = on_attach,
+			-- See link below for more default configurations
+			-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+			capabilities = {
+				textDocument = {
+					foldingRange = {
+						dynamicRegistration = false,
+						lineFoldingOnly = true
+					},
+					completion = {
+						completionItem = {
+							snippetSupport = true
+						}
+					}
+				}
+			}
+		}
+	)
 
 	vim.diagnostic.config({ virtual_text = false })
 
@@ -46,39 +45,11 @@ local function setup()
 	require("user.lsp.floating_window_decoration").setup()
 
 	-- Servers config
-	lspconfig.denols.setup(with_defaults({
+	lspconfig.denols.setup({
 		root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
-	}))
+	})
 
-	-- lspconfig.ts_ls.setup(with_defaults({
-	-- 	filetypes = {
-	-- 		"javascript",
-	-- 		"javascriptreact",
-	-- 		"javascript.jsx",
-	-- 		"typescript",
-	-- 		"typescriptreact",
-	-- 		"typescript.tsx",
-	-- 	},
-	-- 	root_dir = lspconfig.util.root_pattern("package.json"),
-	-- 	on_attach = function(client, bufnr)
-	-- 		local is_deno = util.root_pattern('deno.json', 'import_map.json', 'deno.jsonc')(vim.fn.getcwd())
-	--
-	-- 		if is_deno then
-	-- 			client.stop()
-	-- 			return
-	-- 		end
-	--
-	-- 		client.server_capabilities.document_formatting = false
-	-- 		client.server_capabilities.documentFormattingProvider = false
-	-- 	end,
-	-- 	settings = {
-	-- 		codeActionsOnSave = {
-	-- 			source = { organizeImports = true }
-	-- 		},
-	-- 	}
-	-- }))
-
-	lspconfig.rust_analyzer.setup(with_defaults({
+	lspconfig.rust_analyzer.setup({
 		settings = {
 			["rust-analyzer"] = {
 				checkOnSave = {
@@ -86,9 +57,9 @@ local function setup()
 				},
 			},
 		},
-	}))
+	})
 
-	lspconfig.pest_ls.setup(with_defaults({}))
+	lspconfig.pest_ls.setup({})
 
 	lspconfig.racket_langserver.setup({
 		cmd = { "racket", "--lib", "racket-langserver" },
@@ -96,11 +67,11 @@ local function setup()
 		single_file_support = true,
 	})
 
-	lspconfig.svelte.setup(with_defaults({}))
+	lspconfig.svelte.setup({})
 
-	lspconfig.pyright.setup(with_defaults({}))
+	lspconfig.pyright.setup({})
 
-	lspconfig.jsonls.setup(with_defaults({
+	lspconfig.jsonls.setup({
 		settings = {
 			json = {
 				schemas = {
@@ -162,19 +133,19 @@ local function setup()
 				},
 			},
 		},
-	}))
+	})
 
-	lspconfig.yamlls.setup(with_defaults({
+	lspconfig.yamlls.setup({
 		settings = {
 			yaml = {
 				keyOrdering = false,
 			},
 		},
-	}))
+	})
 
-	lspconfig.gopls.setup(with_defaults({}))
+	lspconfig.gopls.setup({})
 
-	lspconfig.teal_ls.setup(with_defaults({}))
+	lspconfig.teal_ls.setup({})
 
 	local lua_runtime_path = vim.split(package.path, ";")
 	table.insert(lua_runtime_path, "lua/?.lua")
@@ -213,7 +184,7 @@ local function setup()
 
 	lspconfig.terraformls.setup({})
 
-	lspconfig.hls.setup(with_defaults(
+	lspconfig.hls.setup(
 		{
 			settings = {
 				haskell = {
@@ -325,21 +296,21 @@ local function setup()
 					},
 				},
 			},
-		}))
+		})
 
-	lspconfig.standardrb.setup(with_defaults({}))
+	lspconfig.standardrb.setup({})
 
-	lspconfig.clangd.setup(with_defaults({}))
+	lspconfig.clangd.setup({})
 
-	lspconfig.marksman.setup(with_defaults({}))
+	lspconfig.marksman.setup({})
 
-	-- lspconfig.elixirls.setup(with_defaults({}))
-	-- config.nextls.setup(with_defaults({}))
-	lspconfig.lexical.setup(with_defaults({}))
+	-- lspconfig.elixirls.setup({})
+	-- config.nextls.setup({})
+	lspconfig.lexical.setup({})
 
-	lspconfig.gdscript.setup(with_defaults({}))
+	lspconfig.gdscript.setup({})
 
-	lspconfig.omnisharp.setup(with_defaults({}))
+	lspconfig.omnisharp.setup({})
 
 	lspconfig.tailwindcss.setup({
 		init_options = {
@@ -374,15 +345,15 @@ local function setup()
 		},
 	})
 
-	lspconfig.gleam.setup(with_defaults({}))
+	lspconfig.gleam.setup({})
 
-	lspconfig.bashls.setup(with_defaults({}))
+	lspconfig.bashls.setup({})
 
-	lspconfig.emmet_ls.setup(with_defaults({
+	lspconfig.emmet_ls.setup({
 		filetypes = { "html", "heex", "typescriptreact", "svelte" },
-	}))
+	})
 
-	lspconfig.nil_ls.setup(with_defaults({
+	lspconfig.nil_ls.setup({
 		settings = {
 			["nil"] = {
 				formatting = {
@@ -392,11 +363,9 @@ local function setup()
 				}
 			}
 		}
-	}))
+	})
 
-	lspconfig.rnix.setup(with_defaults({}))
-
-	lspconfig.efm.setup(with_defaults({}))
+	lspconfig.efm.setup({})
 end
 
 return {

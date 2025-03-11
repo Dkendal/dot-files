@@ -16,13 +16,18 @@ for _, file in ipairs(init_files) do dofile(file) end
 local plugins = {
 	{
 		dir = "~/src/dkendal/nvim-kitty",
-		opts = {},
+		opts = {
+			snacks = true
+		},
 		rocks = {
 			"lpeg-label"
 		},
-		keys = {
-			{ "<leader>pq", "<plug>(kitty-paths)" },
+		dependencies = {
+			"folk/snacks.nvim"
 		},
+		keys = {
+			{"<leader>sp", function() require("nvim-kitty.snacks").picker() end}
+		}
 	},
 
 	{ dir = "~/src/dkendal/nvim-treeclimber",    opts = {}, },
@@ -171,7 +176,7 @@ local plugins = {
 			},
 		},
 		init = function()
-			require("user/lsp").setup()
+			require("user.lsp").setup()
 		end,
 	},
 
@@ -264,67 +269,67 @@ local plugins = {
 			vim.notify = require("notify")
 			-- vim.api.nvim_set_hl(0, "NotifyBackground", { link = "Normal" })
 		end,
-		{
-			"nvim-treesitter/nvim-treesitter",
-			dependencies = {
-				"nvim-treesitter/playground",
-				"rrethy/nvim-treesitter-textsubjects",
-				"nvim-treesitter/nvim-treesitter-textobjects",
-			},
-			init = function()
-				local configs = require("nvim-treesitter.configs")
-
-				local parsers = require("nvim-treesitter.parsers")
-
-				local setup = configs["setup"]
-
-				setup({
-					auto_install = true,
-					sync_install = true,
-					ignore_install = {},
-					modules = {},
-					ensure_installed = {},
-					query_linter = {
-						enable = true,
-						use_virtual_text = true,
-						lint_events = { "BufWrite", "CursorHold" },
-					},
-					textsubjects = {
-						enable = true,
-						prev_selection = ",", -- (Optional) keymap to select the previous selection
-						keymaps = {
-							["."] = "textsubjects-smart",
-							[";"] = "textsubjects-container-outer",
-							["i;"] = "textsubjects-container-inner",
-						},
-					},
-					playground = {
-						enable = true,
-						disable = {},
-						updatetime = 25,
-						persist_queries = false,
-						keybindings = {
-							toggle_query_editor = "o",
-							toggle_hl_groups = "i",
-							toggle_injected_languages = "t",
-							toggle_anonymous_nodes = "a",
-							toggle_language_display = "I",
-							focus_language = "f",
-							unfocus_language = "F",
-							update = "R",
-							goto_node = "<cr>",
-							show_help = "?",
-						},
-					},
-					indent = { enable = true },
-					highlight = {
-						enable = true,
-						custom_captures = {},
-						disable = { "git", "gitcommit" },
-					},
-				})
-			end,
+	},
+	{
+		"nvim-treesitter/nvim-treesitter",
+		dependencies = {
+			"nvim-treesitter/playground",
+			"rrethy/nvim-treesitter-textsubjects",
+			"nvim-treesitter/nvim-treesitter-textobjects",
 		},
+		init = function()
+			local configs = require("nvim-treesitter.configs")
+
+			local parsers = require("nvim-treesitter.parsers")
+
+			local setup = configs["setup"]
+
+			setup({
+				auto_install = true,
+				sync_install = true,
+				ignore_install = {},
+				modules = {},
+				ensure_installed = {},
+				query_linter = {
+					enable = true,
+					use_virtual_text = true,
+					lint_events = { "BufWrite", "CursorHold" },
+				},
+				textsubjects = {
+					enable = true,
+					prev_selection = ",", -- (Optional) keymap to select the previous selection
+					keymaps = {
+						["."] = "textsubjects-smart",
+						[";"] = "textsubjects-container-outer",
+						["i;"] = "textsubjects-container-inner",
+					},
+				},
+				playground = {
+					enable = true,
+					disable = {},
+					updatetime = 25,
+					persist_queries = false,
+					keybindings = {
+						toggle_query_editor = "o",
+						toggle_hl_groups = "i",
+						toggle_injected_languages = "t",
+						toggle_anonymous_nodes = "a",
+						toggle_language_display = "I",
+						focus_language = "f",
+						unfocus_language = "F",
+						update = "R",
+						goto_node = "<cr>",
+						show_help = "?",
+					},
+				},
+				indent = { enable = true },
+				highlight = {
+					enable = true,
+					custom_captures = {},
+					disable = { "git", "gitcommit" },
+				},
+			})
+		end,
 	},
 
 	{
@@ -853,6 +858,9 @@ local plugins = {
 			quickfile = {},
 			scroll = {},
 			statuscolumn = {},
+			gitbrowse = {},
+			image = {},
+			notifier = {},
 		},
 		keys = {
 			-- Scratch
@@ -905,7 +913,7 @@ local plugins = {
 			{ "<leader>sl",      function() Snacks.picker.loclist() end,                                 desc = "Location List" },
 			{ "<leader>sm",      function() Snacks.picker.marks() end,                                   desc = "Marks" },
 			{ "<leader>sM",      function() Snacks.picker.man() end,                                     desc = "Man Pages" },
-			{ "<leader>sp",      function() Snacks.picker.lazy() end,                                    desc = "Search for Plugin Spec" },
+			{ "<leader>sP",      function() Snacks.picker.lazy() end,                                    desc = "Search for Plugin Spec" },
 			{ "<leader>sq",      function() Snacks.picker.qflist() end,                                  desc = "Quickfix List" },
 			{ "<leader>sR",      function() Snacks.picker.resume() end,                                  desc = "Resume" },
 			{ "<leader>su",      function() Snacks.picker.undo() end,                                    desc = "Undo History" },
@@ -957,9 +965,9 @@ local plugins = {
 local opts = {}
 
 require("lazy").setup(plugins, opts)
-require("user/boxes")
-require("user/background").init()
-require("user/projects")
+require("user.boxes")
+require("user.background").init()
+require("user.projects")
 
 vim.o.exrc = true
 vim.o.secure = true
