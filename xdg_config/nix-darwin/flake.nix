@@ -84,7 +84,6 @@
             restic
             ripgrep
             rustup
-            sapling
             sd
             tailspin
             tig
@@ -99,6 +98,7 @@
             xan
             yq
             zoxide
+            hyperfine
             # Language Servers
             nil
             efm-langserver
@@ -106,7 +106,9 @@
             codespell
             emmet-ls
             tailwindcss-language-server
+            bash-language-server
             taplo
+            stylua
           ];
 
         homebrew = {
@@ -119,6 +121,8 @@
           taps = [
             "noborus/tap"
             "1password/tap"
+            "lucapette/tap" # fakedata
+            "localstack/tap"
           ];
           casks = [
             "1password-cli"
@@ -128,11 +132,13 @@
             "ghostty"
           ];
           brews = [
+            "localstack-cli"
             "trdsql"
             "pipx"
             "wxwidgets"
             "flyctl"
             "autoconf"
+            "fakedata"
             "openssl@1.1" # required for elixir
           ];
         };

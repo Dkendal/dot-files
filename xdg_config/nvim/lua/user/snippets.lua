@@ -1,11 +1,11 @@
-local dedent = require('user.snippet_support').dedent
+local dedent = require("user.snippet_support").dedent
 
 local function process_snippets(snippets)
 	local out = {}
 
 	for _, s in ipairs(snippets) do
-		assert(type(s.trigger) == 'string', 'trigger must be a string')
-		assert(type(s.body) == 'string', 'body must be a string')
+		assert(type(s.trigger) == "string", "trigger must be a string")
+		assert(type(s.body) == "string", "body must be a string")
 		table.insert(out, {
 			trigger = s.trigger,
 			body = dedent(s.body),
@@ -19,75 +19,74 @@ local M = {}
 
 local global_snippets = {
 	{
-		trigger = 'hello',
-		body = 'Hello, ${1:world}!',
-	}
+		trigger = "hello",
+		body = "Hello, ${1:world}!",
+	},
 }
 
 local snippets_by_filetype = {
 	lua = {
 		{
 			trigger = "aug",
-			body = dedent [[
+			body = dedent([[
 				local group = vim.api.nvim_create_augroup("${1:group_name}", { clear = true })
-			]],
+			]]),
 		},
 		{
 			trigger = "snip",
-			body = dedent [[
+			body = dedent([[
 				{
 					trigger = "${1:trigger}",
 					body = "${2:body}",
 				}
-			]],
-		}
+			]]),
+		},
 	},
 	javascript = {
 		{
 			trigger = "p",
-			body = [[console.log($1);]]
-		}
+			body = [[console.log($1);]],
+		},
 	},
 	typescript = {},
 	elixir = process_snippets(require("user.snippets.elixir")),
-	rust =
-	{
+	rust = {
 		{
-			trigger = 'p',
-			body = [[println!("$1");]]
+			trigger = "p",
+			body = [[println!("$1");]],
 		},
 		{
-			trigger = 'i',
-			body = [[dbg!($1);]]
+			trigger = "i",
+			body = [[dbg!($1);]],
 		},
 		{
-			trigger = '.c',
-			body = [[.collect::<Vec<_>>()]]
+			trigger = ".c",
+			body = [[.collect::<Vec<_>>()]],
 		},
 		{
-			trigger = 'f',
-			body = [[format!("{}", $1);]]
+			trigger = "f",
+			body = [[format!("{}", $1);]],
 		},
 		{
-			trigger = 'd',
-			body = [[Default::default()]]
+			trigger = "d",
+			body = [[Default::default()]],
 		},
 		{
-			trigger = 't',
-			body = [[todo!($1);]]
+			trigger = "t",
+			body = [[todo!($1);]],
 		},
 		{
-			trigger = 'pa',
-			body = [[panic!($1);]]
+			trigger = "pa",
+			body = [[panic!($1);]],
 		},
 		{
-			trigger = 'u',
-			body = [[unreachable!($1);]]
-		}
-	}
+			trigger = "u",
+			body = [[unreachable!($1);]],
+		},
+	},
 }
 
-vim.tbl_extend('force', snippets_by_filetype.typescript, snippets_by_filetype.javascript)
+vim.tbl_extend("force", snippets_by_filetype.typescript, snippets_by_filetype.javascript)
 
 local function get_buf_snips()
 	local ft = vim.bo.filetype
@@ -128,7 +127,7 @@ function M.setup()
 		callback(cache[bufnr])
 	end
 
-	require('cmp').register_source('user_snippets', cmp_source)
+	require("cmp").register_source("user_snippets", cmp_source)
 end
 
 return M

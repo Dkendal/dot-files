@@ -12,6 +12,10 @@ if test -d /opt/homebrew/bin
   fish_add_path /opt/homebrew/bin
 end
 
+if test -d ~/.cargo/bin/
+  fish_add_path ~/.cargo/bin/
+end
+
 function fish_safe_bass_source -a file
   if test -r $file
     bass source $file

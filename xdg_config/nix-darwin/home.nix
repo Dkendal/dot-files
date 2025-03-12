@@ -47,6 +47,7 @@ in
       "expressvpn"
       "git"
       "nix-darwin"
+      "nushell/login.nu"
     ]
   );
 
@@ -71,16 +72,16 @@ in
 
   programs.nushell = {
     enable = true;
-    configFile = {
-      text = "
-        $env.config = {
-          show_banner: false
-          edit_mode: vi
-          use_kitty_protocol: true
-          highlight_resolved_externals: true
-        }
-      ";
-    };
+    # configFile = {
+    #   text = "
+    #     $env.config = {
+    #       show_banner: false
+    #       edit_mode: vi
+    #       use_kitty_protocol: true
+    #       highlight_resolved_externals: true
+    #     }
+    #   ";
+    # };
   };
 
   programs.mise = {
