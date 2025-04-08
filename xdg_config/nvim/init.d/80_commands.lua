@@ -65,12 +65,22 @@ local function change_dir()
 	dir = vim.fn.expand("%:p")
 	dir = vim.fn.finddir(".git", dir .. ";")
 	dir = vim.fn.fnamemodify(dir, ":h")
-	vim.api.nvim_set_current_dir(dir)
+	vim.cmd.cd(dir)
+end
+
+local function window_change_dir()
+	local dir
+	dir = vim.fn.expand("%:p")
+	dir = vim.fn.finddir(".git", dir .. ";")
+	dir = vim.fn.fnamemodify(dir, ":h")
+	vim.cmd.lcd(dir)
 end
 
 command("Gsub", gsub, { nargs = "*" })
 
 command("Cd", change_dir, { force = true, desc = "Change root to nearest .git" })
+
+command("Lcd", window_change_dir, { force = true, desc = "Change root to for this window nearest .git" })
 
 command("TestNearest", function()
 	require("neotest").run.run()

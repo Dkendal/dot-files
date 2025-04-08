@@ -275,16 +275,18 @@ local plugins = {
 		version = "*",
 		---@module 'blink.cmp'
 		---@type blink.cmp.Config
-		opts = {},
-		sources = {
-			default = { "lazydev", "lsp", "path", "snippets", "buffer" },
-		},
-		providers = {
-			lazydev = {
-				name = "LazyDev",
-				module = "lazydev.integrations.blink",
-				-- make lazydev completions top priority (see `:h blink.cmp`)
-				score_offset = 100,
+		opts = {
+			snippets = { preset = "mini_snippets" },
+			sources = {
+				default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+				providers = {
+					lazydev = {
+						name = "LazyDev",
+						module = "lazydev.integrations.blink",
+						-- make lazydev completions top priority (see `:h blink.cmp`)
+						score_offset = 100,
+					},
+				},
 			},
 		},
 	},
@@ -1372,10 +1374,20 @@ local plugins = {
 	},
 
 	{
-		"nvim-neorg/neorg",
-		lazy = false, -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default
-		version = "*", -- Pin Neorg to the latest stable release
-		config = true,
+		"echasnovski/mini.snippets",
+		version = false,
+		init = function()
+			local gen_loader = require("mini.snippets").gen_loader
+			require("mini.snippets").setup({
+				snippets = {
+					-- Load custom file with global snippets first (adjust for Windows)
+					gen_loader.from_file(vim.fs.joinpath(vim.fn.stdpath("config"), "/snippets/global.lua")),
+					-- Load snippets based on current language by reading files from
+					-- "snippets/" subdirectories from 'runtimepath' directories.
+					gen_loader.from_lang(),
+				},
+			})
+		end,
 	},
 
 	{ "AndrewRadev/splitjoin.vim" },

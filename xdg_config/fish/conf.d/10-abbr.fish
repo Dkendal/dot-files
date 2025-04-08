@@ -68,6 +68,6 @@ abbr -a -- jja 'jj abandon'
 
 abbr -a -- pr "gh pr view (jj log --no-pager -r 'trunk..@ & tracked_remote_bookmarks()' --no-graph -T 'bookmarks')"
 
-abbr -a -- jjra "jj rebase -s 'all:roots(trunk..@)' -d trunk"
+abbr -a -- jjra "jj rebase -s 'all:roots(trunk..mine()) & mutable()' -d 'trunk()'"
 
 abbr -a -- rm trash
