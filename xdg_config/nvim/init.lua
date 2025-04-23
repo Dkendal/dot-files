@@ -1388,6 +1388,17 @@ local plugins = {
 				},
 			})
 		end,
+		keys = {
+			{
+				"<C-c>",
+				function()
+					while MiniSnippets.session.get() do
+						MiniSnippets.session.stop()
+					end
+				end,
+				mode = "n",
+			},
+		},
 	},
 
 	{ "AndrewRadev/splitjoin.vim" },

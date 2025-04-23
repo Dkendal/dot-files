@@ -65,9 +65,9 @@ abbr -a -- slS 'sl shelve'
 abbr -a -- rg 'rg --hyperlink-format=kitty'
 
 abbr -a -- jja 'jj abandon'
-
-abbr -a -- pr "gh pr view (jj log --no-pager -r 'trunk..@ & tracked_remote_bookmarks()' --no-graph -T 'bookmarks')"
-
+abbr -a -- jjl "jj log -r 'trunk()..@'"
 abbr -a -- jjra "jj rebase -s 'all:roots(trunk..mine()) & mutable()' -d 'trunk()'"
+
+abbr -a -- pr "gh pr view (jj log --no-pager -r 'trunk()..@ & tracked_remote_bookmarks()' --no-graph -T 'bookmarks')"
 
 abbr -a -- rm trash

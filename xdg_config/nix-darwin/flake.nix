@@ -67,7 +67,6 @@
             luajitPackages.fennel
             luajitPackages.teal-language-server
             luajitPackages.tl
-            mise
             moreutils
             neovim
             nodePackages.prettier
@@ -83,22 +82,34 @@
             rclone
             restic
             ripgrep
-            rustup
-            sd
-            tailspin
-            tig
+            tailspin # Log formatter / watcher
+            tig # Text mode for Git
             tree-sitter
-            trufflehog
+            trufflehog # Secret detection
             uutils-coreutils-noprefix
-            uv
-            viddy
-            visidata
+            viddy # Watch
             wget
-            xh
-            xan
-            yq
+            xh # HTTP Client
             zoxide
             hyperfine
+
+            ov # Pager
+
+            # Work
+            jira-cli-go
+
+            # Env management
+            rustup
+            uv
+            mise
+
+            # Data munging
+            yq
+            xan
+            visidata
+            sd # Search and replace
+
+
             # Language Servers
             nil
             efm-langserver
@@ -109,6 +120,7 @@
             bash-language-server
             taplo
             stylua
+            patchutils
           ];
 
         homebrew = {
@@ -119,17 +131,13 @@
             autoUpdate = true;
           };
           taps = [
-            "noborus/tap"
+            "noborus/tap" # trdsql
             "1password/tap"
             "lucapette/tap" # fakedata
             "localstack/tap"
           ];
           casks = [
             "1password-cli"
-            "alt-tab"
-            "linearmouse"
-            "mitmproxy"
-            "ghostty"
           ];
           brews = [
             "localstack-cli"
