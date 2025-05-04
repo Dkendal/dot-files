@@ -22,105 +22,134 @@
         # $ nix-env -qaP | grep wget
         environment.systemPackages = with pkgs;
           [
-            d2
-            act
-            ast-grep
-            cmake
-            colima
-            coreutils
-            curl
-            darwin.trash
-            delta
-            devenv
-            docker
-            docker-compose
-            dprint
-            du-dust
-            duckdb
-            entr
-            eza
-            fd
-            fennel-ls
-            fnlfmt
-            fswatch
-            fx
-            git
-            git-absorb
-            glow
-            gnupg
-            go-task
-            goose
-            gpg-tui
-            graphviz
-            gron
-            gum
-            hledger
-            hledger-ui
-            hledger-web
-            htop
-            hugo
-            imagemagick
-            jq
-            jujutsu
-            lazydocker
-            lazygit
-            luajitPackages.fennel
-            luajitPackages.teal-language-server
-            luajitPackages.tl
-            moreutils
-            neovim
-            nodePackages.prettier
-            nushell
-            ollama
-            oterm
-            pandoc
-            pgcli
-            pgformatter
-            postgresql
-            pv
-            ranger
-            rclone
-            restic
-            ripgrep
-            tailspin # Log formatter / watcher
-            tig # Text mode for Git
-            tree-sitter
-            trufflehog # Secret detection
-            uutils-coreutils-noprefix
-            viddy # Watch
-            wget
-            xh # HTTP Client
-            zoxide
-            hyperfine
+            # Core System Utilities
+            coreutils          # Basic file, shell and text manipulation utilities
+            uutils-coreutils-noprefix # Rust implementation of GNU coreutils
+            moreutils          # Collection of additional Unix utilities
+            curl               # Command line tool for transferring data with URL syntax
+            wget               # Non-interactive network downloader
+            darwin.trash       # macOS trash utility
 
-            ov # Pager
+            # File System Navigation & Management
+            eza                # Modern replacement for ls with Git integration
+            fd                 # Simple, fast and user-friendly alternative to find
+            zoxide             # Smarter cd command with instant directory jumping
+            ranger             # Console file manager with VI key bindings
+            ov                 # Modern terminal pager (like less/more)
+            tree-sitter        # Parser generator tool and incremental parsing library
+            rclone             # Command line program to sync files and directories
+            restic             # Backup program with encryption and deduplication
+            du-dust            # More intuitive version of du (disk usage)
 
-            # Work
-            jira-cli-go
+            # Shell & Terminal
+            nushell            # Data-driven shell with structured data
+            htop               # Interactive process viewer
+            gum                # Tool for glamorous shell scripts
+            viddy              # Modern watch command (executes command periodically)
+            hyperfine          # Command-line benchmarking tool
 
-            # Env management
-            rustup
-            uv
-            mise
+            # Development Tools
+            git                # Distributed version control system
+            git-absorb         # Git command for automatically absorbing staged changes into commits
+            lazygit            # Simple terminal UI for git commands
+            lazyjj             # Terminal UI for jujutsu (jj)
+            jujutsu            # Distributed version control system (alternative to Git)
+            tig                # Text-mode interface for Git
+            delta              # Syntax-highlighting pager for git, diff outputs
+            patchutils         # Collection of programs for manipulating patch files
 
-            # Data munging
-            yq
-            xan
-            visidata
-            sd # Search and replace
+            # Build Systems & Compilation
+            cmake              # Cross-platform build system generator
+            devenv             # Developer environments
 
+            # Containers & Virtualization
+            docker             # Platform for developing, shipping, and running applications
+            docker-compose     # Tool for defining and running multi-container Docker applications
+            colima             # Container runtimes on macOS
+            lazydocker         # Terminal UI for Docker
 
-            # Language Servers
-            nil
-            efm-langserver
-            lua-language-server
-            codespell
-            emmet-ls
-            tailwindcss-language-server
-            bash-language-server
-            taplo
-            stylua
-            patchutils
+            # Data Processing & Analysis
+            jq                 # Lightweight and flexible command-line JSON processor
+            yq                 # YAML/XML/TOML processor (similar to jq)
+            gron               # Make JSON greppable by flattening it
+            duckdb             # In-process SQL OLAP database management system
+            visidata           # Terminal spreadsheet multitool for data discovery and arrangement
+            xan                # Text analyzer and processor
+            fx                 # Command-line JSON processing tool
+            ripgrep            # Fast line-oriented search tool (grep alternative)
+            sd                 # Intuitive find & replace CLI tool
+
+            # Database Tools
+            postgresql         # Advanced object-relational database system
+            pgcli              # Command line interface for PostgreSQL with auto-completion
+            pgformatter        # PostgreSQL SQL syntax beautifier
+
+            # Code Quality & Formatting
+            dprint             # Pluggable and configurable code formatting platform
+            nodePackages.prettier # Code formatter for JavaScript, CSS, JSON, etc.
+            ast-grep           # CLI tool for structural search and replace of code
+            codespell          # Check code for common misspellings
+            stylua             # Opinionated Lua code formatter
+
+            # Programming Languages & Environment Management
+            rustup             # Rust toolchain installer
+            uv                 # Python packaging and virtual environment manager
+            mise               # Development environment manager (formerly rtx)
+
+            # Language Servers (for IDE-like features)
+            nil                # Nix language server
+            efm-langserver     # General purpose Language Server
+            lua-language-server # Language Server for Lua
+            emmet-ls           # Emmet support for Language Servers
+            tailwindcss-language-server # Tailwind CSS Language Server
+            bash-language-server # Bash Language Server
+            taplo              # TOML Language Server
+            fennel-ls          # Fennel language server
+            luajitPackages.fennel # Lisp that compiles to Lua
+            luajitPackages.teal-language-server # Teal language server
+            luajitPackages.tl   # Teal language compiler/type checker
+
+            # Text & Document Processing
+            pandoc             # Universal document converter
+            glow               # Markdown renderer for the terminal
+            fnlfmt             # Formatter for Fennel Lisp dialect
+
+            # Security Tools
+            gnupg              # GNU Privacy Guard - encryption and signing tool
+            gpg-tui           # Terminal user interface for GnuPG
+            trufflehog        # Secret detection in git repositories or files
+
+            # Monitoring & Logging
+            entr               # Run arbitrary commands when files change
+            fswatch            # File change monitor
+            tailspin           # Log file highlighter
+            lnav               # Log file navigator
+
+            # Data Visualization & Diagramming
+            d2                 # Diagram scripting language
+            graphviz           # Graph visualization software
+
+            # Accounting & Finance
+            hledger            # Plain text accounting tool
+            hledger-ui         # Terminal UI for hledger
+            hledger-web        # Web interface for hledger
+
+            # Work & Productivity
+            jira-cli-go        # Command line interface for Jira
+            act                # Run GitHub Actions locally
+            go-task            # Task runner / simpler Make alternative
+
+            # Media Processing
+            imagemagick        # Create, edit, compose, or convert bitmap images
+
+            # HTTP Tools
+            xh                 # Friendly and fast tool for sending HTTP requests
+
+            # Editors
+            neovim             # Hyperextensible Vim-based text editor
+
+            # Utilities Not Easily Categorized
+            pv                 # Monitor the progress of data through a pipeline          ];
           ];
 
         homebrew = {
@@ -145,9 +174,11 @@
             "pipx"
             "wxwidgets"
             "flyctl"
-            "autoconf"
             "fakedata"
-            "openssl@1.1" # required for elixir
+            # required for elixir
+            "openssl@1.1"
+            "autoconf"
+            "coreutils"
           ];
         };
 
@@ -216,9 +247,32 @@
           '';
         };
 
+
         # Used for backwards compatibility, please read the changelog before changing.
         # $ darwin-rebuild changelog
         system.stateVersion = 4;
+
+        # launchd.user.agents.KeyRemapping = {
+        #     serviceConfig = {
+        #       Label = "com.local.KeyRemapping";
+        #       ProgramArguments = let
+        #         keyMapping = {
+        #           UserKeyMapping = [
+        #             {
+        #               HIDKeyboardModifierMappingSrc = "0x7000000e6";  # Right Option key
+        #               HIDKeyboardModifierMappingDst = "0x7000000e4";  # Right Control key
+        #             }
+        #           ];
+        #         };
+        #       in [
+        #         "/usr/bin/hidutil"
+        #         "property"
+        #         "--set"
+        #         (builtins.toJSON keyMapping)
+        #       ];
+        #       RunAtLoad = true;
+        #     };
+        #   };
 
         environment.shells = [ pkgs.fish ];
 

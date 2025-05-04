@@ -213,7 +213,7 @@ local plugins = {
 			-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 			-- Use an on_attach function to only map the following keys
 			-- after the language server attaches to the current buffer
-			local function on_attach(client, bufnr) end
+			local function on_attach(_client, _bufnr) end
 
 			vim.diagnostic.config({ virtual_text = false })
 
@@ -482,6 +482,7 @@ local plugins = {
 		end,
 	},
 
+	-- Treesitter based structural search and replace plugin for Neovim.
 	{
 		"cshuaimin/ssr.nvim",
 		opts = {
@@ -784,28 +785,20 @@ local plugins = {
 		dir = "~/src/dkendal/nvim-alternate",
 		lazy = false,
 		opts = {
-			pairs = {
+			rules = {
 				-- Haskell
-				{ "src/*.hs",        "test/*Spec.hs" },
+				{ glob = { "src/*.hs", "test/*Spec.hs" } },
 				-- Elixir
-				{ "lib/*.ex",        "test/*_test.exs" },
-				{ "lib/*/live/*.ex", "lib/*/live/*.html.heex" },
-				{ "apps/*/lib/*.ex", "apps/*/test/*_test.exs" },
+				{ glob = { "lib/*.ex", "test/*_test.exs" } },
+				{ glob = { "lib/*/live/*.ex", "lib/*/live/*.html.heex" } },
+				{ glob = { "apps/*/lib/*.ex", "apps/*/test/*_test.exs" } },
 				-- Ruby
-				{ "app/*.rb",        "test/*_test.rb" },
-				{ "test/*_test.rb",  "app/*.rb" },
+				{ glob = { "app/*.rb", "test/*_test.rb" } },
+				{ glob = { "test/*_test.rb", "app/*.rb" } },
 				-- Lua
-				{ "lua/*.lua",       "tests/*_spec.lua" },
-				{
-					{ "*.ts", "*.tsx", "*.js", "*.jsx" },
-					"(.+).([jt]sx?)",
-					"%1.test.%2",
-				},
-				{
-					{ "*.test.ts", "*.test.tsx", "*.js", "*.jsx" },
-					"(.+).test.([jt]sx?)",
-					"%1.%2",
-				},
+				{ glob = { "lua/*.lua", "tests/*_spec.lua" } },
+				{ pattern = { "(.+).([jt]sx?)$", "%1.test.%2" } },
+				{ pattern = { "(.+).test.([jt]sx?)$", "%1.%2" } },
 			},
 		},
 		keys = {
@@ -827,121 +820,6 @@ local plugins = {
 	},
 
 	{
-		"olimorris/codecompanion.nvim",
-		config = function()
-			require("codecompanion").setup({
-				strategies = {
-					chat = {
-						adapter = "anthropic",
-					},
-					inline = {
-						adapter = "anthropic",
-					},
-					agent = {
-						adapter = "anthropic",
-					},
-				},
-				adapters = {
-					openai = nil,
-					anthropic = function()
-						return require("codecompanion.adapters").extend("anthropic", {
-							env = {
-								api_key = "ANTHROPIC_API_KEY",
-							},
-						})
-					end,
-					copilot = nil,
-					llama3 = function()
-						return require("codecompanion.adapters").extend("ollama", {
-							name = "llama3.1",
-							schema = {
-								model = {
-									default = "llama3.1:latest",
-								},
-								num_ctx = {
-									default = 4096,
-								},
-								num_predict = {
-									default = -1,
-								},
-							},
-							env = {
-								url = "http://titan.local:11434",
-							},
-							headers = {
-								["Content-Type"] = "application/json",
-							},
-							parameters = {
-								sync = true,
-							},
-						})
-					end,
-					deepseek_coder_v2 = function()
-						return require("codecompanion.adapters").extend("ollama", {
-							name = "Deep Seek Coder v2",
-							schema = {
-								model = {
-									default = "deepseek-coder-v2:latest",
-								},
-								num_ctx = {
-									default = 4096,
-								},
-								num_predict = {
-									default = -1,
-								},
-							},
-							env = {
-								url = "http://titan.local:11434",
-							},
-							headers = {
-								["Content-Type"] = "application/json",
-							},
-							parameters = {
-								sync = true,
-							},
-						})
-					end,
-				},
-			})
-		end,
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-treesitter/nvim-treesitter",
-			"echasnovski/mini.diff",
-			{
-				"stevearc/dressing.nvim", -- Optional: Improves the default Neovim UI
-				opts = {},
-			},
-		},
-	},
-
-	{
-		"zbirenbaum/copilot.lua",
-		cmd = "Copilot",
-		event = "InsertEnter",
-		config = function()
-			require("copilot").setup({
-				suggestion = { enabled = false },
-				panel = {
-					enabled = true,
-					auto_refresh = false,
-					keymap = {
-						jump_prev = "[[",
-						jump_next = "]]",
-						accept = "<CR>",
-						refresh = "gr",
-						open = "<M-CR>",
-					},
-					layout = {
-						position = "bottom", -- | top | left | right
-						ratio = 0.4,
-					},
-				},
-			})
-		end,
-	},
-
-	{
 		"pmizio/typescript-tools.nvim",
 		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 		opts = {},
@@ -953,7 +831,12 @@ local plugins = {
 		---@type snacks.Config
 		opts = {
 			indent = {},
-			picker = {},
+			picker = {
+				matcher = {
+					cwd_bonus = true,
+					frecency = true,
+				},
+			},
 			bigfile = {},
 			quickfile = {},
 			scroll = {},
@@ -1301,7 +1184,7 @@ local plugins = {
 				desc = "Undo History",
 			},
 			{
-				"<leader>uC",
+				"<leader>hdC",
 				function()
 					Snacks.picker.colorschemes()
 				end,
@@ -1397,6 +1280,27 @@ local plugins = {
 					end
 				end,
 				mode = "n",
+			},
+		},
+	},
+
+	{
+		"yetone/avante.nvim",
+		event = "VeryLazy",
+		version = false, -- Never set this value to "*"! Never!
+		opts = {},
+		build = "make",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-lua/plenary.nvim",
+			"MunifTanjim/nui.nvim",
+			{
+				-- Make sure to set this up properly if you have lazy=true
+				"MeanderingProgrammer/render-markdown.nvim",
+				opts = {
+					file_types = { "markdown", "Avante" },
+				},
+				ft = { "markdown", "Avante" },
 			},
 		},
 	},

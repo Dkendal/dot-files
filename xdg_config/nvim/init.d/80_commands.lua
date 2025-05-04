@@ -65,7 +65,7 @@ local function change_dir()
 	dir = vim.fn.expand("%:p")
 	dir = vim.fn.finddir(".git", dir .. ";")
 	dir = vim.fn.fnamemodify(dir, ":h")
-	vim.cmd.cd(dir)
+	vim.cmd([[silent cd ]] .. dir)
 end
 
 local function window_change_dir()
@@ -73,7 +73,7 @@ local function window_change_dir()
 	dir = vim.fn.expand("%:p")
 	dir = vim.fn.finddir(".git", dir .. ";")
 	dir = vim.fn.fnamemodify(dir, ":h")
-	vim.cmd.lcd(dir)
+	vim.cmd([[silent lcd ]] .. dir)
 end
 
 command("Gsub", gsub, { nargs = "*" })

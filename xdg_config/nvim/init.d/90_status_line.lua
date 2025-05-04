@@ -27,7 +27,7 @@ function _G.user_status_line.diagnostics()
 
 	local i = 0
 	local s = {
-		"["
+		"[",
 	}
 
 	-- pre size array
@@ -66,6 +66,25 @@ function _G.user_status_line.diagnostics()
 	return table.concat(s, "")
 end
 
+function _G.user_status_line.file()
+	local cwd = vim.fn.getcwd()
+	local path = vim.fn.expand("%:p")
+	local width = vim.api.nvim_win_get_width(0) - 20
+
+	local str
+	if vim.startswith(path, cwd) then
+		str = vim.fn.pathshorten(vim.fn.expand("%:."), width)
+	else
+		str = vim.fn.pathshorten(vim.fn.expand("%:~"), width)
+	end
+
+	if #str > width then
+		str = vim.fn.pathshorten(str, 2)
+	end
+
+	return str
+end
+
 local function setup()
 	vim.api.nvim_create_autocmd({ "ColorScheme" }, {
 		pattern = "*",
@@ -77,15 +96,15 @@ local function setup()
 			hl.set(0, "StatusLineDiagnosticWarn", { bg = StatusLine.bg, fg = colors.Orange, bold = true })
 			hl.set(0, "StatusLineDiagnosticHint", { bg = StatusLine.bg, fg = colors.Blue, bold = true })
 			hl.set(0, "StatusLineDiagnosticInfo", { bg = StatusLine.bg, fg = colors.Cyan, bold = true })
-		end
+		end,
 	})
 
 	vim.o.statusline =
-	[[%{ v:lua.user_status_line.mode() } %f%s%h%r%w%q %=  %{% v:lua.user_status_line.diagnostics() %}%{% v:lua.user_status_line.macro() %} %l,%c %P]]
+	[[%{ v:lua.user_status_line.mode() } %{v:lua.user_status_line.file()}%s%h%r%w%q %=  %{% v:lua.user_status_line.diagnostics() %}%{% v:lua.user_status_line.macro() %} %l,%c %P]]
 	vim.o.winbar = "%#StatusLine#%f"
 end
 
 vim.api.nvim_create_autocmd({ "User" }, {
 	pattern = "VeryLazy",
-	callback = setup
+	callback = setup,
 })

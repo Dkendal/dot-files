@@ -1,9 +1,3 @@
-vim.g.mapleader = "<space>"
-vim.g.localleader = "\\"
-
-vim.cmd.filetype("plugin", "indent", "on")
-vim.cmd.syntax("on")
-
 vim.o.shell = "bash"
 vim.o.cedit = "<C-O>"
 vim.o.cinoptions = "1s,(0,W2,m1"
@@ -43,10 +37,19 @@ vim.o.cp = false
 vim.o.cmdheight = 0
 vim.o.laststatus = 3
 vim.o.encoding = "UTF-8"
+vim.o.ttimeoutlen = 10
 
--- Disable netrw
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+vim.o.shortmess = vim.fn.join({
+	"A", -- Don't give the "ATTENTION" message when an existing	*shm-A*
+	"C", -- Don't give messages about scanning included files when completing
+	"F", -- Don't give the file info when editing a file (like number of lines and name)
+	"O", -- Message for reading a file overwrites any previous message
+	"T", -- Truncate other messages in the middle if too long
+	"c", -- Don't give "-- XXX completion (YYY)", "match 1 of 2", "The only match", "Pattern not found", "Back at original", etc.
+	"l", -- Don't give "search hit BOTTOM, continuing at TOP" or similar messages
+	"o", -- Overwrite message for writing a file with subsequent message
+	"t", -- Truncate file messages at the start if too long
+}, "")
 
 -- Folding
 vim.o.foldlevel = 99
@@ -55,9 +58,4 @@ vim.o.foldcolumn = "1"
 vim.o.foldenable = true
 vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 
-vim.wo.number = true
-vim.g.vimsyn_embed = "lmpPr"
-vim.g.mapleader = " "
-vim.g.maplocalleader = ","
-vim.g.netrw_banner = 0
-
+vim.o.number = true
