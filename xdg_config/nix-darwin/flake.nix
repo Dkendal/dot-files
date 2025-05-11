@@ -90,6 +90,8 @@
             ast-grep           # CLI tool for structural search and replace of code
             codespell          # Check code for common misspellings
             stylua             # Opinionated Lua code formatter
+            shellharden
+            shellcheck
 
             # Programming Languages & Environment Management
             rustup             # Rust toolchain installer

@@ -34,5 +34,10 @@ return {
 			Dbg.trace()
 			Dbg.process(:all, :c)
 		]]
+	},
+	{
+		desc = ":",
+		prefix = "property",
+		body = [[$1: $1]]
 	}
 }
