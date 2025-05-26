@@ -107,6 +107,7 @@
             bash-language-server # Bash Language Server
             taplo              # TOML Language Server
             fennel-ls          # Fennel language server
+            lexical            # elixir language server
             luajitPackages.fennel # Lisp that compiles to Lua
             luajitPackages.teal-language-server # Teal language server
             luajitPackages.tl   # Teal language compiler/type checker
@@ -135,6 +136,7 @@
             hledger            # Plain text accounting tool
             hledger-ui         # Terminal UI for hledger
             hledger-web        # Web interface for hledger
+            hledger-utils
 
             # Work & Productivity
             jira-cli-go        # Command line interface for Jira
@@ -152,6 +154,10 @@
 
             # Utilities Not Easily Categorized
             pv                 # Monitor the progress of data through a pipeline          ];
+
+            ollama
+
+            putty
           ];
 
         homebrew = {
@@ -218,6 +224,8 @@
           shell = pkgs.fish;
         };
 
+        system.primaryUser = "dylan.kendal";
+
         # Set Git commit hash for darwin-version.
         system.configurationRevision = self.rev or self.dirtyRev or null;
 
@@ -238,43 +246,7 @@
           };
         };
 
-        system.activationScripts = {
-          rustup.text = ''
-            ${pkgs.rustup}/bin/rustup toolchain install nightly --allow-downgrade --profile minimal --component clippy
-          '';
-
-          postUserActivation.text = ''
-            # Reloads defaults
-            /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-          '';
-        };
-
-
-        # Used for backwards compatibility, please read the changelog before changing.
-        # $ darwin-rebuild changelog
         system.stateVersion = 4;
-
-        # launchd.user.agents.KeyRemapping = {
-        #     serviceConfig = {
-        #       Label = "com.local.KeyRemapping";
-        #       ProgramArguments = let
-        #         keyMapping = {
-        #           UserKeyMapping = [
-        #             {
-        #               HIDKeyboardModifierMappingSrc = "0x7000000e6";  # Right Option key
-        #               HIDKeyboardModifierMappingDst = "0x7000000e4";  # Right Control key
-        #             }
-        #           ];
-        #         };
-        #       in [
-        #         "/usr/bin/hidutil"
-        #         "property"
-        #         "--set"
-        #         (builtins.toJSON keyMapping)
-        #       ];
-        #       RunAtLoad = true;
-        #     };
-        #   };
 
         environment.shells = [ pkgs.fish ];
 

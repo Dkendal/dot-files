@@ -132,34 +132,13 @@ local plugins = {
 
 	{
 		"nvimtools/none-ls.nvim",
-		dependencies = {
-			"williamboman/mason.nvim",
-		},
 		config = function()
 			local null_ls = require("null-ls")
 
-			local h = require("null-ls.helpers")
-
 			null_ls.setup({
 				root_dir = require("null-ls.utils").root_pattern(".git", "package.json"),
-				debug = true,
+				debug = false,
 				sources = {
-					-- Diagnostics
-					null_ls.builtins.diagnostics.fish,
-					null_ls.builtins.diagnostics.codespell,
-					-- null_ls.builtins.diagnostics.selene,
-					-- Formatting
-					null_ls.builtins.formatting.shellharden,
-					null_ls.builtins.formatting.erb_format,
-					null_ls.builtins.formatting.black,
-					null_ls.builtins.formatting.shfmt,
-					null_ls.builtins.formatting.rubocop,
-					null_ls.builtins.formatting.mix,
-					null_ls.builtins.formatting.gdformat,
-					null_ls.builtins.formatting.stylua,
-					null_ls.builtins.formatting.prettier,
-					null_ls.builtins.formatting.csharpier,
-					null_ls.builtins.formatting.typstfmt,
 				},
 			})
 		end,
@@ -168,26 +147,15 @@ local plugins = {
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
-			"nvimtools/none-ls.nvim",
 			"lvimuser/lsp-inlayhints.nvim",
 			{ "ray-x/lsp_signature.nvim", opts = {} },
-			{
-				"williamboman/mason-lspconfig.nvim",
-				opts = {},
-				dependencies = {
-					{
-						"williamboman/mason.nvim",
-						opts = {},
-					},
-				},
-			},
 		},
 		init = function()
 			local enabled_langservers = {
 				"bashls",
 				"biome",
 				"clangd",
-				"efm",
+				-- "efm",
 				"emmet_ls",
 				"fennel_ls",
 				"gdscript",
@@ -246,8 +214,57 @@ local plugins = {
 				lspconfig[name].setup(config or {})
 			end
 
-			require("user.lsp.completion_icons").setup()
-			require("user.lsp.floating_window_decoration").setup()
+			local icons = {
+				Class = "",
+				Color = "",
+				Constant = "",
+				Constructor = "",
+				Enum = "",
+				EnumMember = "",
+				Field = "",
+				File = "",
+				Folder = "",
+				Function = "󰊕",
+				Interface = "",
+				Keyword = "",
+				Method = "",
+				Module = "󰕳",
+				Property = "",
+				Snippet = "",
+				Struct = "",
+				Text = "󰦨",
+				Unit = "1",
+				Value = "v",
+				Variable = "󰫧",
+			}
+
+			local kinds = vim.lsp.protocol.CompletionItemKind
+
+			for i, kind in ipairs(kinds) do
+				kinds[i] = icons[kind] or kind
+			end
+
+			local border = {
+				{ "🭽", "FloatBorder" },
+				{ "▔", "FloatBorder" },
+				{ "🭾", "FloatBorder" },
+				{ "▕", "FloatBorder" },
+				{ "🭿", "FloatBorder" },
+				{ "▁", "FloatBorder" },
+				{ "🭼", "FloatBorder" },
+				{ "▏", "FloatBorder" },
+			}
+
+			-- To instead override globally
+			local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+
+			local fn = function(contents, syntax, opts, ...)
+				opts = opts or {}
+				opts.border = opts.border or border
+				return orig_util_open_floating_preview(contents, syntax, opts, ...)
+			end
+
+			vim.lsp.util.open_floating_preview = fn;
 		end,
 	},
 
@@ -355,8 +372,7 @@ local plugins = {
 		dependencies = {
 			"nvim-treesitter/playground",
 			"rrethy/nvim-treesitter-textsubjects",
-			"nvim-treesitter/nvim-treesitter-textobjects",
-			"nushell/tree-sitter-nu",
+			"nvim-treesitter/nvim-treesitter-textobjects"
 		},
 		init = function()
 			local configs = require("nvim-treesitter.configs")
@@ -642,14 +658,20 @@ local plugins = {
 					child_prefix = "├",
 					collapsed = "─",
 					expanded = "╮",
-					failed = "✖",
+					failed = "",
 					final_child_indent = " ",
 					final_child_prefix = "╰",
 					non_collapsible = "─",
-					passed = "✔",
-					running = "◯",
-					skipped = "ﰸ",
-					unknown = "?",
+					notify = "󰂚",
+					passed = "",
+					running = "",
+					running_animated = {
+						"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+						"", "", "", "", "", ""
+					},
+					skipped = "",
+					unknown = "",
+					watching = "󰐃"
 				},
 				highlights = {
 					adapter_name = "NeotestAdapterName",
@@ -673,6 +695,8 @@ local plugins = {
 			})
 		end,
 		keys = {
+			{ "[t",         "<cmd>Neotest jump prev<cr>" },
+			{ "]t",         "<cmd>Neotest jump next<cr>" },
 			{ "<leader>tl", "<cmd>Neotest run last<cr>" },
 			{ "<leader>tt", "<cmd>Neotest run file<cr>" },
 			{
@@ -1305,6 +1329,32 @@ local plugins = {
 		},
 	},
 
+	{
+		"pwntester/octo.nvim",
+		requires = {
+			"nvim-lua/plenary.nvim",
+			"folke/snacks.nvim",
+			"nvim-tree/nvim-web-devicons",
+		},
+		opts = {
+			picker = "snacks"
+		},
+	},
+
+	{
+		dir = "~/src/dkendal/nvim-coverage",
+		opts = {
+			auto_reload = true,
+			lang = {
+				elixir = {
+					coverage_file = function()
+						return vim.fn.findfile("lcov.info", "cover,apps/*/cover")
+					end
+				}
+			}
+		}
+	},
+
 	{ "AndrewRadev/splitjoin.vim" },
 	{ "MagicDuck/grug-far.nvim",                 opts = {} },
 	{ "Mofiqul/vscode.nvim",                     lazy = true },
@@ -1313,7 +1363,6 @@ local plugins = {
 	{ "catppuccin/nvim" },
 	{ "elixir-editors/vim-elixir" },
 	{ "godlygeek/tabular" },
-	{ "https://github.com/LhKipp/nvim-nu",       opts = {} },
 	{ "j-hui/fidget.nvim",                       opts = {} },
 	{ "jamessan/vim-gnupg" },
 	{ "kevinhwang91/promise-async" },

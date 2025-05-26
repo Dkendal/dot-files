@@ -1,3 +1,5 @@
+local dedent = require("user.string").dedent
+
 return {
 	{
 		desc = "IO.puts",
@@ -12,28 +14,28 @@ return {
 	{
 		desc = "describe block",
 		prefix = "desc",
-		body = [[
+		body = dedent([[
 			desc "$1" do
 				$0
 			end
-		]]
+		]])
 	},
 	{
 		desc = "test block",
 		prefix = "test",
-		body = [[
+		body = dedent([[
 			test "$1", state do
 				$0
 			end
-		]]
+		]])
 	},
 	{
-		desc = "@tr",
-		prefix = "dbg trace",
-		body = [[
-			Dbg.trace()
+		desc = "@dbg",
+		prefix = "dbg tracer",
+		body = dedent([[
+			Dbg.tracer()
 			Dbg.process(:all, :c)
-		]]
+		]])
 	},
 	{
 		desc = ":",

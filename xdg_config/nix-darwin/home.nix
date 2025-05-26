@@ -92,9 +92,10 @@ in
       tools = {
         node = "lts";
         usage = "0.3";
-        erlang = "27.0";
-        elixir = "1.17";
+        erlang = "27";
+        elixir = "1";
         lua = "5.1";
+        go = "1";
       };
     };
   };

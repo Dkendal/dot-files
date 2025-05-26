@@ -13,3 +13,7 @@ CLAUDE.md
 .DS_Store
 .nvim.lua
 .env.local
+
+**/CLAUDE.local.md
+
+**/.claude/settings.local.json

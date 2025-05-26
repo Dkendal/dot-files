@@ -4,7 +4,9 @@ vim.o.cinoptions = "1s,(0,W2,m1"
 vim.o.makeef = "errors.err"
 vim.o.clipboard = "unnamedplus,unnamed"
 vim.o.grepprg = "rg --vimgrep"
-vim.o.includeexpr = "asubstitute(v:fname,'[ab]/','./','g')"
+-- vim.o.includeexpr = function(fname)
+-- 	return string.gsub(fname, [[[ab]/]], [[./]])
+-- end
 vim.o.hidden = true
 vim.o.timeoutlen = 400
 vim.o.showbreak = "\226\134\179"
