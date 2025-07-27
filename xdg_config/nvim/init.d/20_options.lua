@@ -4,6 +4,7 @@ vim.o.cinoptions = "1s,(0,W2,m1"
 vim.o.makeef = "errors.err"
 vim.o.clipboard = "unnamedplus,unnamed"
 vim.o.grepprg = "rg --vimgrep"
+vim.o.conceallevel = 3
 -- vim.o.includeexpr = function(fname)
 -- 	return string.gsub(fname, [[[ab]/]], [[./]])
 -- end
@@ -58,6 +59,5 @@ vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldcolumn = "1"
 vim.o.foldenable = true
-vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 
 vim.o.number = true

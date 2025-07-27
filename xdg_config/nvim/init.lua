@@ -37,7 +37,7 @@ local plugins = {
 		},
 	},
 
-	{ dir = "~/src/dkendal/nvim-treeclimber",    opts = {} },
+	{ dir = "~/src/dkendal/nvim-treeclimber", event = "VeryLazy", opts = {} },
 
 	{
 		"morhetz/gruvbox",
@@ -132,6 +132,7 @@ local plugins = {
 
 	{
 		"nvimtools/none-ls.nvim",
+		lazy = true,
 		config = function()
 			local null_ls = require("null-ls")
 
@@ -174,6 +175,7 @@ local plugins = {
 				"taplo",
 				"teal_ls",
 				"terraformls",
+				"nil_ls",
 			}
 
 			local lspconfig = require("lspconfig")
@@ -370,7 +372,7 @@ local plugins = {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		dependencies = {
-			"nvim-treesitter/playground",
+			{ "nvim-treesitter/playground", lazy = true, cmd = "TSPlaygroundToggle" },
 			"rrethy/nvim-treesitter-textsubjects",
 			"nvim-treesitter/nvim-treesitter-textobjects"
 		},
@@ -451,6 +453,7 @@ local plugins = {
 
 	{
 		"kevinhwang91/nvim-ufo",
+		lazy = false,
 		dependencies = {
 			"kevinhwang91/promise-async",
 		},
@@ -491,11 +494,15 @@ local plugins = {
 					},
 				},
 				fold_virt_text_handler = ufo_handler,
-				provider_selector = function(bufnr, filetype, buftype)
+				provider_selector = function(_bufnr, _filetype, _buftype)
 					return { "treesitter", "indent" }
 				end,
 			})
 		end,
+		keys = {
+			{ "zR", function() require("ufo").openAllFolds() end,  mode = "n" },
+			{ "zM", function() require("ufo").closeAllFolds() end, mode = "n" },
+		}
 	},
 
 	-- Treesitter based structural search and replace plugin for Neovim.
@@ -635,6 +642,7 @@ local plugins = {
 
 	{
 		"nvim-neotest/neotest",
+		lazy = true,
 		dependencies = {
 			-- dependencies
 			"nvim-neotest/nvim-nio",
@@ -751,7 +759,6 @@ local plugins = {
 	{
 		"https://github.com/kaarmu/typst.vim",
 		ft = "typst",
-		lazy = false,
 	},
 
 	{
@@ -832,6 +839,7 @@ local plugins = {
 
 	{
 		"David-Kunz/gen.nvim",
+		lazy = true,
 		opts = {
 			model = "llama3.1:latest",
 			host = "titan.local",
@@ -845,12 +853,14 @@ local plugins = {
 
 	{
 		"pmizio/typescript-tools.nvim",
+		ft = "typescript",
 		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 		opts = {},
 	},
 
 	{
 		"folke/snacks.nvim",
+		lazy = false,
 		---@module "snacks.meta.types"
 		---@type snacks.Config
 		opts = {
@@ -1270,7 +1280,7 @@ local plugins = {
 
 	{
 		"folke/lazydev.nvim",
-		ft = "lua", -- only load on lua files
+		ft = "lua",
 		opts = {
 			library = {
 				-- See the configuration section for more details
@@ -1318,6 +1328,7 @@ local plugins = {
 			"nvim-treesitter/nvim-treesitter",
 			"nvim-lua/plenary.nvim",
 			"MunifTanjim/nui.nvim",
+			"stevearc/dressing.nvim",
 			{
 				-- Make sure to set this up properly if you have lazy=true
 				"MeanderingProgrammer/render-markdown.nvim",
@@ -1331,6 +1342,8 @@ local plugins = {
 
 	{
 		"pwntester/octo.nvim",
+		lazy = true,
+		cmd = { "Octo" },
 		requires = {
 			"nvim-lua/plenary.nvim",
 			"folke/snacks.nvim",
@@ -1355,13 +1368,141 @@ local plugins = {
 		}
 	},
 
-	{ "AndrewRadev/splitjoin.vim" },
-	{ "MagicDuck/grug-far.nvim",                 opts = {} },
-	{ "Mofiqul/vscode.nvim",                     lazy = true },
+	{
+		"nvim-neorg/neorg",
+		lazy = false,
+		version = "*",
+		dependencies = {
+			{ "nvim-lua/plenary.nvim" },
+			{
+				dir = "~/src/dkendal/nvim-neorg-snacks/",
+				lazy = false,
+				dependencies = { "folke/snacks.nvim" }
+			},
+			-- {
+			-- 	"3rd/image.nvim",
+			-- 	opts = {
+			-- 		backend = "kitty",
+			-- 		processor = "magick_cli",
+			-- 		integrations = {
+			-- 			neorg = {
+			-- 				enabled = true,
+			-- 				filetypes = { "norg" }
+			-- 			}
+			-- 		}
+			-- 	}
+			-- },
+		},
+		opts = {
+			load = {
+				["core.defaults"] = {},
+				["core.summary"] = {},
+				["core.concealer"] = {
+					folds = false,
+				},
+				["core.export"] = {},
+				["core.dirman"] = {
+					config = {
+						workspaces = {
+							notes = "~/norg/notes",
+							people = "~/norg/people",
+							meetings = "~/norg/meetings",
+							projects = "~/norg/projects",
+						},
+						default_workspace = "notes",
+					}
+				},
+				["external.neorg_snacks"] = {
+					config = {
+						show_title_preview = true, -- Show file titles in preview
+						layout = "default",  -- Picker layout preset
+					}
+				},
+				["core.integrations.telescope"] = {
+				},
+				["core.integrations.treesitter"] = {
+				},
+			},
+		},
+		keys = {
+			{ "<Leader>aojc",     "<cmd>Neorg journal custom<cr>" },
+			{ "<Leader>aojj",     "<cmd>Neorg journal today<cr>" },
+			{ "<Leader>aojf",     "<cmd>Neorg journal tomorrow<cr>" },
+			{ "<Leader>aojb",     "<cmd>Neorg journal yesterday<cr>" },
+			{ "<leader>snl",      "<cmd>Telescope neorg find_linkable<cr>",       mode = "n" },
+			{ "<leader>snf",      "<cmd>Telescope neorg find_norg_files<cr>",     mode = "n" },
+			{ "<c-l>",            "<cmd>Telescope neorg insert_file_link<cr>",    ft = "norg", mode = "i" },
+			{ "<LocalLeader>lif", "<cmd>Telescope neorg insert_file_link<cr>",    ft = "norg", mode = "n" },
+			{ "<c-.>",            "<Plug>(neorg.tempus.insert-date.insert-mode)", ft = "norg", mode = "i" },
+			{ "<leader><leader>", "<cmd>Telescope neorg find_linkable<cr>",       ft = "norg", mode = "n" },
+			{ "<LocalLeader>tt",  "<Plug>(neorg.qol.todo-items.todo.task-cycle)", ft = "norg", mode = "n" },
+			{ "<<",               "<Plug>(neorg.promo.demote)",                   ft = "norg", mode = "n" },
+			{ "<<",               "<Plug>(neorg.promo.demote.range)",             ft = "norg", mode = "v" },
+			{ ">>",               "<Plug>(neorg.promo.promote)",                  ft = "norg", mode = "n" },
+			{ ">>",               "<Plug>(neorg.promo.promote.range)",            ft = "norg", mode = "v" },
+			{ "gO",               "<cmd>Neorg toc<CR>",                           ft = "norg", mode = "v" },
+			{ "<c-]>",            "<Plug>(neorg.esupports.hop.hop-link)",         ft = "norg", mode = "n" },
+			{ "<LocalLeader>gws", "<cmd>Neorg generate-workspace-summary<cr>",    ft = "norg", mode = "n" },
+		}
+	},
+
+	{
+		'nvim-telescope/telescope.nvim',
+		lazy = true,
+		cmd = { "Telescope" },
+		tag = '0.1.8',
+		dependencies = {
+			'nvim-lua/plenary.nvim',
+			{ 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release' },
+			'nvim-neorg/neorg-telescope',
+		},
+		opts = {
+			defaults = {
+				file_ignore_patterns = { "node_modules", ".git/", ".jj/", "deps", "_build" },
+			},
+			extensions = {
+				fzf = {
+					fuzzy = true,
+					override_generic_sorter = true,
+					override_file_sorter = true,
+					case_mode = "smart_case",
+				}
+			},
+			pickers = {
+				find_files = {
+					find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+				},
+				live_grep = {
+					additional_args = function() return { "--hidden" } end,
+				},
+			},
+		}
+	},
+
+	{
+		"AndrewRadev/splitjoin.vim",
+		lazy = true,
+		keys = { "cS", "cJ" }
+	},
+	{
+		"MagicDuck/grug-far.nvim",
+		lazy = true,
+		cmd = { "GrugFar", "GrugFarWithin" },
+		opts = {}
+	},
+	{ "Mofiqul/vscode.nvim",                  lazy = true },
 	{ "artnez/vim-wipeout" },
-	{ "blankname/vim-fish" },
-	{ "catppuccin/nvim" },
-	{ "elixir-editors/vim-elixir" },
+	{
+		"blankname/vim-fish",
+		lazy = true,
+		ft = "fish"
+	},
+	{ "catppuccin/nvim",                         lazy = false },
+	{
+		"elixir-editors/vim-elixir",
+		lazy = true,
+		ft = "elixir"
+	},
 	{ "godlygeek/tabular" },
 	{ "j-hui/fidget.nvim",                       opts = {} },
 	{ "jamessan/vim-gnupg" },
@@ -1369,9 +1510,28 @@ local plugins = {
 	{ "nvim-lua/plenary.nvim" },
 	{ "nvim-tree/nvim-web-devicons" },
 	{ "nvim-treesitter/nvim-treesitter-context", opts = {} },
-	{ "pest-parser/pest.vim",                    filetypes = { "pest" } },
+	{ "pest-parser/pest.vim",                    ft = { "pest" } },
 	{ "ryanoasis/vim-devicons" },
-	{ "sindrets/diffview.nvim",                  opts = {} },
+	{
+		"sindrets/diffview.nvim",
+		lazy = true,
+		cmd = {
+			"DiffviewClose",
+			"DiffviewFileHistory",
+			"DiffviewFocusFiles",
+			"DiffviewLog",
+			"DiffviewOpen",
+			"DiffviewToggleFiles",
+		},
+		opts = {}
+	},
+	{
+		"julienvincent/hunk.nvim",
+		cmd = { "DiffEditor" },
+		config = function()
+			require("hunk").setup()
+		end,
+	},
 	{ "terrastruct/d2-vim" },
 	{ "tpope/vim-abolish" },
 	{ "tpope/vim-eunuch" },
@@ -1383,10 +1543,12 @@ local plugins = {
 	{ "tpope/vim-sleuth" },
 	{ "tpope/vim-speeddating" },
 	{ "tpope/vim-unimpaired" },
-	{ "uga-rosa/ccc.nvim",                       opts = {} },
+	{ "uga-rosa/ccc.nvim",    opts = {} },
+
 }
 
-local opts = {}
+local opts = {
+}
 
 require("lazy").setup(plugins, opts)
 require("user.boxes")

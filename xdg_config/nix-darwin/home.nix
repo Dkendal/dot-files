@@ -72,16 +72,18 @@ in
 
   programs.nushell = {
     enable = true;
-    # configFile = {
-    #   text = "
-    #     $env.config = {
-    #       show_banner: false
-    #       edit_mode: vi
-    #       use_kitty_protocol: true
-    #       highlight_resolved_externals: true
-    #     }
-    #   ";
-    # };
+    configFile = {
+      text = "
+        use functions/jira-api.nu *
+
+        $env.config = {
+          show_banner: false
+          edit_mode: vi
+          use_kitty_protocol: true
+          highlight_resolved_externals: true
+        }
+      ";
+    };
   };
 
   programs.mise = {

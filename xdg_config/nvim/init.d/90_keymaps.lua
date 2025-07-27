@@ -155,14 +155,6 @@ map("n", "gO", vim.lsp.buf.document_symbol)
 map("n", "gd", vim.lsp.buf.definition, { desc = "go to definition" })
 map("n", "gi", vim.lsp.buf.implementation)
 
-map("n", "zR", function()
-	require("ufo").openAllFolds()
-end)
-
-map("n", "zM", function()
-	require("ufo").closeAllFolds()
-end)
-
 map("t", "<c-[>", "<c-\\><c-n>")
 
 map("v", "<", "<gv")
