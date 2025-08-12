@@ -92,18 +92,18 @@ for _, key in ipairs({ "<c-i>", "<c-j>", "<c-h>", "<c-m>" }) do
 	map("n", key, key, { noremap = true })
 end
 
-map("i", "<C-h>", vim.lsp.buf.signature_help)
+map("i", "<C-h>", vim.lsp.buf.signature_help, { desc = "Signature help" })
 
 map("n", "<C-s>", ":s/<c-r><c-w>//gc<left><left><left>")
 -- map("n", "<c-.>", vim.lsp.buf.code_action)
-map("n", "<c-\\>", format_async)
-map("n", "<leader>\\", format_async)
+map("n", "<c-\\>", format_async, { desc = "Format async" })
+map("n", "<leader>\\", format_async, { desc = "Format async" })
 map("n", "<expr>", "<leader>* '<cmd>Rg!<space>'.expand('<cword>').'<cr>'", { desc = "Rg word under cursor" })
 map("n", "<leader>ay", ":let @+='[[' . expand('%:~') . '::' . line('.') . ']]'<cr>:let @*=@+<cr>:echo @*<cr>")
 map("n", "<leader>bd", ":bp<cr>:bd #<cr>")
 map("n", "<leader>e", ":e <c-r>=expand('%:h')<cr>")
 map("n", "<leader>feR", ":source<cr>")
-map("n", "grr", vim.lsp.buf.references)
+map("n", "grr", vim.lsp.buf.references, { desc = "Buffer references" })
 map("v", "<C-s>", ":s/")
 
 -- Copy relative path to clipboard
@@ -148,8 +148,8 @@ map("n", "]c", function()
 	require("gitsigns").nav_hunk("next", { navigation_message = false })
 end)
 
-map("n", "[d", vim.diagnostic.goto_prev)
-map("n", "]d", vim.diagnostic.goto_next)
+map("n", "[d", vim.diagnostic.get_next)
+map("n", "]d", vim.diagnostic.get_prev)
 map("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
 map("n", "gO", vim.lsp.buf.document_symbol)
 map("n", "gd", vim.lsp.buf.definition, { desc = "go to definition" })

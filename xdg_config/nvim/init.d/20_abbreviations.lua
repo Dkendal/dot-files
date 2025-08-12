@@ -2,15 +2,15 @@ local abbr = vim.cmd.abbr
 local cabbr = vim.cmd.cabbr
 local iabbr = vim.cmd.iabbr
 
-abbr([[<expr> D@ strftime('%Y-%m-%d %a')]])
-abbr([[<expr> d@ strftime('%Y-%m-%d')]])
-abbr([[<expr> t@ strftime('%Y%m%d%k%M')]])
-abbr([[<expr> ts@ strftime('%Y-%m-%d %a %k:%M')]])
-abbr([[<expr> us@ strftime('%s')]])
-abbr([[acount account]])
-abbr([[overide override]])
-abbr([[resouces resources]])
-abbr([[teh the]])
+iabbr([[<expr> D@ strftime('%Y-%m-%d %a')]])
+iabbr([[<expr> d@ strftime('%Y-%m-%d')]])
+iabbr([[<expr> t@ strftime('%Y%m%d%k%M')]])
+iabbr([[<expr> ts@ strftime('%Y-%m-%d %a %k:%M')]])
+iabbr([[<expr> us@ strftime('%s')]])
+iabbr([[acount account]])
+iabbr([[overide override]])
+iabbr([[resouces resources]])
+iabbr([[teh the]])
 
 cabbr([[<expr> @% expand('%')]])
 cabbr([[<expr> @%p expand('%:p')]])

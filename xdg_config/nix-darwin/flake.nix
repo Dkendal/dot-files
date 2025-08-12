@@ -173,6 +173,7 @@
               putty
               marksman
               tex
+
             ];
 
           homebrew = {
@@ -202,6 +203,7 @@
               "openssl@1.1"
               "autoconf"
               "coreutils"
+              "snowflake-cli"
             ];
           };
 
