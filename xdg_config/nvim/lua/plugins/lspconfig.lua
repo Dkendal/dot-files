@@ -1,3 +1,51 @@
+local enabled_langservers = {
+	"bashls",
+	"biome",
+	"clangd",
+	"efm",
+	"emmet_ls",
+	"fennel_ls",
+	"gdscript",
+	"gleam",
+	"gopls",
+	"jsonls",
+	"lua_ls",
+	"marksman",
+	"omnisharp",
+	"pest_ls",
+	"pyright",
+	"racket_langserver",
+	"rust_analyzer",
+	"svelte",
+	"taplo",
+	"teal_ls",
+	"terraformls",
+	"nil_ls",
+	"ts_ls",
+	"biome",
+	-- "expert",
+	"lexical",
+}
+
+local default_config = {
+	autostart = true,
+	-- See link below for more default configurations
+	-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+	capabilities = {
+		textDocument = {
+			foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true,
+			},
+			completion = {
+				completionItem = {
+					snippetSupport = true,
+				},
+			},
+		},
+	},
+}
+
 ---@type LazyPluginSpec
 return {
 	"neovim/nvim-lspconfig",
@@ -7,34 +55,6 @@ return {
 	},
 	init = function()
 		-- :help lspconfig-all
-		local enabled_langservers = {
-			"bashls",
-			"biome",
-			"clangd",
-			"efm",
-			"emmet_ls",
-			"fennel_ls",
-			"gdscript",
-			"gleam",
-			"gopls",
-			"jsonls",
-			"lexical",
-			"lua_ls",
-			"marksman",
-			"omnisharp",
-			"pest_ls",
-			"pyright",
-			"racket_langserver",
-			"rust_analyzer",
-			"svelte",
-			"taplo",
-			"teal_ls",
-			"terraformls",
-			"nil_ls",
-			"ts_ls",
-			"biome"
-		}
-
 		local lspconfig = require("lspconfig")
 
 		-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
@@ -44,33 +64,19 @@ return {
 
 		vim.diagnostic.config({ virtual_text = false })
 
-		local lsp_config = vim.tbl_deep_extend("force", lspconfig.util.default_config, {
-			autostart = true,
-			on_attach = on_attach,
-			-- See link below for more default configurations
-			-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-			capabilities = {
-				textDocument = {
-					foldingRange = {
-						dynamicRegistration = false,
-						lineFoldingOnly = true,
-					},
-					completion = {
-						completionItem = {
-							snippetSupport = true,
-						},
-					},
-				},
-			},
-		}, {
-			capabilities = require("blink.cmp").get_lsp_capabilities(),
-		})
+		local lsp_config =
+				vim.tbl_deep_extend("force",
+					lspconfig.util.default_config,
+					{
+						capabilities = require("blink.cmp").get_lsp_capabilities(),
+						on_attach = on_attach,
+					}
+				)
 
 		vim.lsp.config("*", lsp_config)
 
 		for _, name in ipairs(enabled_langservers) do
-			local config = vim.lsp.config[name]
-			lspconfig[name].setup(config or {})
+			vim.lsp.enable(name, true)
 		end
 
 		local icons = {

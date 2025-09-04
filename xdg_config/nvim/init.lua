@@ -330,12 +330,12 @@ local plugins = {
 		},
 	},
 
-	{
-		"pmizio/typescript-tools.nvim",
-		ft = "typescript",
-		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-		opts = {},
-	},
+	-- {
+	-- 	"pmizio/typescript-tools.nvim",
+	-- 	ft = "typescript",
+	-- 	dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+	-- 	opts = {},
+	-- },
 
 	{
 		"folke/lazydev.nvim",

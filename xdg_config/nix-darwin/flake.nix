@@ -14,8 +14,8 @@
   outputs = inputs@{ self, nix-darwin, nixpkgs, nixpkgs-stable, home-manager, ... }:
     let
       overlay = find: prev: {
-        go-task = nixpkgs-stable.legacyPackages.${prev.system}.go-task;
         neovim = inputs.neovim-nightly-overlay.packages.${prev.system}.default;
+        # go-task = nixpkgs-stable.legacyPackages.${prev.system}.go-task;
       };
       configuration = { pkgs, user, ... }:
         let
@@ -90,8 +90,7 @@
               sd # Intuitive find & replace CLI tool
 
               # Database Tools
-              postgresql # Advanced object-relational database system
-              pgcli # Command line interface for PostgreSQL with auto-completion
+              # postgresql # Advanced object-relational database system
               pgformatter # PostgreSQL SQL syntax beautifier
 
               # Code Quality & Formatting
