@@ -247,7 +247,7 @@
           # users.groups.ai_agents = {
           # };
 
-          system.primaryUser = "dylan.kendal";
+          system.primaryUser = user;
 
           # Set Git commit hash for darwin-version.
           system.configurationRevision = self.rev or self.dirtyRev or null;

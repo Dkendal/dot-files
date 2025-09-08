@@ -28,7 +28,7 @@ local plugins = {
 		dependencies = {
 			"folk/snacks.nvim",
 		},
-		keys = {
+		key = {
 			{
 				"<leader>sp",
 				function()
@@ -38,7 +38,36 @@ local plugins = {
 		},
 	},
 
-	{ dir = "~/src/dkendal/nvim-treeclimber", event = "VeryLazy", opts = {} },
+	{
+		dir = "~/src/dkendal/nvim-treeclimber",
+		opts = {
+			highlight = 60
+		},
+		keys = {
+			-- Core navigation
+			{ "<M-h>",     "<Plug>(treeclimber-select-previous)",          mode = { "n", "x", "o" }, desc = "Select previous node" },
+			{ "<M-l>",     "<Plug>(treeclimber-select-next)",              mode = { "n", "x", "o" }, desc = "Select next node" },
+			{ "<M-k>",     "<Plug>(treeclimber-select-parent)",            mode = { "n", "x", "o" }, desc = "Select parent node" },
+			{ "<M-j>",     "<Plug>(treeclimber-select-shrink)",            mode = { "n", "x", "o" }, desc = "Select child node" },
+			-- Growth selection
+			{ "<M-H>",     "<Plug>(treeclimber-select-grow-backward)",     mode = { "n", "x", "o" }, desc = "Grow selection backward" },
+			{ "<M-L>",     "<Plug>(treeclimber-select-grow-forward)",      mode = { "n", "x", "o" }, desc = "Grow selection forward" },
+			-- Sibling navigation
+			{ "<M-[>",     "<Plug>(treeclimber-select-siblings-backward)", mode = { "n", "x", "o" }, desc = "Select first sibling" },
+			{ "<M-]>",     "<Plug>(treeclimber-select-siblings-forward)",  mode = { "n", "x", "o" }, desc = "Select last sibling" },
+			-- Top level
+			{ "<M-g>",     "<Plug>(treeclimber-select-top-level)",         mode = { "n", "x", "o" }, desc = "Select top-level node" },
+			-- Movement selection
+			{ "<M-b>",     "<Plug>(treeclimber-select-backward)",          mode = { "n", "x", "o" }, desc = "Select and move to node start" },
+			{ "<M-e>",     "<Plug>(treeclimber-select-forward-end)",       mode = { "n", "x", "o" }, desc = "Select and move to node end" },
+			-- Visual/operator mode specific
+			{ "i.",        "<Plug>(treeclimber-select-current-node)",      mode = { "x", "o" },      desc = "Select current node (inner)" },
+			{ "a.",        "<Plug>(treeclimber-select-expand)",            mode = { "x", "o" },      desc = "Select parent node (around)" },
+			-- Commands
+			{ "<leader>k", "<Plug>(treeclimber-show-control-flow)",        mode = "n",               desc = "Show control flow" },
+		},
+		cmd = { "TCDiffThis", "TCShowControlFlow", "TCHighlightExternalDefinitions" },
+	},
 
 	{
 		"nvimtools/none-ls.nvim",
@@ -49,8 +78,7 @@ local plugins = {
 			null_ls.setup({
 				root_dir = require("null-ls.utils").root_pattern(".git", "package.json"),
 				debug = false,
-				sources = {
-				},
+				sources = {},
 			})
 		end,
 	},
@@ -262,7 +290,6 @@ local plugins = {
 		ft = "typst",
 	},
 
-
 	{
 		"chentoast/marks.nvim",
 		config = function()
@@ -409,7 +436,7 @@ local plugins = {
 			"nvim-tree/nvim-web-devicons",
 		},
 		opts = {
-			picker = "snacks"
+			picker = "snacks",
 		},
 	},
 
@@ -421,34 +448,34 @@ local plugins = {
 				elixir = {
 					coverage_file = function()
 						return vim.fn.findfile("lcov.info", "cover,apps/*/cover")
-					end
-				}
-			}
-		}
+					end,
+				},
+			},
+		},
 	},
 	{
 		"AndrewRadev/splitjoin.vim",
 		lazy = true,
-		keys = { "cS", "cJ" }
+		keys = { "cS", "cJ" },
 	},
 	{
 		"MagicDuck/grug-far.nvim",
 		lazy = true,
 		cmd = { "GrugFar", "GrugFarWithin" },
-		opts = {}
+		opts = {},
 	},
-	{ "Mofiqul/vscode.nvim",                  lazy = true },
+	{ "Mofiqul/vscode.nvim", lazy = true },
 	{ "artnez/vim-wipeout" },
 	{
 		"blankname/vim-fish",
 		lazy = true,
-		ft = "fish"
+		ft = "fish",
 	},
 	{ "catppuccin/nvim",                         lazy = false },
 	{
 		"elixir-editors/vim-elixir",
 		lazy = true,
-		ft = "elixir"
+		ft = "elixir",
 	},
 	{ "godlygeek/tabular" },
 	{ "j-hui/fidget.nvim",                       opts = {} },
@@ -470,7 +497,7 @@ local plugins = {
 			"DiffviewOpen",
 			"DiffviewToggleFiles",
 		},
-		opts = {}
+		opts = {},
 	},
 	{
 		"julienvincent/hunk.nvim",
@@ -493,21 +520,18 @@ local plugins = {
 	{ "uga-rosa/ccc.nvim",    opts = {} },
 	{
 		"mason-org/mason.nvim",
-		opts = {}
-	}
+		opts = {},
+	},
 }
 
 local opts = {
 	checker = { enabled = false },
 }
 
-require("lazy").setup(
-	{
-		{ import = "plugins" },
-		plugins
-	},
-	opts
-)
+require("lazy").setup({
+	{ import = "plugins" },
+	plugins,
+}, opts)
 require("user.boxes")
 require("user.background").init()
 require("user.projects")
