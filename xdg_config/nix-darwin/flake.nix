@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
@@ -19,13 +19,7 @@
       };
       configuration = { pkgs, user, ... }:
         let
-          tex = (pkgs.texlive.combine {
-            inherit (pkgs.texlive) scheme-basic
-              dvisvgm dvipng# for preview and export as html
-              wrapfig amsmath ulem hyperref capt-of;
-            #(setq org-latex-compiler "lualatex")
-            #(setq org-preview-latex-default-process 'dvisvgm)
-          });
+          stable = nixpkgs-stable.legacyPackages.${pkgs.system};
         in
         {
           # List packages installed in system profile. To search by name, run:
@@ -62,7 +56,7 @@
               git # Distributed version control system
               git-absorb # Git command for automatically absorbing staged changes into commits
               lazygit # Simple terminal UI for git commands
-              lazyjj # Terminal UI for jujutsu (jj)
+              stable.lazyjj
               jujutsu # Distributed version control system (alternative to Git)
               tig # Text-mode interface for Git
               delta # Syntax-highlighting pager for git, diff outputs
@@ -92,6 +86,7 @@
               # Database Tools
               # postgresql # Advanced object-relational database system
               pgformatter # PostgreSQL SQL syntax beautifier
+              stable.pgcli
 
               # Code Quality & Formatting
               dprint # Pluggable and configurable code formatting platform
@@ -171,16 +166,14 @@
 
               putty
               marksman
-              tex
-
             ];
 
           homebrew = {
             enable = true;
             onActivation = {
-              cleanup = "zap";
+              cleanup = "none";
               extraFlags = [ "--verbose" ];
-              autoUpdate = true;
+              autoUpdate = false;
             };
             taps = [
               "noborus/tap" # trdsql
@@ -214,6 +207,18 @@
           # Necessary for using flakes on this system.
           nix.settings.experimental-features = "nix-command flakes";
           nix.settings.trusted-users = [ "root" user ];
+
+          # Binary caches for faster builds
+          nix.settings.extra-substituters = [
+            "https://nix-community.cachix.org"
+          ];
+          nix.settings.extra-trusted-public-keys = [
+            "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+          ];
+
+          # Parallel builds
+          nix.settings.max-jobs = "auto";
+          nix.settings.cores = 0; # Use all available cores
 
           # 500MB
           nix.settings.download-buffer-size = 500000000;
