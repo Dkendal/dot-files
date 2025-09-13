@@ -1,3 +1,4 @@
+---@module 'lazy'
 local enabled_langservers = {
 	"bashls",
 	"biome",
@@ -11,7 +12,6 @@ local enabled_langservers = {
 	"jsonls",
 	"lua_ls",
 	"marksman",
-	"omnisharp",
 	"pest_ls",
 	"pyright",
 	"racket_langserver",
@@ -52,6 +52,14 @@ return {
 	dependencies = {
 		"lvimuser/lsp-inlayhints.nvim",
 		{ "ray-x/lsp_signature.nvim", opts = {} },
+		{
+			"seblyng/roslyn.nvim",
+			---@module 'roslyn.config'
+			---@type RoslynNvimConfig
+			opts = {
+				-- your configuration comes here; leave empty for default settings
+			},
+		}
 	},
 	init = function()
 		-- :help lspconfig-all
@@ -60,7 +68,8 @@ return {
 		-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 		-- Use an on_attach function to only map the following keys
 		-- after the language server attaches to the current buffer
-		local function on_attach(_client, _bufnr) end
+		local function on_attach(client, _bufnr)
+		end
 
 		vim.diagnostic.config({ virtual_text = false })
 

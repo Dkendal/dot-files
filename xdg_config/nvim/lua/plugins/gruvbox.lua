@@ -32,6 +32,8 @@ return {
 				hl.SignColumn = Normal
 
 				-- Customization on top of Gruvbox
+				hl.set(0, "MarkSignHL", { link = "GruvboxPurpleSign" })
+
 				hl.set(0, "@module", { link = "Structure" })
 
 				hl.set(0, "@markup.heading.1", { link = "GruvboxRed" })

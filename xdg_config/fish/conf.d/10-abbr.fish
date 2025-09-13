@@ -62,8 +62,6 @@ abbr -a -- sld 'sl diff | delta'
 abbr -a -- slu 'sl unshelve'
 abbr -a -- slS 'sl shelve'
 
-abbr -a -- rg 'rg --hyperlink-format=kitty'
-
 abbr -a -- jja 'jj abandon'
 abbr -a -- jjl "jj log -r 'trunk()..@'"
 abbr -a -- jjra "jj rebase -s 'all:roots(trunk..mine()) & mutable()' -d 'trunk()'"

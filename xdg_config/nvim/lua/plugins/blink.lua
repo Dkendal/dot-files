@@ -1,3 +1,4 @@
+---@module 'lazy'
 ---@module 'blink.cmp'
 ---@type blink.cmp.Config
 local opts = {
