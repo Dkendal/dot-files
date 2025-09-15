@@ -403,7 +403,6 @@ local keys = {
 	{ "<leader>'",   action("org_mappings.edit_special"),                        ft = "org",                  mode = "n", desc = "org edit special" },
 	{ "<leader>*",   action("org_mappings.toggle_heading"),                      ft = "org",                  mode = "n", desc = "org toggle headline" },
 	{ "<leader>,",   action("org_mappings.set_priority"),                        ft = "org",                  mode = "n", desc = "org cycle priority" },
-	{ "<leader>A",   action("org_mappings.toggle_archive_tag"),                  ft = "org",                  mode = "n", desc = "org toggle archive tag" },
 	{ "<leader>bt",  action("org_mappings.org_babel_tangle"),                    ft = "org",                  mode = "n", desc = "org tangle" },
 	{ "<leader>d!",  action("org_mappings.org_toggle_timestamp_type"),           ft = "org",                  mode = "n", desc = "org toggle timestamp type" },
 	{ "<leader>oe",  action("org_mappings.export"),                              ft = "org",                  mode = "n", desc = "org export" },
@@ -462,17 +461,8 @@ local keys = {
 	{ "<C-l>",       action("org_mappings.do_demote"),                           ft = "org",                  mode = "i", desc = "org promote heading" },
 
 	-- Toggles
-	{ "<leader>th",  action("org_mappings.toggle_heading"),                      ft = "org",                  mode = "n", desc = "org toggle headline" },
-	{ "<leader>ta",  action("org_mappings.toggle_archive_tag"),                  ft = "org",                  mode = "n", desc = "org toggle archive tag" },
 	{ "<leader>td",  action("org_mappings.org_toggle_timestamp_type"),           ft = "org",                  mode = "n", desc = "org toggle timestamp type", },
-	{ "<leader>tc",  action("org_mappings.org_toggle_checkbox"),                 ft = "org",                  mode = "n", desc = "org toggle checkbox" },
 	{ "<leader>:",   action("org_mappings.set_tags"),                            ft = "org",                  mode = "n", desc = "org set tags" },
-
-	{ "[t",          action("org_mappings.todo_next_state"),                     ft = { "org", "orgagenda" }, mode = "n", desc = "org todo prev" },
-	{ "]t",          action("org_mappings.todo_prev_state"),                     ft = { "org", "orgagenda" }, mode = "n", desc = "org todo next" },
-
-	{ "[,",          action("org_mappings.priority_up"),                         ft = { "org", "orgagenda" }, mode = "n", desc = "org priority up" },
-	{ "],",          action("org_mappings.priority_down"),                       ft = { "org", "orgagenda" }, mode = "n", desc = "org priority down" },
 }
 
 
@@ -588,6 +578,13 @@ return {
 					org_do_demote = '>>',
 					org_promote_subtree = '<s',
 					org_demote_subtree = '>s',
+					org_toggle_checkbox = "<prefix>tc",
+					org_toggle_archive_tag = "<prefix>ta",
+					org_toggle_timestamp_type = "<prefix>th",
+					org_priority_up = "[,",
+					org_priority_down = "],",
+					org_todo_prev = "[t",
+					org_todo = "]t",
 				},
 			},
 			ui = {

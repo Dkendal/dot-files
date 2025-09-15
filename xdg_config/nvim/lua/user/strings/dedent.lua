@@ -1,6 +1,5 @@
-local M = {}
-
-function M.dedent(str)
+-- Remove hanging indentation from string
+return function(str)
     -- Handle empty or nil input
     if not str or str == "" then
         return ""
@@ -41,5 +40,3 @@ function M.dedent(str)
     -- Join the lines back together
     return table.concat(result, "\n")
 end
-
-return M

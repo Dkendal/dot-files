@@ -17,6 +17,24 @@ end
 
 ---@type LazyPluginSpec[]
 local plugins = {
+	-- Filetype plugins
+	{
+		"elixir-editors/vim-elixir",
+		lazy = true,
+		ft = "elixir",
+	},
+
+	{ "pest-parser/pest.vim", ft = "pest" },
+
+	{ "terrastruct/d2-vim", ft = "d2" },
+
+	{
+		"https://github.com/kaarmu/typst.vim",
+		ft = "typst",
+	},
+
+	--
+
 	{
 		dir = "~/src/dkendal/nvim-kitty",
 		opts = {
@@ -37,6 +55,108 @@ local plugins = {
 			},
 		},
 	},
+
+	{
+		dir = "~/src/dkendal/nvim-treeclimber",
+		opts = {
+			highlight = 60,
+		},
+		keys = {
+			-- Core navigation
+			{
+				"<M-h>",
+				"<Plug>(treeclimber-select-previous)",
+				mode = { "n", "x", "o" },
+				desc = "Select previous node",
+			},
+			{
+				"<M-l>",
+				"<Plug>(treeclimber-select-next)",
+				mode = { "n", "x", "o" },
+				desc = "Select next node",
+			},
+			{
+				"<M-k>",
+				"<Plug>(treeclimber-select-parent)",
+				mode = { "n", "x", "o" },
+				desc = "Select parent node",
+			},
+			{
+				"<M-j>",
+				"<Plug>(treeclimber-select-shrink)",
+				mode = { "n", "x", "o" },
+				desc = "Select child node",
+			},
+			-- Growth selection
+			{
+				"<M-H>",
+				"<Plug>(treeclimber-select-grow-backward)",
+				mode = { "n", "x", "o" },
+				desc = "Grow selection backward",
+			},
+			{
+				"<M-L>",
+				"<Plug>(treeclimber-select-grow-forward)",
+				mode = { "n", "x", "o" },
+				desc = "Grow selection forward",
+			},
+			-- Sibling navigation
+			{
+				"<M-[>",
+				"<Plug>(treeclimber-select-siblings-backward)",
+				mode = { "n", "x", "o" },
+				desc = "Select first sibling",
+			},
+			{
+				"<M-]>",
+				"<Plug>(treeclimber-select-siblings-forward)",
+				mode = { "n", "x", "o" },
+				desc = "Select last sibling",
+			},
+			-- Top level
+			{
+				"<M-g>",
+				"<Plug>(treeclimber-select-top-level)",
+				mode = { "n", "x", "o" },
+				desc = "Select top-level node",
+			},
+			-- Movement selection
+			{
+				"<M-b>",
+				"<Plug>(treeclimber-select-backward)",
+				mode = { "n", "x", "o" },
+				desc = "Select and move to node start",
+			},
+			{
+				"<M-e>",
+				"<Plug>(treeclimber-select-forward-end)",
+				mode = { "n", "x", "o" },
+				desc = "Select and move to node end",
+			},
+			-- Visual/operator mode specific
+			{
+				"i.",
+				"<Plug>(treeclimber-select-current-node)",
+				mode = { "x", "o" },
+				desc = "Select current node (inner)",
+			},
+			{
+				"a.",
+				"<Plug>(treeclimber-select-expand)",
+				mode = { "x", "o" },
+				desc = "Select parent node (around)",
+			},
+			-- Commands
+			{
+				"<leader>k",
+				"<Plug>(treeclimber-show-control-flow)",
+				mode = "n",
+				desc = "Show control flow",
+			},
+		},
+		cmd = { "TCDiffThis", "TCShowControlFlow", "TCHighlightExternalDefinitions" },
+	},
+
 	{
 		"nvimtools/none-ls.nvim",
 		lazy = true,
@@ -84,30 +204,6 @@ local plugins = {
 		end,
 	},
 
-	-- Treesitter based structural search and replace plugin for Neovim.
-	{
-		"cshuaimin/ssr.nvim",
-		opts = {
-			min_width = 50,
-			min_height = 5,
-			keymaps = {
-				close = "q",
-				next_match = "n",
-				prev_match = "N",
-				replace_all = "<leader><cr>",
-			},
-		},
-		keys = {
-			{
-				"<leader>sr",
-				function()
-					require("ssr").open()
-				end,
-				mode = "n",
-			},
-		},
-	},
-
 	{
 		"folke/trouble.nvim",
 		opts = {},
@@ -123,15 +219,15 @@ local plugins = {
 		"numToStr/Comment.nvim",
 		opts = {
 			toggler = {
-				---Line-comment toggle keymap
+				-- Line-comment toggle keymap
 				line = "<leader>;",
-				---Block-comment toggle keymap
+				-- Block-comment toggle keymap
 				block = "<leader>:",
 			},
 			opleader = {
-				---Line-comment keymap
+				-- Line-comment keymap
 				line = "<leader>;",
-				---Block-comment keymap
+				-- Block-comment keymap
 				block = "<leader>:",
 			},
 		},
@@ -254,22 +350,8 @@ local plugins = {
 	},
 
 	{
-		"https://github.com/kaarmu/typst.vim",
-		ft = "typst",
-	},
-
-	{
 		"chentoast/marks.nvim",
-		config = function()
-			require("marks").setup({})
-
-			vim.api.nvim_create_autocmd({ "ColorScheme" }, {
-				pattern = "gruvbox",
-				callback = function()
-					require("user.highlight").set(0, "MarkSignHL", { link = "GruvboxPurpleSign" })
-				end,
-			})
-		end,
+		opts = {},
 	},
 
 	{
@@ -312,16 +394,6 @@ local plugins = {
 	},
 
 	{
-		"David-Kunz/gen.nvim",
-		lazy = true,
-		opts = {
-			model = "llama3.1:latest",
-			host = "titan.local",
-			port = 11434,
-		},
-	},
-
-	{
 		"folke/lazydev.nvim",
 		ft = "lua",
 		opts = {
@@ -330,70 +402,6 @@ local plugins = {
 				-- Load luvit types when the `vim.uv` word is found
 				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 			},
-		},
-	},
-
-	{
-		"echasnovski/mini.snippets",
-		version = false,
-		init = function()
-			local gen_loader = require("mini.snippets").gen_loader
-			require("mini.snippets").setup({
-				snippets = {
-					-- Load custom file with global snippets first (adjust for Windows)
-					gen_loader.from_file(vim.fs.joinpath(vim.fn.stdpath("config"), "/snippets/global.lua")),
-					-- Load snippets based on current language by reading files from
-					-- "snippets/" subdirectories from 'runtimepath' directories.
-					gen_loader.from_lang(),
-				},
-			})
-		end,
-		keys = {
-			{
-				"<C-c>",
-				function()
-					while MiniSnippets.session.get() do
-						MiniSnippets.session.stop()
-					end
-				end,
-				mode = "n",
-			},
-		},
-	},
-
-	{
-		"yetone/avante.nvim",
-		event = "VeryLazy",
-		version = false, -- Never set this value to "*"! Never!
-		opts = {},
-		build = "make",
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-lua/plenary.nvim",
-			"MunifTanjim/nui.nvim",
-			"stevearc/dressing.nvim",
-			{
-				-- Make sure to set this up properly if you have lazy=true
-				"MeanderingProgrammer/render-markdown.nvim",
-				opts = {
-					file_types = { "markdown", "Avante" },
-				},
-				ft = { "markdown", "Avante" },
-			},
-		},
-	},
-
-	{
-		"pwntester/octo.nvim",
-		lazy = true,
-		cmd = { "Octo" },
-		requires = {
-			"nvim-lua/plenary.nvim",
-			"folke/snacks.nvim",
-			"nvim-tree/nvim-web-devicons",
-		},
-		opts = {
-			picker = "snacks",
 		},
 	},
 
@@ -410,39 +418,38 @@ local plugins = {
 			},
 		},
 	},
+
 	{
 		"AndrewRadev/splitjoin.vim",
 		lazy = true,
 		keys = { "cS", "cJ" },
 	},
+
 	{
 		"MagicDuck/grug-far.nvim",
 		lazy = true,
 		cmd = { "GrugFar", "GrugFarWithin" },
 		opts = {},
 	},
-	{ "Mofiqul/vscode.nvim", lazy = true },
+
 	{ "artnez/vim-wipeout" },
+
 	{
 		"blankname/vim-fish",
 		lazy = true,
 		ft = "fish",
 	},
+
+	{ "Mofiqul/vscode.nvim", lazy = true },
+
 	{ "catppuccin/nvim", lazy = false },
-	{
-		"elixir-editors/vim-elixir",
-		lazy = true,
-		ft = "elixir",
-	},
-	{ "godlygeek/tabular" },
+
 	{ "j-hui/fidget.nvim", opts = {} },
+
 	{ "jamessan/vim-gnupg" },
-	{ "kevinhwang91/promise-async" },
-	{ "nvim-lua/plenary.nvim" },
-	{ "nvim-tree/nvim-web-devicons" },
+
 	{ "nvim-treesitter/nvim-treesitter-context", opts = {} },
-	{ "pest-parser/pest.vim", ft = { "pest" } },
-	{ "ryanoasis/vim-devicons" },
+
 	{
 		"sindrets/diffview.nvim",
 		lazy = true,
@@ -463,27 +470,45 @@ local plugins = {
 			require("hunk").setup()
 		end,
 	},
-	{ "terrastruct/d2-vim" },
+
 	{ "tpope/vim-abolish" },
+
 	{ "tpope/vim-eunuch" },
+
 	{ "tpope/vim-fugitive" },
+
 	{ "tpope/vim-repeat" },
+
 	{ "tpope/vim-rhubarb" },
+
 	{ "tpope/vim-rsi" },
+
 	{ "tpope/vim-scriptease" },
+
 	{ "tpope/vim-sleuth" },
+
 	{ "tpope/vim-speeddating" },
+
 	{ "tpope/vim-unimpaired" },
+
 	{ "uga-rosa/ccc.nvim", opts = {} },
 	{
 		"mason-org/mason.nvim",
-		opts = {},
+		opts = {
+			registries = {
+				"github:mason-org/mason-registry",
+				"github:Crashdummyy/mason-registry",
+			},
+		},
 	},
+
+	-- TODO move these to dependencies
+	{ "ryanoasis/vim-devicons" },
+	{ "nvim-tree/nvim-web-devicons" },
 }
 
 local opts = {
 	checker = { enabled = false },
-	dev = { path = "~/src/" },
 }
 
 require("lazy").setup({

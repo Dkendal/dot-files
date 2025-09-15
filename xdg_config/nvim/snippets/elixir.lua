@@ -1,4 +1,4 @@
-local dedent = require("user.string").dedent
+local dedent = require("user.strings.dedent")
 
 return {
 	{
