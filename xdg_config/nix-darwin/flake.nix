@@ -84,7 +84,7 @@
               sd # Intuitive find & replace CLI tool
 
               # Database Tools
-              # postgresql # Advanced object-relational database system
+              postgresql
               pgformatter # PostgreSQL SQL syntax beautifier
               stable.pgcli
 
@@ -252,7 +252,7 @@
           # users.groups.ai_agents = {
           # };
 
-          system.primaryUser = "dylan.kendal";
+          system.primaryUser = user;
 
           # Set Git commit hash for darwin-version.
           system.configurationRevision = self.rev or self.dirtyRev or null;

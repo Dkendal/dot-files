@@ -29,6 +29,7 @@ in
       clone_repo "${gh}/nvim-treeclimber.git" "${mySrc}/nvim-treeclimber"
       clone_repo "${gh}/nvim-kitty.git" "${mySrc}/nvim-kitty"
       clone_repo "${gh}/nvim-alternate.git" "${mySrc}/nvim-alternate"
+      clone_repo "${gh}/nvim-coverage.git" "${mySrc}/nvim-coverage"
     '';
   };
 

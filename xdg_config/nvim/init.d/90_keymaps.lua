@@ -108,10 +108,9 @@ map("v", "<C-s>", ":s/")
 
 -- Copy relative path to clipboard
 map("n", "<leader>fyy", copy_relative_path)
--- Copy absolute path to clipboard
-map("n", "<leader>fyY", copy_absolute_path)
--- Copy path with line number
-map("n", "<leader>fyl", ":let @+=expand('%') . ':' . line('.')<cr>:let @*=@+<cr>")
+map({ "n", "v" }, "<leader>fyl", function()
+	require("user.copy_path")({ bang = false, range = 0 })
+end)
 -- Copy basename
 map("n", "<leader>fyb", ":let @+=expand('%:t')<cr>:let @*=@+<cr>")
 
@@ -148,8 +147,12 @@ map("n", "]c", function()
 	require("gitsigns").nav_hunk("next", { navigation_message = false })
 end)
 
-map("n", "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end, { desc = "goto prev diagnostic" })
-map("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end, { desc = "goto next diagnostic" })
+map("n", "[d", function()
+	vim.diagnostic.jump({ count = -1, float = true })
+end, { desc = "goto prev diagnostic" })
+map("n", "]d", function()
+	vim.diagnostic.jump({ count = 1, float = true })
+end, { desc = "goto next diagnostic" })
 map("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
 map("n", "gO", vim.lsp.buf.document_symbol)
 map("n", "gd", vim.lsp.buf.definition, { desc = "go to definition" })
@@ -213,7 +216,6 @@ map("n", "<space>Wl", inspect_workspace_folders)
 -- remap to open the Telescope refactoring menu in visual mode
 map("v", "<leader>rr", telescope_refactors, { noremap = true })
 
-
 map("i", "<c-.>", vim.lsp.codelens.display)
 
 -- Folding
@@ -264,7 +266,7 @@ map("n", "<leader>ls", "<cmd>LspStart<cr>", { desc = "LSP: Start" })
 map("n", "<leader>lS", "<cmd>LspStart<cr>", { desc = "LSP: Stop" })
 
 -- Ex mode
-map('c', '<M-=>', [[<c-\>eexpandcmd(getcmdline())<CR>]])
+map("c", "<M-=>", [[<c-\>eexpandcmd(getcmdline())<CR>]])
 
 -- Toggle keymaps
 for _, key in ipairs({ "b", "c", "d", "h", "i", "l", "n", "r", "s", "u", "v", "w", "x" }) do

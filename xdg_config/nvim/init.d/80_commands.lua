@@ -96,3 +96,7 @@ command("StripAnsiCodes", [[:%s/\e\[[0-9;]*m//g]], { force = true, desc = "Remov
 
 -- Command to call the function
 command("ReloadModule", reload_module, {})
+
+vim.api.nvim_create_user_command("CopyPath", function(opts)
+	require("user.copy_path")(opts)
+end, { range = true, bang = true })

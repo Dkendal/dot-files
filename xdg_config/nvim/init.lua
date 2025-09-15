@@ -28,7 +28,7 @@ local plugins = {
 		dependencies = {
 			"folk/snacks.nvim",
 		},
-		keys = {
+		key = {
 			{
 				"<leader>sp",
 				function()
@@ -37,9 +37,6 @@ local plugins = {
 			},
 		},
 	},
-
-	{ dir = "~/src/dkendal/nvim-treeclimber", event = "VeryLazy", opts = {} },
-
 	{
 		"nvimtools/none-ls.nvim",
 		lazy = true,
@@ -49,8 +46,7 @@ local plugins = {
 			null_ls.setup({
 				root_dir = require("null-ls.utils").root_pattern(".git", "package.json"),
 				debug = false,
-				sources = {
-				},
+				sources = {},
 			})
 		end,
 	},
@@ -65,7 +61,7 @@ local plugins = {
 		event = "LspAttach",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter", -- optional
-			"nvim-tree/nvim-web-devicons",  -- optional
+			"nvim-tree/nvim-web-devicons", -- optional
 		},
 		keys = {
 			{ "<c-.>", "<cmd>Lspsaga code_action<cr>" },
@@ -165,11 +161,11 @@ local plugins = {
 	{
 		"mg979/vim-visual-multi",
 		keys = {
-			{ "<C-LeftMouse>",    "<Plug>(VM-Mouse-Cursor)",    mode = "n" },
-			{ "<C-RightMouse>",   "<Plug>(VM-Mouse-Word)",      mode = "n" },
-			{ "<M-C-RightMouse>", "<Plug>(VM-Mouse-Column)",    mode = "n" },
-			{ "<C-S-j>",          "<Plug>(VM-Add-Cursor-Down)", mode = "n" },
-			{ "<C-S-k>",          "<Plug>(VM-Add-Cursor-Up)",   mode = "n" },
+			{ "<C-LeftMouse>", "<Plug>(VM-Mouse-Cursor)", mode = "n" },
+			{ "<C-RightMouse>", "<Plug>(VM-Mouse-Word)", mode = "n" },
+			{ "<M-C-RightMouse>", "<Plug>(VM-Mouse-Column)", mode = "n" },
+			{ "<C-S-j>", "<Plug>(VM-Add-Cursor-Down)", mode = "n" },
+			{ "<C-S-k>", "<Plug>(VM-Add-Cursor-Up)", mode = "n" },
 		},
 		lazy = false,
 		init = function()
@@ -262,7 +258,6 @@ local plugins = {
 		ft = "typst",
 	},
 
-
 	{
 		"chentoast/marks.nvim",
 		config = function()
@@ -323,19 +318,8 @@ local plugins = {
 			model = "llama3.1:latest",
 			host = "titan.local",
 			port = 11434,
-			-- command = function(options)
-			-- 	local body = { model = options.model, stream = true }
-			-- 	return "curl --silent --no-buffer -X POST http://" .. options.host .. ":" .. options.port .. "/api/chat -d $body"
-			-- end,
 		},
 	},
-
-	-- {
-	-- 	"pmizio/typescript-tools.nvim",
-	-- 	ft = "typescript",
-	-- 	dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-	-- 	opts = {},
-	-- },
 
 	{
 		"folke/lazydev.nvim",
@@ -409,7 +393,7 @@ local plugins = {
 			"nvim-tree/nvim-web-devicons",
 		},
 		opts = {
-			picker = "snacks"
+			picker = "snacks",
 		},
 	},
 
@@ -421,43 +405,43 @@ local plugins = {
 				elixir = {
 					coverage_file = function()
 						return vim.fn.findfile("lcov.info", "cover,apps/*/cover")
-					end
-				}
-			}
-		}
+					end,
+				},
+			},
+		},
 	},
 	{
 		"AndrewRadev/splitjoin.vim",
 		lazy = true,
-		keys = { "cS", "cJ" }
+		keys = { "cS", "cJ" },
 	},
 	{
 		"MagicDuck/grug-far.nvim",
 		lazy = true,
 		cmd = { "GrugFar", "GrugFarWithin" },
-		opts = {}
+		opts = {},
 	},
-	{ "Mofiqul/vscode.nvim",                  lazy = true },
+	{ "Mofiqul/vscode.nvim", lazy = true },
 	{ "artnez/vim-wipeout" },
 	{
 		"blankname/vim-fish",
 		lazy = true,
-		ft = "fish"
+		ft = "fish",
 	},
-	{ "catppuccin/nvim",                         lazy = false },
+	{ "catppuccin/nvim", lazy = false },
 	{
 		"elixir-editors/vim-elixir",
 		lazy = true,
-		ft = "elixir"
+		ft = "elixir",
 	},
 	{ "godlygeek/tabular" },
-	{ "j-hui/fidget.nvim",                       opts = {} },
+	{ "j-hui/fidget.nvim", opts = {} },
 	{ "jamessan/vim-gnupg" },
 	{ "kevinhwang91/promise-async" },
 	{ "nvim-lua/plenary.nvim" },
 	{ "nvim-tree/nvim-web-devicons" },
 	{ "nvim-treesitter/nvim-treesitter-context", opts = {} },
-	{ "pest-parser/pest.vim",                    ft = { "pest" } },
+	{ "pest-parser/pest.vim", ft = { "pest" } },
 	{ "ryanoasis/vim-devicons" },
 	{
 		"sindrets/diffview.nvim",
@@ -470,7 +454,7 @@ local plugins = {
 			"DiffviewOpen",
 			"DiffviewToggleFiles",
 		},
-		opts = {}
+		opts = {},
 	},
 	{
 		"julienvincent/hunk.nvim",
@@ -490,24 +474,22 @@ local plugins = {
 	{ "tpope/vim-sleuth" },
 	{ "tpope/vim-speeddating" },
 	{ "tpope/vim-unimpaired" },
-	{ "uga-rosa/ccc.nvim",    opts = {} },
+	{ "uga-rosa/ccc.nvim", opts = {} },
 	{
 		"mason-org/mason.nvim",
-		opts = {}
-	}
+		opts = {},
+	},
 }
 
 local opts = {
 	checker = { enabled = false },
+	dev = { path = "~/src/" },
 }
 
-require("lazy").setup(
-	{
-		{ import = "plugins" },
-		plugins
-	},
-	opts
-)
+require("lazy").setup({
+	{ import = "plugins" },
+	plugins,
+}, opts)
 require("user.boxes")
 require("user.background").init()
 require("user.projects")
