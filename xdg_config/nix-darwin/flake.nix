@@ -149,6 +149,33 @@
               act # Run GitHub Actions locally
               go-task # Task runner / simpler Make alternative
 
+              cargo-binstall
+              cargo-expand
+              mergiraf
+
+              # Custom Rust crates
+              (pkgs.rustPlatform.buildRustPackage rec {
+                pname = "starship-jj";
+                version = "0.6.0";
+                src = pkgs.fetchCrate {
+                  inherit pname version;
+                  sha256 = "sha256-oJNww2zuof/fngb5q7+NoguebLv+urjqPV74dkBLFFk=";
+                };
+                cargoHash = "sha256-E5z3AZhD3kiP6ojthcPne0f29SbY0eV4EYTFewA+jNc=";
+              })
+
+              (pkgs.rustPlatform.buildRustPackage rec {
+                pname = "fake";
+                version = "4.4.0";
+                src = pkgs.fetchCrate {
+                  inherit pname version;
+                  sha256 = "sha256-mYswgFDX3GVfxOPSdbDj7SCwIsY6BNxI8I/WcvHMscs=";
+                };
+                cargoHash = "sha256-BcHakzBj3xZ/yTTaI6umW3H2gxXAFdOBymcnRCPdnDU=";
+                doCheck = false;
+                buildType = "release";
+              })
+
               # Media Processing
               imagemagick # Create, edit, compose, or convert bitmap images
               luajitPackages.magick
@@ -166,6 +193,12 @@
 
               putty
               marksman
+
+              devenv
+              gnuplot
+              nodePackages.vega-cli
+              nodePackages.vega-lite
+              timg
             ];
 
           homebrew = {

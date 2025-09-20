@@ -1,3 +1,3 @@
-alias claude "/Users/dylan.kendal/.claude/local/claude"
+alias claude "$HOME/.claude/local/claude"
 alias ^ls ls
 alias ^rm rm

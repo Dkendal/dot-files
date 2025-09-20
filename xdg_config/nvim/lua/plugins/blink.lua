@@ -15,7 +15,7 @@ local opts = {
 		enabled = false
 	},
 	sources = {
-		default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+		default = { "lazydev", "lsp", "path", "snippets", "buffer"},
 		per_filetype = {
 			org = { 'orgmode', 'buffer' }
 		},
@@ -43,13 +43,16 @@ local opts = {
 	},
 }
 
+--- @type LazyPluginSpec[]
+local dependencies = {
+	{ "rafamadriz/friendly-snippets" },
+	{ "mikavilpas/blink-ripgrep.nvim" },
+}
+
 --- @type LazyPluginSpec
 return {
 	"Saghen/blink.cmp",
-	dependencies = {
-		"rafamadriz/friendly-snippets",
-		"mikavilpas/blink-ripgrep.nvim",
-	},
+	dependencies = dependencies,
 	version = "*",
 	opts = opts,
 }
