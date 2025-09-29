@@ -24,7 +24,29 @@ return {
 					]],
 					formatStdin = true
 				}
+			},
+			sql = {
+				{
+					formatCommand = [[pg_format -]],
+					formatStdin = true
+				}
 			}
+			-- elixir = {
+			-- 	{
+			-- 		formatCommand = "mix format --stdin-filename ${INPUT} -",
+			-- 		formatStdin = true,
+			-- 		rootMarkers = { "mix.exs" },
+			-- 		requireMarker = true
+			-- 	}
+			-- },
+			-- eelixir = {
+			-- 	{
+			-- 		formatCommand = "mix format --stdin-filename ${INPUT} -",
+			-- 		formatStdin = true,
+			-- 		rootMarkers = { "mix.exs" },
+			-- 		requireMarker = true
+			-- 	}
+			-- }
 		}
 	}
 }

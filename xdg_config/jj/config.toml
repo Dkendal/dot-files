@@ -1,0 +1,101 @@
+[user]
+name = "Dylan Kendal"
+email = "dylan.kendal@blvd.co"
+
+[ui]
+default-command = "log"
+editor = "nvim"
+
+[fix.tools.mix-format]
+command = ["mix", "format", "--stdin-filename=$path", "-"]
+patterns = ["glob:'**/*.ex'", "glob:'**/*.exs'"]
+
+
+[merge-tools.hunk]
+program = "nvim"
+merge-args = [
+    "-c :DiffEditor $left $right $output"
+]
+
+[merge-tools.nvim-diffconflicts]
+program = "nvim"
+merge-args = [
+    "-c", "let g:jj_diffconflicts_marker_length=$marker_length",
+    "-c", "JJDiffConflicts!", "$output", "$base", "$left", "$right",
+]
+
+[signing]
+behavior = "own"
+backend = "ssh"
+key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAFiPjdvZtRVpfC/GVOeRE4vaBZjAejUMoEWPgkM1Ru/"
+backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
+[commit]
+gpgsign = true
+
+[revset-aliases]
+'user()' = 'user("dylan.kendal@blvd.co")'
+'user(x)' = 'author(x) | committer(x)'
+'trunk' = 'trunk()'
+'HEAD' = '@-'
+'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+
+[git]
+sign-on-push = true
+
+[template-aliases]
+commit_description_verbose = '''
+concat(
+  description,
+  "\n",
+  "JJ: This commit contains the following changes:\n",
+  indent("JJ:    ", diff.stat(72)),
+  "JJ: ignore-rest\n",
+  diff.git(),
+)
+'''
+
+[templates]
+log = '''
+  if(root,
+    format_root_commit(self),
+    label(if(current_working_copy, "working_copy"),
+      concat(
+        separate(" ",
+          format_short_change_id_with_hidden_and_divergent_info(self),
+          if(empty, label("empty", "(empty)")),
+          if(description,
+            description.first_line(),
+            label(if(empty, "empty"), description_placeholder),
+          ),
+          bookmarks,
+          tags,
+          working_copies,
+          if(git_head, label("git_head", "HEAD")),
+          if(conflict, label("conflict", "conflict")),
+          if(config("ui.show-cryptographic-signatures").as_boolean(),
+            format_short_cryptographic_signature(signature)),
+        ) ++ "\n",
+      ),
+    )
+  )
+'''
+
+[aliases]
+dv = ["--config=templates.draft_commit_description=commit_description_verbose", "describe"]
+fetch = ["git", "fetch"]
+push = ["git", "push"]
+n = ["new", "-r", "trunk()"]
+bl = ["bookmark", "list"]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
+pr = [
+  "util",
+  "exec",
+  "--",
+  "nu",
+  "-c",
+  """
+  let bookmark = jj log -r 'closest_bookmark(@-)' --no-graph --limit 1 --template bookmarks
+  gh pr view $bookmark --web
+  """,
+]

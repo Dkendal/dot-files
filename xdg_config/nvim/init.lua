@@ -46,7 +46,7 @@ local plugins = {
 		dependencies = {
 			"folk/snacks.nvim",
 		},
-		key = {
+		keys = {
 			{
 				"<leader>sp",
 				function()

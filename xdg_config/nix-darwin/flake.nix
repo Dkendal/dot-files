@@ -47,6 +47,7 @@
 
               # Shell & Terminal
               nushell # Data-driven shell with structured data
+              nufmt # Data-driven shell with structured data
               htop # Interactive process viewer
               gum # Tool for glamorous shell scripts
               viddy # Modern watch command (executes command periodically)

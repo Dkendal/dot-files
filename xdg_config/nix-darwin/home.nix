@@ -1,56 +1,81 @@
 { config, pkgs, lib, ... }:
 let
-  ln = pkgs.lib.file.mkOutOfStoreSymlink;
-  homeDir = config.home.homeDirectory;
-  dotFilesDir = "${homeDir}/dot-files";
+  home = config.home.homeDirectory;
+  configHome = config.xdg.configHome;
+  dotFilesDir = "${home}/dot-files";
   gh = "git@github.com:Dkendal";
-  mySrc = "${homeDir}/src/dkendal";
+  mySrc = "${home}/src/dkendal";
+  ln = config.lib.file.mkOutOfStoreSymlink;
 in
 {
   home.stateVersion = "24.05";
 
-  home.activation = {
-    makeRepos = lib.hm.dag.entryAfter [ "installPackages" ] ''
-      mkdir -p ${homeDir}/src
+  home.packages = with pkgs.nushellPlugins; [
+    formats
+    highlight
+    polars
+    query
+    skim
+  ];
 
-      clone_repo() {
-        local repo_name=$1
-        local repo_path=$2
-        if [ ! -d "$repo_path" ]; then
-          echo "Cloning $repo_name"
-          ${pkgs.git}/bin/git clone "$repo_name" "$repo_path"
-        else
-          echo "Skipping $repo_name: already cloned"
-        fi
-      }
+  home.activation.makeRepos = lib.hm.dag.entryAfter [ "installPackages" ] ''
+    mkdir -p ${home}/src
 
-      clone_repo "${gh}/dot-files.git" "${dotFilesDir}"
-      clone_repo "${gh}/newtype.git" "${mySrc}/newtype"
-      clone_repo "${gh}/nvim-treeclimber.git" "${mySrc}/nvim-treeclimber"
-      clone_repo "${gh}/nvim-kitty.git" "${mySrc}/nvim-kitty"
-      clone_repo "${gh}/nvim-alternate.git" "${mySrc}/nvim-alternate"
-      clone_repo "${gh}/nvim-coverage.git" "${mySrc}/nvim-coverage"
-    '';
-  };
+    clone_repo() {
+      local repo_name=$1
+      local repo_path=$2
+      if [ ! -d "$repo_path" ]; then
+        echo "Cloning $repo_name"
+        ${pkgs.git}/bin/git clone "$repo_name" "$repo_path"
+      else
+        echo "Skipping $repo_name: already cloned"
+      fi
+    }
+
+    clone_repo "${gh}/dot-files.git" "${dotFilesDir}"
+    clone_repo "${gh}/newtype.git" "${mySrc}/newtype"
+    clone_repo "${gh}/nvim-treeclimber.git" "${mySrc}/nvim-treeclimber"
+    clone_repo "${gh}/nvim-kitty.git" "${mySrc}/nvim-kitty"
+    clone_repo "${gh}/nvim-alternate.git" "${mySrc}/nvim-alternate"
+    clone_repo "${gh}/nvim-coverage.git" "${mySrc}/nvim-coverage"
+  '';
 
   xdg.enable = true;
 
-  # Symlink non home-manager config files
-  xdg.configFile = builtins.listToAttrs (map
-    (name: {
-      inherit name;
-      value.source = config.lib.file.mkOutOfStoreSymlink "${dotFilesDir}/xdg_config/${name}";
-    })
-    [
-      "kitty"
-      "fish"
-      "nvim"
-      "expressvpn"
-      "git"
-      "nix-darwin"
-      "nushell/login.nu"
-    ]
-  );
+  xdg.configFile =
+    let
+      list =
+        [
+          "expressvpn"
+          "fish"
+          "git"
+          "kitty"
+          "nix-darwin"
+          "nvim"
+          "jj"
+        ];
+    in
+    builtins.listToAttrs (map
+      (name: {
+        inherit name;
+        value.source = ln "${dotFilesDir}/xdg_config/${name}";
+      })
+      list);
+
+  home.file =
+    let
+      list =
+        [
+          "nushell"
+        ];
+    in
+    builtins.listToAttrs (map
+      (name: {
+        name = "Library/Application Support/${name}";
+        value.source = ln "${dotFilesDir}/xdg_config/${name}";
+      })
+      list);
+
 
   programs.bat.enable = true;
 
@@ -73,24 +98,27 @@ in
 
   programs.nushell = {
     enable = true;
-    configFile = {
-      text = "
-        use functions/jira-api.nu *
-
-        $env.config = {
-          show_banner: false
-          edit_mode: vi
-          use_kitty_protocol: true
-          highlight_resolved_externals: true
-        }
-      ";
+    settings = {
+      buffer_editor = "nvim";
+      edit_mode = "vi";
+      use_kitty_protocol = true;
+      highlight_resolved_externals = true;
+      show_banner = false;
     };
+    plugins = with pkgs.nushellPlugins; [
+      formats
+      highlight
+      polars
+      query
+      skim
+    ];
   };
 
   programs.mise = {
     enable = true;
     enableFishIntegration = true;
     enableBashIntegration = true;
+    enableNushellIntegration = true;
     globalConfig = {
       tools = {
         node = "lts";
