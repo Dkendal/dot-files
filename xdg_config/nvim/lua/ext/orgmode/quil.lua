@@ -1,6 +1,6 @@
 local M = {}
 
-function M.insert_most_recent_quill_doc()
+function M.insert_link_most_recent()
   local cmd = {
     "nu",
     "-c",

@@ -109,12 +109,12 @@ local keys = {
 	},
 	{
 		"<leader>so",
-		require("user.orgmode.snacks").picker_orgmode_grep,
+		require("ext.orgmode.snacks").picker_orgmode_grep,
 		desc = "Search Org files",
 	},
 	{
 		"<leader>sO",
-		require("user.orgmode.snacks").picker_orgmode_headlines,
+		require("ext.orgmode.snacks").picker_orgmode_headlines,
 		desc = "Search Org Headlines",
 	},
 	{

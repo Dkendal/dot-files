@@ -33,8 +33,6 @@ local plugins = {
 		ft = "typst",
 	},
 
-	--
-
 	{
 		dir = "~/src/dkendal/nvim-kitty",
 		opts = {
@@ -510,6 +508,11 @@ local plugins = {
 local opts = {
 	checker = { enabled = false },
 }
+
+function Reload(mod)
+	package.loaded[mod] = nil
+	return require(mod)
+end
 
 require("lazy").setup({
 	{ import = "plugins" },

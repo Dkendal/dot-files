@@ -200,6 +200,8 @@
               nodePackages.vega-cli
               nodePackages.vega-lite
               timg
+
+              just
             ];
 
           homebrew = {

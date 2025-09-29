@@ -211,7 +211,7 @@ local keys = {
 	},
 	{
 		"<leader>il",
-		function () require("ext.snacks.picker.org").insert_org_headline_with_id() end,
+		function() require("ext.orgmode.snacks").insert_org_headline_with_id() end,
 		ft = "org",
 		mode = "n",
 		desc = "org find and insert link",
@@ -300,27 +300,34 @@ local keys = {
 
 	-- Search
 	{
-		"<leader>ss",
-		function() require("ext.snacks.picker.org").org_buf_headlines() end,
+		"<leader>st",
+		function() require("ext.orgmode.snacks").picker_orgmode_todos() end,
 		ft = "org",
 		mode = "n",
-		desc = "org search buffer headlines",
+		desc = "Orgmode search TODOs",
+	},
+	{
+		"<leader>ss",
+		function() require("ext.orgmode.snacks").org_buf_headlines() end,
+		ft = "org",
+		mode = "n",
+		desc = "Orgmode search buffer headlines",
 	},
 	{
 		"<leader>sS",
-		function() require("ext.snacks.picker.org").org_headlines("~/orgfiles/") end,
+		function() require("ext.orgmode.snacks").org_headlines("~/orgfiles/") end,
 		ft = "org",
 		mode = "n",
-		desc = "org search headlines",
+		desc = "Orgmode search headlines",
 	},
 
 	-- References
 	{
 		"gr",
-		function() require("ext.snacks.picker.org").org_backlinks(0) end,
+		function() require("ext.orgmode.snacks").org_backlinks(0) end,
 		ft = "org",
 		mode = "n",
-		desc = "org references",
+		desc = "Orgmode references",
 	},
 	{
 		"gd",
@@ -333,21 +340,21 @@ local keys = {
 	-- Insert
 	{
 		"<leader>oil",
-		require("user.orgmode.snacks").insert_file,
+		require("ext.orgmode.snacks").insert_file,
 		ft = "org",
 		mode = "n",
 		desc = "Insert org file link",
 	},
 	{
 		"@f",
-		require("user.orgmode.snacks").insert_file,
+		require("ext.orgmode.snacks").insert_file,
 		ft = "org",
 		mode = "i",
 		desc = "Insert org file link",
 	},
 	{
 		"@@",
-		require("user.orgmode.snacks").insert_person,
+		require("ext.orgmode.snacks").insert_person,
 		ft = "org",
 		mode = "i",
 		desc = "Insert org file link",
@@ -496,6 +503,14 @@ return {
 						[[* TODO %?]],
 						[[%u]],
 					},
+				},
+				m = {
+					description = "Current Meeting",
+					target = "~/orgfiles/log.org",
+					datetree = { tree_type = "week" },
+					template = [[%(
+						  return vim.system({ "org-schedule-now",  "dylan.kendal@blvd.co" }):wait().stdout
+						)]],
 				},
 				d = {
 					description = "Daily log",
