@@ -27,7 +27,7 @@ merge-args = [
 [signing]
 behavior = "own"
 backend = "ssh"
-key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAFiPjdvZtRVpfC/GVOeRE4vaBZjAejUMoEWPgkM1Ru/"
+key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPftfsUHQkoMrv8W8mDUcwOSOs7CFMitEz0qm+qOriXD"
 backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
 [commit]

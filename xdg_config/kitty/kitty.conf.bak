@@ -49,7 +49,7 @@ map kitty_mod+s goto_layout stack
 map kitty_mod+p>f kitten hints --type linenum --linenum-action background nvim --server ~/.cache/nvim/server.pipe --remote +{line} {path}
 
 # BEGIN_KITTY_THEME
-# zenwritten_light
+# 3024 Day
 include current-theme.conf
 # END_KITTY_THEME
 

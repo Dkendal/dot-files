@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 let
   home = config.home.homeDirectory;
   configHome = config.xdg.configHome;
@@ -6,6 +6,7 @@ let
   gh = "git@github.com:Dkendal";
   mySrc = "${home}/src/dkendal";
   ln = config.lib.file.mkOutOfStoreSymlink;
+  onePassPath = "~/.1password/agent.sock";
 in
 {
   home.stateVersion = "24.05";
@@ -174,4 +175,12 @@ in
   };
 
   programs.nix-index.enable = true;
+
+  programs.ssh = {
+    enable = true;
+    enableDefaultConfig = false;
+    matchBlocks."*" = {
+      identityAgent = onePassPath;
+    };
+  };
 }

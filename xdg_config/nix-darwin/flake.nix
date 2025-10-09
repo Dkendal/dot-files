@@ -57,7 +57,7 @@
               git # Distributed version control system
               git-absorb # Git command for automatically absorbing staged changes into commits
               lazygit # Simple terminal UI for git commands
-              stable.lazyjj
+              lazyjj
               jujutsu # Distributed version control system (alternative to Git)
               tig # Text-mode interface for Git
               delta # Syntax-highlighting pager for git, diff outputs
@@ -149,6 +149,7 @@
               jira-cli-go # Command line interface for Jira
               act # Run GitHub Actions locally
               go-task # Task runner / simpler Make alternative
+              usage
 
               cargo-binstall
               cargo-expand
@@ -192,7 +193,7 @@
 
               ollama
 
-              putty
+              stable.putty
               marksman
 
               devenv
