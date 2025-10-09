@@ -1,0 +1,109 @@
+nix_profile := "dylankendal-mbp"
+
+default: install
+
+# Update nix flake
+upgrade:
+    nix flake update
+
+alias u := upgrade
+
+# Build and switch to new configuration
+install:
+    sudo darwin-rebuild switch --flake /etc/nix-darwin
+
+alias i := install
+
+# Edit flake.nix
+edit:
+    $EDITOR ~/.config/nix-darwin/flake.nix
+
+# Clean up old generations
+clean:
+    sudo nix-collect-garbage --delete-older-than 30d
+
+# List system generations
+lsg:
+    sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
+
+# Generate Nix package definition for a Rust crate with proper hashes
+# Usage: just add-crate <name> <version>
+gen-crate CRATE VERSION:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo "Fetching SHA256 for {{CRATE}} v{{VERSION}}..."
+    SRC_HASH=$(nix-prefetch-url --unpack https://crates.io/api/v1/crates/{{CRATE}}/{{VERSION}}/download 2>/dev/null | tail -1 | xargs nix hash convert --to sri --hash-algo sha256)
+
+    if [ -z "$SRC_HASH" ]; then
+      echo "Error: Could not fetch crate {{CRATE}} v{{VERSION}}"
+      exit 1
+    fi
+
+    echo "Got source hash: $SRC_HASH"
+    echo "Building to get cargo hash..."
+
+    # Create a temporary nix expression to build and get the cargo hash
+    TEMP_FILE=$(mktemp /tmp/crate-build-XXXXXX.nix)
+    cat > "$TEMP_FILE" << EOF
+    { pkgs ? import <nixpkgs> {} }:
+    pkgs.rustPlatform.buildRustPackage rec {
+      pname = "{{CRATE}}";
+      version = "{{VERSION}}";
+      src = pkgs.fetchCrate {
+        inherit pname version;
+        sha256 = "$SRC_HASH";
+      };
+      cargoHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      doCheck = false;
+      buildType = "release";
+    }
+    EOF
+
+    # Try to build and capture the correct cargo hash
+    echo "Attempting to build (this may take a moment)..."
+    BUILD_OUTPUT=$(nix-build "$TEMP_FILE" 2>&1 || true)
+    CARGO_HASH=$(echo "$BUILD_OUTPUT" | grep "got:" | sed 's/.*got:[[:space:]]*//' | head -1)
+    rm "$TEMP_FILE"
+
+    if [ -n "$CARGO_HASH" ] && [ "$CARGO_HASH" != "" ] && [ "$CARGO_HASH" != "error:" ]; then
+      echo "✅ Successfully determined cargo hash: $CARGO_HASH"
+      echo "
+    Add this to your flake.nix systemPackages:
+
+    (pkgs.rustPlatform.buildRustPackage rec {
+      pname = \"{{CRATE}}\";
+      version = \"{{VERSION}}\";
+      src = pkgs.fetchCrate {
+        inherit pname version;
+        sha256 = \"$SRC_HASH\";
+      };
+      cargoHash = \"$CARGO_HASH\";
+      doCheck = false;
+      buildType = \"release\";
+    })"
+    else
+      echo "Could not automatically determine cargo hash."
+      echo "
+    Add this to your flake.nix systemPackages:
+
+    (pkgs.rustPlatform.buildRustPackage rec {
+      pname = \"{{CRATE}}\";
+      version = \"{{VERSION}}\";
+      src = pkgs.fetchCrate {
+        inherit pname version;
+        sha256 = \"$SRC_HASH\";
+      };
+      cargoHash = \"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\";
+      doCheck = false;
+      buildType = \"release\";
+    })
+
+    Then run 'darwin-rebuild build --flake .' to get the correct cargoHash.
+    The error will show:
+      error: hash mismatch in fixed-output derivation
+      wanted: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+      got:    sha256-[THE REAL HASH HERE]
+
+    Replace the placeholder with the 'got' hash."
+    fi

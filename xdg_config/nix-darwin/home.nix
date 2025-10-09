@@ -10,12 +10,18 @@ in
 {
   home.stateVersion = "24.05";
 
-  home.packages = with pkgs.nushellPlugins; [
-    formats
-    highlight
-    polars
-    query
-    skim
+  home.packages = with pkgs; [
+    # nushell
+    nushellPlugins.formats
+    nushellPlugins.highlight
+    nushellPlugins.polars
+    nushellPlugins.query
+    nushellPlugins.skim
+
+    # just
+    just
+    just-formatter
+    just-lsp
   ];
 
   home.activation.makeRepos = lib.hm.dag.entryAfter [ "installPackages" ] ''
@@ -169,6 +175,3 @@ in
 
   programs.nix-index.enable = true;
 }
-
-
-

@@ -1,1 +1,161 @@
 ls
+nvim ~/.config/nushell/env.nu
+open datadog.json
+open datadog.json | get C1
+open datadog.json | get C1 | to text
+open datadog.json | get C1 | to text | save datadog.txt
+open datadog.csv
+xf datadog.csv 
+xan datadog.csv 
+xan format datadog.csv 
+xan fmt datadog.csv 
+xan fmt datadog.csv  -h
+xan fmt datadog.csv  -i
+open ewc.csv
+open ewc.csv --help
+open ewc.csv raw --help
+200741 + 272292
+52812760.0034771 - 50510949.85118049
+18316456.5883402 - 38154336.24197552<\n>
+open datadog.csv
+let dd = open datadog.csv; let ewc = open ewc.csv
+let dd = open datadog.csv; let ewc = open ewc.csv; $dd | join $ewc
+let dd = open datadog.csv; let ewc = open ewc.csv; $dd | join $ewc type type
+let dd = open datadog.csv; let ewc = open ewc.csv; $dd | join $ewc type type | update { |x| $x }
+let dd = open datadog.csv; let ewc = open ewc.csv; $dd | join $ewc type type | update estimated_wall { |x| $x }
+let dd = open datadog.csv; let ewc = open ewc.csv; $dd | join $ewc type type | insert estimated_wall { |x| $x }
+let dd = open datadog.csv; let ewc = open ewc.csv | rename row_count ewc_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * ewc_row_count  }
+let dd = open datadog.csv; let ewc = open ewc.csv | rename row_count ewc_count; $dd | join $ewc type type 
+let dd = open datadog.csv; let ewc = open ewc.csv $dd | join $ewc type type 
+let dd = open datadog.csv; let ewc = open ewc.csv; $dd | join $ewc type type 
+let dd = open datadog.csv; let ewc = open ewc.csv | rename row_count ewc_row_count; $dd | join $ewc type type 
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type 
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * ewc_row_count  }
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count  }
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count  } | order by estimate_wall
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count  } | sort by estimate_wall
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count  } | sort-by estimate_wall
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count  } | order-by estimate_wall
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count  } | sort-by estimated_wall
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count  } | sort-by estimated_wall --desc
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count  } | sort-by estimated_wall --reverse
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count | into duration } | sort-by estimated_wall --reverse
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count | into duration --unit ns } | sort-by estimated_wall --reverse
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count | into duration --unit ns } | sort-by estimated_wall --reverse | to md
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count | into duration --unit ns } | sort-by estimated_wall --reverse | to md | pbcopy
+let dd = open datadog.csv; let ewc = open ewc.csv | rename type ewc_row_count; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count | into duration --unit ns } | sort-by estimated_wall --reverse 
+let dd = open datadog.csv; let ewc = open ewc.csv ; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_row * $x.ewc_row_count | into duration --unit ns } | sort-by estimated_wall --reverse 
+let dd = open datadog.csv; let ewc = open ewc.csv ; $dd | join $ewc type type | insert estimated_wall { |x| $x.ns_per_row * $x.ewc_row_count | into duration --unit ns } | sort-by estimated_wall --reverse 
+let dd = open datadog.csv; let ewc = open ewc.csv ; $dd | join $ewc type type --left | insert estimated_wall { |x| $x.ns_per_row * $x.ewc_row_count | into duration --unit ns } | sort-by estimated_wall --reverse 
+let dd = open datadog.csv; let ewc = open ewc.csv ; $dd | join $ewc type type --left | insert estimated_wall { |x| try { $x.ns_per_row * $x.ewc_row_count | into duration --unit ns } } | sort-by estimated_wall --reverse 
+let dd = open datadog.csv; let ewc = open ewc.csv ; $dd | join $ewc type type --left | insert estimated_wall { |x| try { $x.ns_per_row * $x.ewc_row_count | into duration --unit ns } } | sort-by estimated_wall --reverse | to md
+let dd = open datadog.csv; let ewc = open ewc.csv ; $dd | join $ewc type type --left | insert estimated_wall { |x| try { $x.ns_per_row * $x.ewc_row_count | into duration --unit ns } } | sort-by estimated_wall --reverse | to md | pbcopy
+cd ~/Downloads/
+open Jira.csv
+open Jira.csv | select project
+open Jira.csv | select Project
+open Jira.csv | select 'Project key'
+open Jira.csv | select 'Project key' 'Status'
+open Jira.csv | select 'Project key' 'Status' 'Updated at'
+open Jira.csv | select 'Project key' 'Status' 'Updated'
+open Jira.csv | select 'Project key' 'Status' 'Updated' | update Update { into datetime }
+open Jira.csv | select 'Project key' 'Status' 'Updated' | update Updated { into datetime }
+open Jira.csv | select 'Project key' 'Status' 'Updated' | update Updated { into datetime } | sort-by Updated
+open Jira.csv | select 'Project key' 'Status' 'Updated' | update Updated { into datetime } | sort-by Updated | polars into
+use polars
+plugin use polars
+polars
+plugin use polars
+plugin
+plugin list
+plugin add no_polars
+plugin add nu_polars
+plugin add nu_plugin_polars
+polars
+plugin use polars
+polars
+fg
+nvim /etc/nix-darwin/home.nix
+nvim ~/.config/nushell/config.nu
+ln -s app_support `~/Library/Application Support/`
+ls -la
+jj st
+jj diff
+ls
+cd ~
+ln -s app-support `~/Library/Application Support/`
+z sched
+polars
+open Jira.csv | select 'Project key' 'Status' 'Updated' | update Updated { into datetime } | sort-by Updated | polars into
+open Jira.csv | select 'Project key' 'Status' 'Updated' | update Updated { into datetime } | sort-by Updated 
+polars open Jira.csv 
+polars open Jira.csv | polars collect
+polars open Jira.csv | polars agg | polars collect
+polars agg
+polars agg --help
+polars open Jira.csv <\n>| polars agg { <\n>  status: (polars col status)<\n>  status_count: (polars col status | count)<\n>}<\n>| polars collect
+polars open Jira.csv <\n>| polars agg { <\n>  status: (polars col status)<\n>  status_count: (polars col status | polars count)<\n>}<\n>| polars collect
+polars open Jira.csv <\n>| polars group-by status<\n>| polars agg { <\n>  status: (polars col status)<\n>  status_count: (polars col status | polars count)<\n>}<\n>| polars collect
+polars open Jira.csv <\n>| polars group-by Status<\n>| polars agg { <\n>  status: (polars col Status)<\n>  status_count: (polars col Status | polars count)<\n>}<\n>| polars collect
+polars open Jira.csv <\n>| polars group-by Status<\n>| polars agg { <\n>  status: (polars col Status | uniq)<\n>  status_count: (polars col Status | polars count)<\n>}<\n>| polars collect
+polars open Jira.csv <\n>| polars group-by Status<\n>| polars agg { <\n>  status: (polars col Status | polars uniq)<\n>  status_count: (polars col Status | polars count)<\n>}<\n>| polars collect
+polars open Jira.csv <\n>| polars group-by Status<\n>| polars agg { <\n>  status_count: (polars col Status | polars count)<\n>}<\n>| polars collect
+polars --hepl
+polars --help
+polars agg-groups --help
+polars quantile 
+polars quantile  --help
+polars open Jira.csv <\n>| polars group-by Status<\n>| polars agg { <\n>  updated_bin: ( polars col Updated | polars get-year  )<\n>  status_count: ( polars col Status | polars count )<\n>}<\n>| polars collect
+polars open Jira.csv <\n>| polars group-by Status<\n>| polars agg { <\n>  status_count: ( polars col Status | polars count )<\n>}<\n>| polars collect
+polars group-by --help
+polars open Jira.csv  | polars schema<\n>
+polars open Jira.csv  | polars schema | to json
+polars open Jira.csv  | polars schema | to json | pbcopy
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%Y-%m-%d"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars dt-year | polars as year),<\n>    (polars col created_date | polars dt-quarter | polars as quarter)<\n>  ]<\n>| polars group-by [Status year quarter]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%Y-%m-%d"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart  | polars as year),<\n>    (polars col created_date | polars dt-quarter | polars as quarter)<\n>  ]<\n>| polars group-by [Status year quarter]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]
+polars datepart -h
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%Y-%m-%d"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [Status year quarter]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%Y-%m-%d"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [Status year quarter]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [Status year quarter]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect
+polars as-datetime -h
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%Y-%m-%d"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [Status year quarter]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [Status year quarter]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect | to csv
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect | into csv
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect | to csv
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect<\n>| to nuon 
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect<\n>| polars into-df 
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect<\n>| polars into-nu
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect<\n>| polars into-nu<\n>| into csv
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect<\n>| polars into-nu<\n>| to csv
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect<\n>| polars into-nu<\n>| to csv<\n>| gnuplot -h
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect<\n>| polars into-nu<\n>| to csv<\n>| save /tmp/data.csv
+gnuplot -h
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect<\n>| polars schema<\n>
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect<\n>| polars schema | pbcopy
+gnuplot
+ls
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars with-column [<\n>  ( polars col year ) + ( polars col quarter )<\n>]<\n>| polars collect<\n>
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars with-column [<\n>  (  ( polars col year ) + ( polars col quarter ) )<\n>]<\n>| polars collect<\n>
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars with-column [<\n>  (  ( polars col year ) + ( polars col quarter ) | polars as ts )<\n>]<\n>| polars collect<\n> 
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars with-column [<\n>  (   $"( polars col year ) ( polars col quarter )" | polars as ts )<\n>]<\n>| polars collect<\n> 
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars with-column [<\n>    (polars concat-str "-" [(polars col year) (polars col quarter)] | polars as ts)<\n>]<\n>| polars collect
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars with-column [<\n>    (polars concat-str "-" [(polars col year) (polars col quarter)] | polars as ts)<\n>]<\n>| polars collect<\n>| polars into-nu
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars with-column [<\n>    (polars concat-str "-" [(polars col year) (polars col quarter)] | polars as ts)<\n>]<\n>| polars collect<\n>| polars into-nu<\n>| into csv<\n>| save /tmp/data.csv -f
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars with-column [<\n>    (polars concat-str "-" [(polars col year) (polars col quarter)] | polars as ts)<\n>]<\n>| polars collect<\n>| polars into-nu<\n>| to csv<\n>| save /tmp/data.csv -f
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars with-column [<\n>    (polars concat-str "-" [(polars col year) (polars col quarter)] | polars as ts)<\n>]<\n>| polars collect
+gnuplot
+gnuplot 
+gnuplot c /tmp/plot.gnuplot
+gnuplot -c /tmp/plot.gnuplot
+gnuplot /tmp/plot.gnuplot
+gnuplot -h /tmp/plot.gnuplot
+gnuplot -c/tmp/plot.gnuplot
+gnuplot -c /tmp/plot.gnuplot
+cat /tmp/data.csv | pbcopy
+open /tmp
+nvim /tmp/plot.sh
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars with-column [<\n>    (polars concat-str "-" [(polars col year) (polars col quarter)] | polars as ts)<\n>]<\n>| polars collect
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect<\n>| polars into-nu
+polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter count]<\n>| polars collect<\n>| polars into-nu

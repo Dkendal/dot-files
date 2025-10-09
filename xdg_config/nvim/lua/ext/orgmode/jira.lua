@@ -1,3 +1,103 @@
+---Callback function for prewalk traversal
+---@alias PrewalkCallback fun(node: TSNode, parent: TSNode?, depth: integer): boolean?
+---Return false to skip visiting children of this node
+
+---@param node TSNode The root node to start traversal from
+---@param callback PrewalkCallback Function called for each node. Return false to skip children
+---@param parent TSNode? The parent node (used internally during recursion)
+---@param depth integer? The current depth in the tree (default: 0)
+---@return nil
+local function prewalk(node, callback, parent, depth)
+  depth = depth or 0
+
+  -- Visit current node (pre-order)
+  local result = callback(node, parent, depth)
+
+  -- If callback returns false, skip children
+  if result == false then
+    return
+  end
+
+  -- Recursively visit children
+  for child, field_name in node:iter_children() do
+    prewalk(child, callback, node, depth + 1)
+  end
+end
+
+local function node_to_sexpr(node, bufnr)
+  bufnr = bufnr or 0
+
+  local function sexpr_helper(n, depth)
+    local node_type = n:type()
+    local child_count = n:child_count()
+
+    if child_count == 0 then
+      -- Leaf node - include the text content
+      local text = vim.treesitter.get_node_text(n, bufnr)
+      -- Escape special characters in text
+      text = text:gsub('"', '\\"'):gsub('\n', '\\n')
+      return string.format('(%s "%s")', node_type, text)
+    else
+      -- Non-leaf node - recursively process children
+      local parts = { "(" .. node_type }
+
+      for i = 0, child_count - 1 do
+        local child = n:child(i)
+        if child then
+          table.insert(parts, sexpr_helper(child, depth + 1))
+        end
+      end
+
+      table.insert(parts, ")")
+      return table.concat(parts, " ")
+    end
+  end
+
+  return sexpr_helper(node, 0)
+end
+
+-- Usage example:
+local function print_node_sexpr()
+  local node = vim.treesitter.get_node()
+  if node then
+    local sexpr = node_to_sexpr(node)
+    print(sexpr)
+  else
+    print("No node under cursor")
+  end
+end
+
+-- You can call it like:
+-- :lua print_node_sexpr()
+local function node_to_sexpr_pretty(node, bufnr)
+  bufnr = bufnr or 0
+
+  local function sexpr_helper(n, depth)
+    local indent = string.rep("  ", depth)
+    local node_type = n:type()
+    local child_count = n:child_count()
+
+    if child_count == 0 then
+      local text = vim.treesitter.get_node_text(n, bufnr)
+      text = text:gsub('"', '\\"'):gsub('\n', '\\n')
+      return string.format('(%s "%s")', node_type, text)
+    else
+      local parts = { "(" .. node_type }
+
+      for i = 0, child_count - 1 do
+        local child = n:child(i)
+        if child then
+          table.insert(parts, "\n" .. indent .. "  " .. sexpr_helper(child, depth + 1))
+        end
+      end
+
+      table.insert(parts, ")")
+      return table.concat(parts, "")
+    end
+  end
+
+  return sexpr_helper(node, 0)
+end
 local _ = vim.iter
 local M = {}
 ---
@@ -256,6 +356,12 @@ local function format_issue(issue)
     priority = ""
   end
 
+  local todo_status = "TODO"
+
+  if fields.statusCategory == "DONE" then
+    todo_status = "DONE"
+  end
+
   local scheduled = fields["customfield_10015"]
 
   if scheduled == vim.NIL then
@@ -274,6 +380,7 @@ local function format_issue(issue)
     scheduled = scheduled,
     deadline = deadline,
     summary = issue.fields.summary,
+    todo_status = todo_status,
     properties = {
       created = fields.created,
       updated = fields.updated,
@@ -290,12 +397,6 @@ local function format_issue(issue)
   }
 end
 
--- local issue = get_issue("COPS-8000")
--- if issue then
---   vim.print(vim.inspect(format_issue(issue)))
--- end
---
-
 function M.get_closest_headline()
   local orgmode = require 'orgmode.api'
   local headline = orgmode.current():get_closest_headline()
@@ -305,6 +406,22 @@ function M.get_closest_headline()
   end
 
   return headline
+end
+
+function M.test()
+  local headline = M.get_closest_headline()
+
+  if headline == nil then
+    error("expected headline")
+  end
+
+  local source = headline.title
+  local pos = headline.position
+  local stars = string.rep("*", headline.level)
+  local status = "TODO"
+  local rep = string.format("%s %s %s", status, stars, "test")
+  vim.api.nvim_buf_set_text(0, pos.start_line - 1, 0, pos.end_line - 1, -1, { rep })
+  -- vim.print(vim.inspect(text))
 end
 
 function M.fetch_issue()
@@ -346,6 +463,17 @@ function M.fetch_issue()
 
   headline:set_scheduled(issue_data.scheduled)
   headline:set_deadline(issue_data.deadline)
+
+  local pos = headline.position
+  local stars = string.rep("*", headline.level, "")
+  local summary = issue_data.summary
+  local rep = string.format("%s %s %s: %s", stars, issue_data.todo_status, issue_data.key, summary)
+
+  vim.schedule(function()
+    vim.api.nvim_buf_set_text(0, pos.start_line - 1, 0, pos.start_line - 1, -1, { rep })
+  end)
+
+  vim.notify(string.format("Updated issue: %s", jira_key))
 end
 
 return M

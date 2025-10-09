@@ -21,8 +21,7 @@
 ---@field range astgrep.Range
 ---@field labels astgrep.Item[]
 
-local people_path = vim.env.HOME .. "/orgfiles/people/"
-
+vim.g.ext_orgmode_hyperlinks_sources_jira_path = vim.env.HOME .. "/orgfiles/people/"
 
 local function action(cmd, opts)
 	return function()
@@ -38,65 +37,8 @@ local function insert_property()
 	end)
 end
 
----@type OrgLinkType
-local hyperlink_people = {
-	get_name = function()
-		return "people"
-	end,
-	follow = function(_self, link)
-		if not vim.startswith(link, "people:") then
-			return false
-		end
-
-		local filename = string.match(link, "people:(.*)")
-		filename = people_path .. filename .. ".org"
-
-		vim.cmd("split " .. filename)
-
-		return true
-	end,
-	autocomplete = function(_self, _link)
-		local result = vim.system({ "fd", "\\.org$", people_path }, { text = true }):wait()
-
-		if result.code == 0 then
-			return vim.iter(vim.split(result.stdout, "\n"))
-					:filter(function(x)
-						return vim.trim(x) ~= ""
-					end)
-					:map(function(x)
-						local text = x:gsub("^" .. people_path, ""):gsub("%.org$", "")
-						return "people:" .. text .. "][" .. text .. "]]"
-					end)
-					:totable()
-		else
-			vim.notify(result.stderr, "error")
-			return {}
-		end
-	end,
-}
-
----@type OrgLinkType
-local hyperlink_jira = {
-	get_name = function()
-		return "jira"
-	end,
-	follow = function(_self, link)
-		if not vim.startswith(link, "jira:") then
-			return false
-		end
-
-		link = string.match(link, "jira:(%w+-%d+)")
-		vim.ui.open("https://blvd.atlassian.net/browse/" .. link)
-		return true
-	end,
-	autocomplete = function()
-		return {}
-	end,
-}
 --- @type LazyKeysSpec[]
 local keys = {
-	-- { "<leader>\\",  "<cmd>:silent !org-format.sh %<cr>",                        ft = "org",                  mode = "n", desc = "org format file" },
-
 	{
 		"<CR>",
 		action("org_mappings.meta_return"),
@@ -451,9 +393,186 @@ local keys = {
 		mode = "n",
 		desc = "org set tags",
 	},
+
+	-- Jira
+	{
+		"<leader>ojf",
+		function() require("ext.orgmode.jira").fetch_issue() end,
+		ft = "org",
+		mode = "n",
+		desc = "Fetch the Jisa issue for the current headline",
+	},
 }
 
 vim.cmd([[autocmd ColorScheme * hi link @org.todo @comment.note]])
+
+local function config()
+	local Menu = require("org-modern.menu")
+	local Date = require("orgmode.objects.date")
+
+	require("orgmode").setup({
+		org_agenda_files = "~/orgfiles/**/*",
+		org_default_notes_file = "~/orgfiles/inbox.org",
+		org_use_property_inheritance = false,
+		org_id_link_to_org_use_id = true,
+		org_todo_keywords = { "TODO", "|", "DONE", "CANCELLED" },
+		org_agenda_skip_scheduled_if_done = true,
+		org_agenda_skip_deadline_if_done = true,
+		org_todo_keyword_faces = {
+			TODO = "",
+			DONE = "",
+			CANCELLED = ":slant italic",
+		},
+		org_startup_folded = "showeverything",
+		org_startup_indented = true,
+		org_agenda_custom_commands = {
+			c = {
+				description = "Combined view",
+				types = {
+					{
+						type = "tags_todo",
+						org_agenda_files = { "~/orgfiles/log.org", "~/orgfiles/inbox.org" },
+						org_agenda_sorting_strategy = { 'priority-down' }
+					},
+				},
+			},
+		},
+		org_capture_templates = {
+			t = {
+				description = "Task",
+				template = {
+					[[* TODO %?]],
+					[[:PROPERTIES:]],
+					[[:CREATED: %U]],
+					[[:END:]],
+				},
+			},
+			m = {
+				description = "Current Meeting",
+				target = "~/orgfiles/log.org",
+				datetree = { tree_type = "week" },
+				template = [[%(
+						  return vim.system({ "org-schedule-now",  "dylan.kendal@blvd.co" }):wait().stdout
+						)]],
+			},
+			d = {
+				description = "Daily log",
+				target = "~/orgfiles/log.org",
+				datetree = { tree_type = "week" },
+				template = {
+					[[* %?]],
+					[[:PROPERTIES:]],
+					[[:CREATED: %U]],
+					[[:END:]],
+				},
+			},
+		},
+		hyperlinks = {
+			sources = {
+				require("ext.orgmode.hyperlinks.sources.jira"),
+				require("ext.orgmode.hyperlinks.sources.people"),
+			},
+		},
+		org_edit_src_filetype_map = {},
+		org_adapt_indentation = false,
+		mappings = {
+			disable_all = false,
+			org_return_uses_meta_return = false,
+			prefix = "<Leader>o",
+			global = {
+				org_agenda = "<prefix>a",
+				org_capture = "<prefix>c",
+			},
+			agenda = {
+				org_agenda_later = "f",
+				org_agenda_earlier = "b",
+				org_agenda_goto_today = ".",
+				org_agenda_day_view = "vd",
+				org_agenda_week_view = "vw",
+				org_agenda_month_view = "vm",
+				org_agenda_year_view = "vy",
+				org_agenda_quit = "q",
+				org_agenda_switch_to = "<CR>",
+				org_agenda_goto = "<TAB>",
+				org_agenda_goto_date = "J",
+				org_agenda_redo = "r",
+				org_agenda_todo = "t",
+				org_agenda_clock_goto = "<prefix>xj",
+				org_agenda_set_effort = "<prefix>xe",
+				org_agenda_clock_in = "I",
+				org_agenda_clock_out = "O",
+				org_agenda_clock_cancel = "X",
+				org_agenda_clockreport_mode = "R",
+				org_agenda_priority = "<prefix>,",
+				org_agenda_priority_up = "+",
+				org_agenda_priority_down = "-",
+				org_agenda_archive = "<prefix>$",
+				org_agenda_toggle_archive_tag = "<prefix>A",
+				org_agenda_set_tags = "<prefix>t",
+				org_agenda_deadline = "<prefix>id",
+				org_agenda_schedule = "<prefix>is",
+				org_agenda_filter = "/",
+				org_agenda_refile = "<prefix>r",
+				org_agenda_add_note = "<prefix>na",
+				org_agenda_preview = "K",
+				org_agenda_show_help = "g?",
+			},
+			capture = {
+				org_capture_finalize = "<C-c>",
+				org_capture_refile = "<prefix>r",
+				org_capture_kill = "<prefix>k",
+				org_capture_show_help = "g?",
+			},
+			note = {
+				org_note_finalize = "<C-c>",
+				org_note_kill = "<prefix>k",
+			},
+			org = {
+				org_do_promote = "<<",
+				org_do_demote = ">>",
+				org_promote_subtree = "<s",
+				org_demote_subtree = ">s",
+				org_toggle_checkbox = "<prefix>tc",
+				org_toggle_archive_tag = "<prefix>ta",
+				org_toggle_timestamp_type = "<prefix>th",
+				org_priority_up = "[,",
+				org_priority_down = "],",
+				org_todo_prev = "[t",
+				org_todo = "]t",
+			},
+		},
+		ui = {
+			menu = {
+				handler = function(data)
+					Menu:new({
+						window = {
+							margin = { 1, 0, 1, 0 },
+							padding = { 0, 1, 0, 1 },
+							title_pos = "center",
+							border = "single",
+							zindex = 1000,
+						},
+						icons = {
+							separator = "➜",
+						},
+					}):open(data)
+				end,
+			},
+		},
+	})
+
+	local EventManager = require('orgmode.events')
+
+	EventManager.listen(EventManager.event.TodoChanged, function(event)
+		-- Only set CREATED if this is a new TODO (old_todo_state is nil/empty)
+		if not event.old_todo_state and event.headline and event.headline:get_todo() then
+			if not event.headline:get_property('CREATED') then
+				local now = Date.now()
+				event.headline:set_property('CREATED', now:to_wrapped_string(true))
+			end
+		end
+	end)
+end
 
 --- @type LazyPluginSpec
 return {
@@ -466,154 +585,5 @@ return {
 	event = "VeryLazy",
 	ft = { "org" },
 	keys = keys,
-	config = function()
-		local Menu = require("org-modern.menu")
-
-		require("orgmode").setup({
-			org_agenda_files = "~/orgfiles/**/*",
-			org_default_notes_file = "~/orgfiles/inbox.org",
-			org_use_property_inheritance = false,
-			org_id_link_to_org_use_id = true,
-			org_todo_keywords = { "TODO", "|", "DONE", "CANCELLED" },
-			org_agenda_skip_scheduled_if_done = true,
-			org_agenda_skip_deadline_if_done = true,
-			org_todo_keyword_faces = {
-				TODO = "",
-				DONE = "",
-				CANCELLED = ":slant italic",
-			},
-			org_startup_folded = "showeverything",
-			org_startup_indented = true,
-			org_agenda_custom_commands = {
-				c = {
-					description = "Combined view",
-					types = {
-						{
-							type = "tags_todo",
-							org_agenda_files = { "~/orgfiles/log.org", "~/orgfiles/inbox.org" },
-							org_agenda_sorting_strategy = { 'priority-down' }
-						},
-					},
-				},
-			},
-			org_capture_templates = {
-				t = {
-					description = "Task",
-					template = {
-						[[* TODO %?]],
-						[[%u]],
-					},
-				},
-				m = {
-					description = "Current Meeting",
-					target = "~/orgfiles/log.org",
-					datetree = { tree_type = "week" },
-					template = [[%(
-						  return vim.system({ "org-schedule-now",  "dylan.kendal@blvd.co" }):wait().stdout
-						)]],
-				},
-				d = {
-					description = "Daily log",
-					target = "~/orgfiles/log.org",
-					datetree = { tree_type = "week" },
-					template = {
-						[[* %?]],
-						[[%U]],
-					},
-				},
-			},
-			hyperlinks = {
-				sources = {
-					hyperlink_jira,
-					hyperlink_people,
-				},
-			},
-			org_edit_src_filetype_map = {},
-			org_adapt_indentation = false,
-			mappings = {
-				disable_all = false,
-				org_return_uses_meta_return = false,
-				prefix = "<Leader>o",
-				global = {
-					org_agenda = "<prefix>a",
-					org_capture = "<prefix>c",
-				},
-				agenda = {
-					org_agenda_later = "f",
-					org_agenda_earlier = "b",
-					org_agenda_goto_today = ".",
-					org_agenda_day_view = "vd",
-					org_agenda_week_view = "vw",
-					org_agenda_month_view = "vm",
-					org_agenda_year_view = "vy",
-					org_agenda_quit = "q",
-					org_agenda_switch_to = "<CR>",
-					org_agenda_goto = "<TAB>",
-					org_agenda_goto_date = "J",
-					org_agenda_redo = "r",
-					org_agenda_todo = "t",
-					org_agenda_clock_goto = "<prefix>xj",
-					org_agenda_set_effort = "<prefix>xe",
-					org_agenda_clock_in = "I",
-					org_agenda_clock_out = "O",
-					org_agenda_clock_cancel = "X",
-					org_agenda_clockreport_mode = "R",
-					org_agenda_priority = "<prefix>,",
-					org_agenda_priority_up = "+",
-					org_agenda_priority_down = "-",
-					org_agenda_archive = "<prefix>$",
-					org_agenda_toggle_archive_tag = "<prefix>A",
-					org_agenda_set_tags = "<prefix>t",
-					org_agenda_deadline = "<prefix>id",
-					org_agenda_schedule = "<prefix>is",
-					org_agenda_filter = "/",
-					org_agenda_refile = "<prefix>r",
-					org_agenda_add_note = "<prefix>na",
-					org_agenda_preview = "K",
-					org_agenda_show_help = "g?",
-				},
-				capture = {
-					org_capture_finalize = "<C-c>",
-					org_capture_refile = "<prefix>r",
-					org_capture_kill = "<prefix>k",
-					org_capture_show_help = "g?",
-				},
-				note = {
-					org_note_finalize = "<C-c>",
-					org_note_kill = "<prefix>k",
-				},
-				org = {
-					org_do_promote = "<<",
-					org_do_demote = ">>",
-					org_promote_subtree = "<s",
-					org_demote_subtree = ">s",
-					org_toggle_checkbox = "<prefix>tc",
-					org_toggle_archive_tag = "<prefix>ta",
-					org_toggle_timestamp_type = "<prefix>th",
-					org_priority_up = "[,",
-					org_priority_down = "],",
-					org_todo_prev = "[t",
-					org_todo = "]t",
-				},
-			},
-			ui = {
-				menu = {
-					handler = function(data)
-						Menu:new({
-							window = {
-								margin = { 1, 0, 1, 0 },
-								padding = { 0, 1, 0, 1 },
-								title_pos = "center",
-								border = "single",
-								zindex = 1000,
-							},
-							icons = {
-								separator = "➜",
-							},
-						}):open(data)
-					end,
-				},
-			},
-		})
-	end,
+	config = config,
 }
