@@ -41,9 +41,6 @@ local plugins = {
 		rocks = {
 			"lpeg-label",
 		},
-		dependencies = {
-			"folk/snacks.nvim",
-		},
 		keys = {
 			{
 				"<leader>sp",

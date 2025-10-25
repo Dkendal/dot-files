@@ -51,6 +51,7 @@
   "promise-async": { "branch": "main", "commit": "119e8961014c9bfaf1487bf3c2a393d254f337e2" },
   "rainbow-delimiters.nvim": { "branch": "master", "commit": "97bf4b8ef9298644a29fcd9dd41a0210cf08cac7" },
   "roslyn.nvim": { "branch": "main", "commit": "7ba2dd0a5628c5ad3d8cc5a22e66ece3efc371bc" },
+  "snacks.nvim": { "branch": "main", "commit": "1472211f9ccd171f69ec7f33764620dd935b5ccf" },
   "splitjoin.vim": { "branch": "main", "commit": "cace6c962b67312fc1265d55337048e80d64ca90" },
   "trouble.nvim": { "branch": "main", "commit": "76030c5542c5d132aeeb467ca0ab370f3f79a697" },
   "typst.vim": { "branch": "main", "commit": "0a42c4de63984a8131c1042516f72c997bd44f92" },

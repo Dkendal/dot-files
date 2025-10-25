@@ -4,7 +4,6 @@
 return {
 	"coder/claudecode.nvim",
 	event = "VeryLazy",
-	dependencies = { "folke/snacks.nvim" },
 	config = true,
 	---@type ClaudeCodeConfig
 	opts = {
