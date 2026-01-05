@@ -42,7 +42,7 @@ local plugins = {
 			"lpeg-label",
 		},
 		dependencies = {
-			"folk/snacks.nvim",
+			"folke/snacks.nvim",
 		},
 		keys = {
 			{

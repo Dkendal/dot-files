@@ -3,10 +3,11 @@ source ~/.config/nushell/config.nu
 plugin add nu_plugin_polars
 plugin use polars
 
-use functions/jira-api.nu
+use functions/jira.nu
 
 alias fg = job unfreeze
 alias claude = ~/.claude/local/claude
+alias p = polars
 
 $env.config.keybindings ++= [
   {

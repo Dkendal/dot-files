@@ -411,7 +411,7 @@ local function config()
 	local Date = require("orgmode.objects.date")
 
 	require("orgmode").setup({
-		org_agenda_files = "~/orgfiles/**/*",
+		org_agenda_files = { "~/orgfiles/inbox.org", "~/orgfiles/log.org", "~/orgfiles/projects.org", "~/orgfiles/personal.org" },
 		org_default_notes_file = "~/orgfiles/inbox.org",
 		org_use_property_inheritance = false,
 		org_id_link_to_org_use_id = true,

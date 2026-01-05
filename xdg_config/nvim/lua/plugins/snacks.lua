@@ -559,7 +559,13 @@ return {
 		},
 		bigfile = {},
 		quickfile = {},
-		scroll = {},
+		scroll = {
+			animate = {
+				duration = {
+					ms = 25,
+				}
+			}
+		},
 		statuscolumn = {},
 		gitbrowse = {},
 		image = {},

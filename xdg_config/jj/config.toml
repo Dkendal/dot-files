@@ -36,7 +36,6 @@ gpgsign = true
 [revset-aliases]
 'user()' = 'user("dylan.kendal@blvd.co")'
 'user(x)' = 'author(x) | committer(x)'
-'trunk' = 'trunk()'
 'HEAD' = '@-'
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
 
@@ -83,7 +82,7 @@ log = '''
 
 [aliases]
 dv = ["--config=templates.draft_commit_description=commit_description_verbose", "describe"]
-fetch = ["git", "fetch"]
+fetch = ["git", "fetch", '--tracked']
 push = ["git", "push"]
 n = ["new", "-r", "trunk()"]
 bl = ["bookmark", "list"]

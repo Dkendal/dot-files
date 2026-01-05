@@ -159,3 +159,605 @@ nvim /tmp/plot.sh
 polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars with-column [<\n>    (polars concat-str "-" [(polars col year) (polars col quarter)] | polars as ts)<\n>]<\n>| polars collect
 polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect<\n>| polars into-nu
 polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter count]<\n>| polars collect<\n>| polars into-nu
+source ./jira.nu
+use ./jira.nu
+use ./jira.nu; jira
+nu -c jira.nu
+nu -c ./jira.nu
+chmod  u+x ./jira.nu
+open jira.clean.json
+nu -c ./jira.nu
+nu -c ./jira.nu ./jira-data-migrations.csv
+nu -c ./jira.nu 
+nu ./jira.nu
+nu ./jira.nu ./jira-data-migrations.csv
+nu ./jira.nu ./jira-data-migrations.csv | from nuon
+open ./jira-data-migrations.csv
+p
+abbr
+dfr 
+df
+p
+alias p = polars
+open ./jira-data-migrations.csv
+open ./jira-data-migrations.csv | get 'Migration Platform'
+open ./jira-data-migrations.csv | get 'Custom field (Migration Platform)'
+open ./jira-data-migrations.csv | get 'Custom field (Migration Platform)' | uniq
+open ./jira-data-migrations.csv | get 'Custom field (Migration Platform)' | uniq | to json
+open ./jira-data-migrations.csv | get 'Custom field (Migration Platform)' 
+open ./jira-data-migrations.csv 
+open ./jira-data-migrations.csv  | take 1
+open ./jira-data-migrations.csv  | take 1 | pivot
+open ./jira-data-migrations.csv  | take 1 | transpose
+open ./jira-data-migrations.csv | get 'Custom field (Migration Level)'
+open ./jira-data-migrations.csv | get 'Custom field (Migration Level)' | uniq
+open ./jira-data-migrations.csv | get 'Custom field (Migration Stage)' | uniq
+nu ./jira.nu ./jira-data-migrations.csv | from nuon
+nu ./jira.nu ./jira-data-migrations.csv 
+nu ./jira.nu ./jira-data-migrations.csv | from nuon
+where -h
+nu ./jira.nu ./jira-data-migrations.csv | from nuon
+is-empty -h
+nu ./jira.nu ./jira-data-migrations.csv | from nuon
+where --help
+nu ./jira.nu ./jira-data-migrations.csv | from nuon
+parse -h
+nu ./jira.nu ./jira-data-migrations.csv | from nuon
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | flatten
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | flatten | get platform
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | flatten | get platform | uniq
+parse -h
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | flatten | get platform | uniq
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | flatten 
+nu ./jira.nu ./jira-data-migrations.csv | from nuon 
+nu ./jira.nu ./jira-data-migrations.csv | from nuon  | flatten
+nu ./jira.nu ./jira-data-migrations.csv | from nuon 
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | where { $it.platform | is-empty }
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | where { |x| $x.platform | is-empty }
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | where { |x| $x | get 'platform' | is-empty }
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | where platform
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | where { |x| try { $x.platform } }
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | where 
+nu ./jira.nu ./jira-data-migrations.csv | from nuon 
+nu ./jira.nu ./jira-data-migrations.csv | from nuon  | explore
+nu ./jira.nu ./jira-data-migrations.csv | from nuon  
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | where platform 
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | where platform is-empty
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | where platform = empty
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | where { |x| $x.platform = empty }
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | where { |x| $x.platform == empty }
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | where { |x| $x.platform | is-empty }
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | where { |x| $x.platform | is-not-empty }
+open jira-data-migrations.csv 
+open jira-data-migrations.csv | get Summary
+open jira-data-migrations.csv | get Summary | sort
+open jira-data-migrations.csv | get Summary
+open jira-data-migrations.csv | take 
+open jira-data-migrations.csv | take  1
+open jira-data-migrations.csv | take  1 | explore
+open jira-data-migrations.csv | take  1 | transpose | explore
+open jira-data-migrations.csv 
+open jira-data-migrations.csv | get Description
+open jira-data-migrations.csv | get Description | parse '{_}Platform: {platform}\n{_}'
+open jira-data-migrations.csv | get Description | parse '{_}\nPlatform: {platform}\n{_}'
+open jira-data-migrations.csv | get Description | parse '{_}\nPlatform:{platform}\n{_}'
+open jira-data-migrations.csv | get Description | parse '{_}Platform:{platform}{_}'
+open jira-data-migrations.csv | get Description | parse '{_}Platform: {platform}{_}'
+open jira-data-migrations.csv | get Description | parse '{_}Platform: {platform}\n{_}'
+open jira-data-migrations.csv | get Description | parse '{_}Platform: {platform}\r{_}'
+open jira-data-migrations.csv | get Description | parse '{_}\rPlatform: {platform}\r{_}'
+open jira-data-migrations.csv | get Description | parse '{_}Platform: {platform}\r{_}'
+open jira-data-migrations.csv | get Description | parse 'Platform: {platform}'
+open jira-data-migrations.csv | get Description | lines 
+open jira-data-migrations.csv | get Description | lines | parse 'Platform: {platform}'
+open jira-data-migrations.csv | get Description | lines | parse 'Platform: {platform}' | uniq
+open jira-data-migrations.csv | get Description | lines | parse 'Platform: {platform}' | uniq | sort
+open jira-data-migrations.csv | get Description | lines | parse 'Platform: {platform}' | uniq | sort | to table
+open jira-data-migrations.csv | get Description | lines | parse 'Platform: {platform}' | uniq | sort | to json
+open jira-data-migrations.csv | get Description | lines | parse 'Platform: {platform}' | uniq | sort | to nuon
+open jira-data-migrations.csv | get Description | lines | parse 'Platform: {platform}' | uniq | sort | to jon
+open jira-data-migrations.csv | get Description | lines | parse 'Platform: {platform}' | uniq | sort | to json
+open jira-data-migrations.csv | get Description | lines | parse 'Platform: {platform}' | uniq | sort 
+open jira-data-migrations.csv | get Description | lines | parse 'Platform: {platform}' | uniq | sort  | get platform
+nu ./jira.nu ./jira-data-migrations.csv 
+nu ./jira.nu ./jira-data-migrations.csv<\n> 
+env
+env | grep JIRA
+http get --headers [Authorization $"Bearer ($env.JIRA_API_TOKEN)"] https://blvd.atlassian.net/rest/api/3/field | where custom == true
+"dylan.kendal@blvd.co:$JIRA_API_TOKEN" 
+"dylan.kendal@blvd.co:$JIRA_API_TOKEN" | base64
+"dylan.kendal@blvd.co:$JIRA_API_TOKEN" | base64 -w0
+encode
+encode -h
+"dylan.kendal@blvd.co:$JIRA_API_TOKEN" | encode base64
+("dylan.kendal@blvd.co:$JIRA_API_TOKEN" | encode base64)
+http get --headers [Authorization $"Basic ("dylan.kendal@blvd.co:$JIRA_API_TOKEN" | encode base64)"]
+http get --headers [Authorization $"Basic ("dylan.kendal@blvd.co:$JIRA_API_TOKEN" | encode base64)"] https://blvd.atlassian.net/rest/api/3/field
+jira -h
+jira C-h
+echo $JIRA_CONFIG_FILE
+$JIRA_CONFIG_FILE
+~/.config/.jira/.config.yml
+jj
+open ~/.config/.jira/.config.yml
+$env.JIRA_CONFIG_FILE
+~/.config/.jira/.config.yml
+~/.config/.jira/.config.yml | path
+~/.config/.jira/.config.yml | path parse
+`~/.config/.jira/.config.yml` | path parse
+$config
+use ~/.config/nushell/functions/jira.nu;
+use ~/.config/nushell/functions/jira.nu; jira
+use ~/.config/nushell/functions/jira.nu; jira 
+use ~/.config/nushell/functions/jira.nu; jira.nu 
+use ~/.config/nushell/functions/jira.nu; list-fields
+use ~/.config/nushell/functions/jira.nu; jira
+use ~/.config/nushell/functions/jira.nu; jira list-fields
+use ~/.config/nushell/functions/jira.nu; jira list-fields | fzf
+use ~/.config/nushell/functions/jira.nu; jira list-fields | explore
+use ~/.config/nushell/functions/jira.nu; jira list-fields | where id = customfield_10047
+use ~/.config/nushell/functions/jira.nu; jira list-fields | where id == customfield_10047
+ls
+nu ./jira.nu ./jira-data-migrations.csv<\n> 
+nu ./jira.nu ./jira-data-migrations.csv
+nu ./jira.nu ./jira-data-migrations.csv | explore
+source ./jira.nu ./jira-data-migrations.csv
+source ./jira.nu 
+source ./jira.nu  | explore
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | explore
+nu ./jira.nu ./jira-data-migrations.csv | from nuon 
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | explor
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | explore
+rename -h
+nu ./jira.nu ./jira-data-migrations.csv | from nuon | explore
+nu ./jira.nu ./jira-data-migrations.csv | from nuon 
+use ./script-jira; script-jira ./jira-data-migrations.csv | from nuon 
+use ./script-jira; script-jira ./jira-data-migrations.csv
+use ./script-jira.nu; script-jira ./jira-data-migrations.csv
+use ./script-jira.nu; 
+use ./script-jira.nu; main
+use ./script-jira.nu; script-jira
+use ./script-jira.nu; script-jira.nu
+./script-jira.nu
+script-jira.nu 
+script-jira
+./jira.nu
+./jira.nu 
+./jira.nu ./jira-data-migrations.csv
+./jira.nu ./jira-data-migrations.csv | explore
+./jira.nu ./jira-data-migrations.csv | from nuon
+./jira.nu ./jira-data-migrations.csv | from nuon 
+./jira.nu ./jira-data-migrations.csv | from nuon | get platform
+./jira.nu ./jira-data-migrations.csv | from nuon | get platform | unique
+./jira.nu ./jira-data-migrations.csv | from nuon | get platform | unqi
+./jira.nu ./jira-data-migrations.csv | from nuon | get platform | uniq
+./jira.nu ./jira-data-migrations.csv | from nuon | get platform 
+rm jira-data-migrations.csv
+rm jira.clean.json
+rm jira.vl.json
+rm Jira.csv
+cp `~/Downloads/Filter for CORPS Migrations (Jira).csv`
+cp `~/Downloads/Filter for CORPS Migrations (Jira).csv` ./jira.csv
+ls
+open jira.csv
+open jira.csv | explore
+./jira.nu ./jira-data-migrations.csv | from nuon | get platform 
+./jira.nu ./jira-data-migrations.csv | from nuon
+./jira.nu ./jira-data-migrations.csv
+./jira.nu ./jira.csv
+./jira.nu ./jira.csv | from nuon
+./jira.nu ./jira.csv | from nuon | get platform
+./jira.nu ./jira.csv | from nuon | get platform | uniq
+./jira.nu ./jira.csv | from nuon | take 10 | transpose
+./jira.csv | take 10 | transpose
+open ./jira.csv | take 10 | transpose
+open ./jira.csv | take 10 | transpose | explore
+open `~/Downloads/Filter for CORPS Migrations (Jira)(1).csv` | take 10 | transpose | explore
+open `~/Downloads/Filter for CORPS Migrations (Jira)(2).csv` | take 10 | transpose | explore
+open ./jira.csv
+echo ./jira.nu | entr ./jira.nu
+jira
+jira list-fields
+jira list-fields | explore
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu;
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira get-field customfield_10222
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira list-fields
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields list
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields get customfield_10222
+]
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields get customfield_10222
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields list
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields list | explore
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields get customfield_10222
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields get "Migration Stage"
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields get "10222"
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields get "customfield_10222"
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields get "10222"
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields get "10223"
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields search --id 10222
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields search 
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields search --id 10222
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields search
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields search --id 10222
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields search --id customfield_10222
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields get customfield_10222
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira fields issue editmeta COPS-1
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira issue editmeta COPS-1
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira issue editmeta COPS-800
+use /Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jira.nu; jira issue editmeta COPS-800 | explore
+nvim ~/app-support/nushell/functions/jira.nu
+open ~/Documents/bulk_import/abundant/appointments-all-durations.csv
+open ~/Documents/bulk_import/abundant/appointments-all-durations.csv | transpose
+fg
+open jira.clean.nuon
+polars open jira.clean.nuon
+to
+polars open jira.clean.csv
+open jira.clean.csv
+ls
+open jira.clean.csv
+open jira.clean.csv | schema
+polars open jira.clean.nuon
+polars open jira.clean.csv
+polars open jira.clean.csv | polars collect
+polars open jira.clean.csv | polars pivot --index [created] --on [platform]  --values [platform] --aggregate count --sort |  polars collect
+polars open jira.clean.csv | polars with-column { created: (polars col created | polars as-date ) } | polars pivot --index [created] --on [platform]  --values [platform] --aggregate count --sort |  polars collect
+polars open jira.clean.csv | polars with-column { created: (polars col created | polars as-date '%Y-%m-%d') } | polars pivot --index [created] --on [platform]  --values [platform] --aggregate count --sort |  polars collect
+polars open jira.clean.csv | polars with-column { created: (polars col created | polars as-date '%Y-%m-%d' --naive) } | polars pivot --index [created] --on [platform]  --values [platform] --aggregate count --sort |  polars collect
+polars open jira.clean.csv | polars with-column { created: (polars col created | polars as-date '%Y-%m-%d' --naive --help) } | polars pivot --index [created] --on [platform]  --values [platform] --aggregate count --sort |  polars collect
+polars open jira.clean.csv | polars with-column { created: (polars col created | polars as-date '%Y-%m-%d' --naive --not-exact) } | polars pivot --index [created] --on [platform]  --values [platform] --aggregate count --sort |  polars collect
+polars open jira.clean.csv | polars with-column { created: (polars col created | polars as-date '%Y-%m-%d' -not-exact) } | polars pivot --index [created] --on [platform]  --values [platform] --aggregate count --sort |  polars collect
+polars open jira.clean.csv | polars with-column { created: (polars col created | polars as-date '%Y-%m-%d' --not-exact) } | polars pivot --index [created] --on [platform]  --values [platform] --aggregate count --sort |  polars collect
+polars open jira.clean.csv<\n>| polars with-column {<\n>  created: (polars col created | polars as-date '%Y-%m-%d' --not-exact)<\n>}<\n>| polars with-column {<\n>  year: (polars col created | polars datepart year)<\n>  month: (polars col created | polars datepart month)<\n>}<\n>| polars pivot --index [created] --on [platform]  --values [platform] --aggregate count --sort <\n>| polars collect
+polars open jira.clean.csv<\n>| polars with-column {<\n>  created: (polars col created | polars as-date '%Y-%m-%d' --not-exact)<\n>}<\n>| polars with-column {<\n>  year: (polars col created | polars datepart year)<\n>  month: (polars col created | polars datepart month)<\n>}<\n>| polars pivot --index [year month] --on [platform]  --values [platform] --aggregate count --sort <\n>| polars collect
+polars open jira.clean.csv<\n>| polars with-column {<\n>  created: (polars col created | polars as-date '%Y-%m-%d' --not-exact)<\n>}<\n>| polars with-column {<\n>  year: (polars col created | polars datepart year)<\n>  month: (polars col created | polars datepart month)<\n>}<\n>| polars pivot --index [year month] --on [platform]  --values [platform] --aggregate count --sort <\n>| polars collect<\n>| select year month Vagaro
+polars open jira.clean.csv<\n>| polars with-column {<\n>  created: (polars col created | polars as-date '%Y-%m-%d' --not-exact)<\n>}<\n>| polars with-column {<\n>  year: (polars col created | polars datepart year)<\n>  month: (polars col created | polars datepart month)<\n>}<\n>| polars pivot --index [year month] --on [platform]  --values [platform] --aggregate count --sort <\n>| polars collect<\n>| polars select year month Vagaro
+polars open jira.clean.csv<\n>| polars with-column {<\n>  created: (polars col created | polars as-date '%Y-%m-%d' --not-exact)<\n>}<\n>| polars with-column {<\n>  year: (polars col created | polars datepart year)<\n>  month: (polars col created | polars datepart month)<\n>}<\n>| polars pivot --index [year month] --on [platform]  --values [platform] --aggregate count --sort <\n>| polars select year month Vagaro<\n>| polars collect<\n>
+polars open jira.clean.csv<\n>| polars with-column {<\n>  created: (polars col created | polars as-date '%Y-%m-%d' --not-exact)<\n>}<\n>| polars with-column {<\n>  year: (polars col created | polars datepart year)<\n>  month: (polars col created | polars datepart month)<\n>}<\n>| polars pivot --index [year month] --on [platform]  --values [platform] --aggregate count --sort <\n>| polars select year month Vagaro<\n>| polars sort-by year month<\n>| polars collect
+fzf
+ls
+ls /tmp
+ls /tmp/dumps
+pg_dump -h
+pg_dump --help
+open /tmp/appointments.a.csv
+ls /tmp
+ls *.b.csv
+ls a.b.csv
+ls *.b.csv
+ls
+cd postgres/
+ls *.b.csv
+ls *
+ls
+ranger
+;s
+fg
+ls
+help path 
+help path basename
+ls
+diff 
+difft
+mix test /Users/dylan.kendal/src/boulevard/sched/apps/blvd/test/bulk_import/data/types/appointment_test.exs
+ls
+jj
+jj new
+jj
+cd dbt_project/
+ls
+./src/exporters/appointments.nu
+nu ./src/exporters/appointments.nu
+claude
+claude update
+direnv
+direnv hook
+direnv hook nu
+direnv hook nushell
+use std/log
+log 
+help log
+help log log-short-prefix
+help log log-ansi
+log log-ansi sup
+log log-ansi 
+log log-prefix
+log ""
+./main.sh
+jj
+./main.sh
+open gen/input/appointments.csv
+open gen/input/appointments.csv | to nuon
+open gen/input/appointments.csv | to nuon -h
+open gen/input/appointments.csv | to nuon --indent 2
+open gen/input/appointments.csv | to 
+open gen/input/appointments.csv | to yml
+open gen/input/appointments.csv | to json
+open gen/input/appointments.csv | to json | save gen/input/appointments.json
+nu ./gen/main.nu
+cd gen/
+nu ./gen/main.nu
+nu main.nu
+open '/Users/dylan.kendal/src/boulevard/bulk-import-fake-data/out/appointments.csv'
+open '/Users/dylan.kendal/src/boulevard/bulk-import-fake-data/out/appointments.csv' | transpose
+open /tmp/appointments.json
+ls
+cd tmp
+./main
+./main.sh
+ls
+nu ./main.nu
+nvim main.nu
+^difft ./postgres/json/a ./postgres/json/b --skip-unchanged<\n>
+^difft ./postgres/json/a ./postgres/json/b --skip-unchanged --help
+^difft ./postgres/json/a ./postgres/json/b --skip-unchanged --display side-by-side
+^difft ./postgres/json/a ./postgres/json/b --skip-unchanged --display side-by-side | pbcopy
+fg
+cd ~/src/boulevard/bulk-import-fake-data/
+..
+cd sched
+git restore .
+rm -rf bulk_import/
+rm -rf ./bulk_import/
+ls -la bulk_import/
+sudo chmod 755 ./bulk_import/
+rm -rf ./bulk_import/
+ls -la bulk_import/
+rm -rf ./bulk_import/ -h
+sudo chmod 755 -R ./bulk_import/
+rm -rf ./bulk_import/ -h
+rm -rf ./bulk_import/ 
+git restore .
+jj
+jj workspace update-stale
+jj new -r 'trunk()'
+rm -rf .devenv/
+jj
+jj st
+nvim
+nvim /Users/dylan.kendal/orgfiles/log.org
+nvim
+jira list-fields | explore
+jira list-fields 
+use jira
+jira list-fields 
+nvim ~/.config/.jira/.config.yml
+nvim
+jj show upzwoysl
+z sched
+jj show upzwoysl
+cd sched
+jj show upzwoysl
+rg LocationFeaturesInput
+rg location_features_input
+rg update_location_features
+rg update_location_features_input
+fg
+ls -la
+ls
+l
+ls --sort created
+ls --sort creat
+ls | sort 
+ls | sort-by modified
+ls `./Client Records Aeterna.csv`
+open `./Client Records Aeterna.csv`
+open `./Client Records Aeterna.csv` | get id
+open `./Client Records Aeterna.csv` | get id | str join 'OR'
+open `./Client Records Aeterna.csv`  | str join ' OR '
+open `./Client Records Aeterna.csv` | each { $in.id }  | str join ' OR '
+open `./Client Records Aeterna.csv` | each { $in.id }  | str join ' OR ' | pbcopy
+open `./Client Records Aeterna.csv` | wc
+open clients.csv
+open clients.csv | transpose
+fg
+..
+fg
+open out/clients.csv
+open out/clients.csv | transpose
+nvim
+./main.sh
+open out/clients.csv | transpose
+open out/clients.csv | insert id ""
+open out/clients.csv | insert id "" | transpose
+fg
+nvim 
+open out/clients.csv | insert id "" | transpose
+./main.sh
+open out/clients.csv | insert id "" | transpose
+open out/clients.csv | transpose
+rm out/clients.csv
+fg
+nvim 
+ls
+./src/exporters/clients.nu
+nu ./src/exporters/clients.nu
+./main.sh
+open out/clients.csv | transpose
+ls
+ls lout
+ls out/
+rm out/*
+ls
+ls out
+./main.sh
+ls out/
+open out/clients.csv | transpose
+open dbt-out/clients.csv
+open dbt-out/clients.csv | transpose
+cat dbt-out/clients.csv 
+open dbt-out/clients.csv
+open dbt-out/clients.csv | transpose
+open hipaa.tsv
+open hipaa.tsv | join (open token.tsv) client_id
+open hipaa.tsv | join (open token.tsv) client_ip
+open hipaa.tsv | join (open token.tsv) client_ip client_ip
+open hipaa.tsv 
+open hipaa.tsv --header
+nvim hipaa.tsv
+cd ~/Downloads/
+ls
+open `hipaa logs.csv`
+open `hipaa logs.csv` | (open `Admin Token Generation.csv`)
+open `hipaa logs.csv` | join (open `Admin Token Generation.csv`) `Client IP`
+open `hipaa logs.csv` | join (open `Admin Token Generation.csv`) `Client IP` `Client IP`
+open `hipaa logs.csv` | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | explore
+open `hipaa logs.csv` | join --left (open `Admin Token Generation.csv`) `Client IP` `Client IP` | explore
+open `hipaa logs.csv` | join --left (open `Admin Token Generation.csv` | select `Client IP` `Blvd Metadata.current Staff Id`) `Client IP` `Client IP` | explore
+open `hipaa logs.csv`
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != null
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` == null
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` = null
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != ``
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | explore
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | transpose
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | transpose | explore
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | join (open `Admin Token Generation.csv`) | transpose | explore
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | join (open `Admin Token Generation.csv` `Client IP` `Client IP`) | transpose | explore
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | insert date { |x| $x }  | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | insert dt { |x| $x }  | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | insert t { |x| $x.Date }  | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | insert t { |x| $x.Date | date format  }  | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | insert t { |x| $x.Date | into datetime  }  | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | insert t { |x| $x.Date | into datetime | format date `YYYY-DD` }  | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | insert t { |x| $x.Date | into datetime | format date `{YYYY}-{DD}` }  | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | insert t { |x| $x.Date | into datetime | format date `%Y` }  | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | insert t { |x| $x.Date | into datetime | format date `%Y-%m-%d` }  | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+def key [{Date: string, `Client IP`: string}] { insert t { |x| $x.Date | into datetime | format date `%Y-%m-%d` } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` |   | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+def key [row: {Date: string, `Client IP`: string}] { insert t { |x| $x.Date | into datetime | format date `%Y-%m-%d` } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` |   | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+def key [row] { insert t { |x| $x.Date | into datetime | format date `%Y-%m-%d` } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` |   | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+def gen-key [row] { insert key { |x| $x.Date | into datetime | format date `%Y-%m-%d` } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | gen-key  | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+def gen-key [] { insert key { |x| $x.Date | into datetime | format date `%Y-%m-%d` } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | gen-key  | join (open `Admin Token Generation.csv`) `Client IP` `Client IP` | transpose | explore
+def gen-key [] { insert key { |x| $x.Date | into datetime | format date `%Y-%m-%d` } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | gen-key | join (open `Admin Token Generation.csv` | gen-key) `Client IP` `Client IP` | transpose | explore
+def gen-key [] { insert key { |x| let t = $x.Date | into datetime | format date `%Y-%m-%d`; $'($x.`Client IP`)($t)' } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | gen-key | join (open `Admin Token Generation.csv` | gen-key) `Client IP` `Client IP` | transpose | explore
+def gen-key [] { insert key { |x| let t = $x.Date | into datetime | format date `%Y-%m-%d`; $'($x.`Client IP`)--($t)' } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | gen-key | join (open `Admin Token Generation.csv` | gen-key) `Client IP` `Client IP` | transpose | explore
+def gen-key [] { insert key { |x| let t = $x.Date | into datetime | format date `%Y-%m-%d`; $'($x.`Client IP`)--($t)' } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | gen-key | join (open `Admin Token Generation.csv` | gen-key) key kye | transpose | explore
+def gen-key [] { insert key { |x| let t = $x.Date | into datetime | format date `%Y-%m-%d`; $'($x.`Client IP`)--($t)' } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | gen-key | join (open `Admin Token Generation.csv` | gen-key) key key | transpose | explore
+def gen-key [] { insert key { |x| let t = $x.Date | into datetime | format date `%Y-%m-%d`; $'($x.`Client IP`)--($t)' } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | gen-key | join (open `Admin Token Generation.csv` | gen-key | rename --block { $'identity_($in)'} ) key key | transpose | explore
+def gen-key [] { insert key { |x| let t = $x.Date | into datetime | format date `%Y-%m-%d`; $'($x.`Client IP`)--($t)' } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | gen-key | join (open `Admin Token Generation.csv` | gen-key | rename --block { $'identity_($in)'} ) key identity_key | transpose | explore
+def gen-key [] { insert key { |x| let t = $x.Date | into datetime | format date `%Y-%m-%d`; $'($x.`Client IP`)--($t)' } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | gen-key | join (open `Admin Token Generation.csv` | gen-key | rename --block { $'identity_($in)'} ) key identity_key | sort-by Date | transpose | explore
+def gen-key [] { insert key { |x| let t = $x.Date | into datetime | format date `%Y-%m-%d`; $'($x.`Client IP`)--($t)' } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | gen-key | join (open `Admin Token Generation.csv` | gen-key | rename --block { $'identity_($in)'} ) key identity_key | sort-by Date | to csv | save calendar_mfa_access.csv
+def gen-key [] { insert key { |x| let t = $x.Date | into datetime | format date `%Y-%m-%d`; $'($x.`Client IP`)--($t)' } }; open `hipaa logs.csv` | where `@blvd.api Application.unique Name` != `` | gen-key | join (open `Admin Token Generation.csv` | gen-key | rename --block { $'identity_($in)'} ) key identity_key | sort-by Date 
+open '2025-12-02 1_07pm_2025-12-02-2000.csv'
+open '2025-12-02 1_07pm_2025-12-02-2000.csv' | first
+open '2025-12-02 1_07pm_2025-12-02-2000.csv' | first | get event
+open '2025-12-02 1_07pm_2025-12-02-2000.csv' | first | get EVENT
+open '2025-12-02 1_07pm_2025-12-02-2000.csv' | first | get EVENT | from json
+using polars
+use polars
+use std/polars
+plugin use polars
+nu ./log.nu
+polars sample -h
+nu ./log.nu
+nu ./log.nu | save ip-sample-100.csv
+nu ./log.nu
+finder .
+^open .
+nu ./log.nu
+claude
+open '2025-12-02 1_07pm_2025-12-02-2000.csv' | first | get EVENT | from json
+nu ./log.nu
+open '2025-12-02 1_07pm_2025-12-02-2000.csv' | first | get EVENT | from json
+^open .
+nu ./log.nu
+^open .
+nu ./log.nu
+lnav ./staff_member_logged_in_2025_10_02__2025_12_02.txt
+nu ./log.nu
+lnav ./staff_member_logged_in_2025_10_02__2025_12_02.txt
+nvim ./staff_member_logged_in_2025_10_02__2025_12_02.txt
+lnav ./staff_member_logged_in_2025_10_02__2025_12_02.txt
+nu ./log.nu
+lnav ./staff_member_logged_in_2025_10_02__2025_12_02.txt
+cat staff_member_logged_in_2025_10_02__2025_12_02.txt
+nu ./log.nu
+lnav ./staff_member_logged_in_2025_10_02__2025_12_02.txt
+nu ./log.nu
+nu ./log.nu | lnav
+nu ./log.nu
+./main.nu
+nu ./main.nu
+fg
+use std/log
+log info "sup"
+fg
+log 
+log --help
+log log-prefix "%ANSI_START%%DATE%|%LEVEL%|(ansi u)%MSG%%ANSI_STOP%"
+log log-prefix 
+fg
+5 % 1
+5 mod 1
+duckdb -json ./output/neinstein-hipaa.duckdb 'select count(*) as count from logs' | from  json
+duckdb -json ./output/neinstein-hipaa.duckdb 'select count(*) as count from logs' | from  json | get 0 
+duckdb -json ./output/neinstein-hipaa.duckdb 'select count(*) as count from logs' | from  json | get 0.count
+error in { error: 1 }
+"error" in { error: 1 }
+format duration
+format duration --help
+open ./tmp/cursor
+open ./tmp/cursor | describe
+open ./tmp/cursor | into string
+open ./tmp/cursor | into string | describe
+open --help
+open --raw ./tmp/cursor 
+open --raw ./tmp/cursor | desc
+open --raw ./tmp/cursor | describe
+open --raw ./tmp/cursor | decode utf-8
+duckdb -json ./output/neinstein-hipaa.duckdb 'alter table logs add primary key (id)'
+http get "example.com" |<\n>  tee { save --append --progress /dev/null }<\n>
+http get "example.com"
+sleep 1
+sleep 5sec
+{ echo "start"; sleep 5sec; echo "..end" }
+( echo "start"; sleep 5sec; echo "..end" )
+( print "start"; sleep 5sec; print "..end" )
+( sleep 5sec; "1" ) | ^pv
+( sleep 5sec; "1" ) | tee
+{ sleep 5sec; "1" } | tee
+{ sleep 5sec; "1" } | tee { save --append --progress /dev/null }
+( sleep 5sec; "1" ) | tee { save --append --progress /dev/null }
+tee --help
+save --help
+( sleep 5sec; "1" ) | pv -l
+{ sleep 5sec; "1" } | tee { to text | pv -l | ignore }
+( sleep 5sec; "1" ) | tee { to text | pv -l | ignore }
+pv --help
+pv -p
+pv "https://example.com" | http get
+http get (pv "https://example.com")
+nvim pv.nu
+open Patients.csv
+open Patients.csv | explore
+open Patients.csv | head
+open Patients.csv | columns
+open Patients.csv | select `Internal ID` `Last Name` `First Name` `Email` `Chart ID` `Home Phone` `Cell Phone`
+qls
+ls
+ls -la
+open PatientDocuments.csv
+open PatientDocuments.csv | take 10
+open Patients.csv | select `Internal ID` `Last Name` `First Name` `Email` `Chart ID` `Home Phone` `Cell Phone`
+open Patients.csv | select `Internal ID` `Last Name` `First Name` `Email` `Chart ID` `Home Phone` `Cell Phone` | where `Chart ID` != `Internal ID`
+open Patients.csv | select `Internal ID` `Last Name` `First Name` `Email` `Chart ID` `Home Phone` `Cell Phone` | where { $in.`Chart ID` != $in.`Internal ID` }
+open Patients.csv | select `Internal ID` `Last Name` `First Name` `Email` `Chart ID` `Home Phone` `Cell Phone` | save clients.csv
+open Patients.csv | select `Internal ID` `Last Name` `First Name` `Email` `Chart ID` `Home Phone` `Cell Phone` | save clients.csv -f
+mkdir medspa-files
+mv PatientDocuments.csv ./medspa-files/
+mv Patients.csv ./medspa-files/
+ls
+cd medspa-files/
+ls
+open Patients.csv | select `Internal ID` `Last Name` `First Name` `Email` `Chart ID` `Home Phone` `Cell Phone` | save clients.csv -f
+./main.nu
+nu ./main.nu
+ls
+open clients.csv
+duckdb ./db.duckdb
+ls
+nvim main.nu
+ls
+duckdb ./db.duckdb
