@@ -14,12 +14,12 @@
   outputs = inputs@{ self, nix-darwin, nixpkgs, nixpkgs-stable, home-manager, ... }:
     let
       overlay = find: prev: {
-        neovim = inputs.neovim-nightly-overlay.packages.${prev.system}.default;
+        neovim = inputs.neovim-nightly-overlay.packages.${prev.stdenv.hostPlatform.system}.default;
         # go-task = nixpkgs-stable.legacyPackages.${prev.system}.go-task;
       };
       configuration = { pkgs, user, ... }:
         let
-          stable = nixpkgs-stable.legacyPackages.${pkgs.system};
+          stable = nixpkgs-stable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
         in
         {
           # List packages installed in system profile. To search by name, run:
@@ -43,10 +43,10 @@
               tree-sitter # Parser generator tool and incremental parsing library
               rclone # Command line program to sync files and directories
               restic # Backup program with encryption and deduplication
-              du-dust # More intuitive version of du (disk usage)
+              dust # More intuitive version of du (disk usage)
 
               # Shell & Terminal
-              nushell # Data-driven shell with structured data
+              stable.nushell # Data-driven shell with structured data
               nufmt # Data-driven shell with structured data
               htop # Interactive process viewer
               gum # Tool for glamorous shell scripts
@@ -342,7 +342,6 @@
             configuration
             home-manager.darwinModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "before-home-manager";
               home-manager.users.${user} = import ./home.nix;
@@ -364,7 +363,6 @@
             configuration
             home-manager.darwinModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "before-home-manager";
               home-manager.users.${user} = import ./home.nix;

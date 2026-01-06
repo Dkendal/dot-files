@@ -11,13 +11,6 @@ in
   home.stateVersion = "24.05";
 
   home.packages = with pkgs; [
-    # nushell
-    nushellPlugins.formats
-    nushellPlugins.highlight
-    nushellPlugins.polars
-    nushellPlugins.query
-    nushellPlugins.skim
-
     # just
     just
     just-formatter
@@ -104,6 +97,7 @@ in
 
   programs.nushell = {
     enable = true;
+    package = pkgs.nushell;
     settings = {
       buffer_editor = "nvim";
       edit_mode = "vi";
