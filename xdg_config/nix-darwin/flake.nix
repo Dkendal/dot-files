@@ -2,16 +2,16 @@
   description = "Example Darwin system flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
-    nix-darwin.url = "github:LnL7/nix-darwin";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nix-darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nixpkgs-stable, home-manager, ... }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, nixpkgs-unstable, home-manager, ... }:
     let
       overlay = find: prev: {
         neovim = inputs.neovim-nightly-overlay.packages.${prev.stdenv.hostPlatform.system}.default;
@@ -19,7 +19,7 @@
       };
       configuration = { pkgs, user, ... }:
         let
-          stable = nixpkgs-stable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+          unstable = nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
         in
         {
           # List packages installed in system profile. To search by name, run:
@@ -46,7 +46,7 @@
               dust # More intuitive version of du (disk usage)
 
               # Shell & Terminal
-              stable.nushell # Data-driven shell with structured data
+              nushell # Data-driven shell with structured data
               nufmt # Data-driven shell with structured data
               htop # Interactive process viewer
               gum # Tool for glamorous shell scripts
@@ -57,7 +57,7 @@
               git # Distributed version control system
               git-absorb # Git command for automatically absorbing staged changes into commits
               lazygit # Simple terminal UI for git commands
-              stable.lazyjj
+              lazyjj
               jujutsu # Distributed version control system (alternative to Git)
               tig # Text-mode interface for Git
               delta # Syntax-highlighting pager for git, diff outputs
@@ -87,7 +87,7 @@
               # Database Tools
               postgresql
               pgformatter # PostgreSQL SQL syntax beautifier
-              stable.pgcli
+              pgcli
 
               # Code Quality & Formatting
               dprint # Pluggable and configurable code formatting platform
@@ -155,14 +155,14 @@
               mergiraf
 
               # Custom Rust crates
-              (pkgs.rustPlatform.buildRustPackage rec {
+              (unstable.rustPlatform.buildRustPackage rec {
                 pname = "starship-jj";
-                version = "0.6.0";
-                src = pkgs.fetchCrate {
+                version = "0.7.0";
+                src = unstable.fetchCrate {
                   inherit pname version;
-                  sha256 = "sha256-oJNww2zuof/fngb5q7+NoguebLv+urjqPV74dkBLFFk=";
+                  sha256 = "sha256-oisz3V3UDHvmvbA7+t5j7waN9NykMUWGOpEB5EkmYew=";
                 };
-                cargoHash = "sha256-E5z3AZhD3kiP6ojthcPne0f29SbY0eV4EYTFewA+jNc=";
+                cargoHash = "sha256-NNeovW27YSK/fO2DjAsJqBvebd43usCw7ni47cgTth8=";
               })
 
               (pkgs.rustPlatform.buildRustPackage rec {
