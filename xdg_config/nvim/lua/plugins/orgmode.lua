@@ -40,7 +40,7 @@ end
 local function insert_created_timestamp()
 	local Date = require("orgmode.objects.date")
 	local now = Date.now()
-	require("orgmode.api").current():get_closest_headline():set_property("CREATED", now:to_wrapped_string(true))
+	require("orgmode.api").current():get_closest_headline():set_property("CREATED", now:to_wrapped_string(false))
 end
 
 
