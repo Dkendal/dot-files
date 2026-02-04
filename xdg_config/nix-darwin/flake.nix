@@ -83,6 +83,8 @@
               fx # Command-line JSON processing tool
               ripgrep # Fast line-oriented search tool (grep alternative)
               sd # Intuitive find & replace CLI tool
+              xmlstarlet
+              dasel
 
               # Database Tools
               postgresql
@@ -153,6 +155,8 @@
               cargo-binstall
               cargo-expand
               mergiraf
+              typst
+
 
               # Custom Rust crates
               (unstable.rustPlatform.buildRustPackage rec {

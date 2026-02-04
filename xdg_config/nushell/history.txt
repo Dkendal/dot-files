@@ -761,3 +761,100 @@ ls
 nvim main.nu
 ls
 duckdb ./db.duckdb
+nu config
+nvim '/Users/dylan.kendal/Library/Application Support/nushell/config.nu'
+nu
+nu
+ls
+gunzip -c tmp/pg_dump/8016.dat.gz
+gunzip -c tmp/pg_dump/8016.dat.gz | lines
+gunzip -c tmp/pg_dump/8016.dat.gz | from tsv
+fg
+open staff.csv
+open staff.csv | select role_id
+open staff.csv | select staff_role_id
+open staff.csv | select staff_role_id | distinct
+open staff.csv | select staff_role_id | uniq
+nvim
+..
+nvim
+fd erd
+cd output/
+ls
+fg
+ls
+open ~/Downloads/client.csv | select errors
+xan agg < ~/Downloads/client.csv 
+ls *.csv
+ls *.csv | each { xan count < $in.name }
+ls *.csv | each { xan count $in.name }
+ls *.csv | each { ("$in.name", (xan count $in.name)) }
+ls *.csv | each { ('$in.name', (xan count $in.name)) }
+ls *.csv | each { ['$in.name', (xan count $in.name)] }
+ls *.csv | each { ['$in.name', (xan count $in.name)] } | table
+ls *.csv | each { ['$in.name', (xan count $in.name)] } | explore
+ls *.csv | each { ['$in.name', (xan count $in.name)] } | flatten
+ls *.csv | each { [$in.name, (xan count $in.name)] } | flatten
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} }
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | table
+rm client.1.csv
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | table
+let t = ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | table
+$t
+$t | table
+$t | table | to md
+$t | table | to csv
+$t | to table
+$t | table
+$t | describe
+let t = ls *.csv | each { { name: $in.name, count: (xan count $in.name)} }
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | describe
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | collect | describe
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | collect 
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | collect  | pbcopy
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | collect  | order-by count
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | collect  | sort-by count
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | collect  | sort-by count -h
+sort-by h
+sort-by --help
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | collect  | sort-by {|a,b| a.count < b.count } 
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | collect  | sort-by {|a,b| $a.count < $b.count } 
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | collect  | sort-by {|a, b| $a.count < $b.count } 
+ls *.csv | each { { name: $in.name, count: (xan count $in.name)} } | collect  | sort-by count
+rm locations.1.csv
+rm *.1.cvs
+ls
+open output/service.csv
+open output/service.csv | sample
+open output/service.csv | sample 10
+open output/service.csv | shuffle | take 100
+open output/service.csv | shuffle | take 100 | explore
+open output/service.csv | select category_id
+open output/service.csv | select 'category id' 'category name'
+open output/service.csv | select 'category id' 'category name' | groupby 'category name'
+open output/service.csv | select 'category id' 'category name' | group-by 'category name'
+xan group output/service.csv
+xan groupby output/service.csv
+xan groupby 'category name' 'count(category id)' output/service.csv
+xan groupby 'category name, category id' 'count()' output/service.csv
+xan groupby 'category name,category id' 'count()' output/service.csv
+xan groupby 'category name,category id' 'count()' output/service.csv | from csv
+xan groupby 'category name,category id' 'count()' output/service.csv | from csv | sort-by 'category name'
+open output/service.csv | select 'category id' 'category name' | group-by 'category name'
+open service.csv | select 'category id' 'category name' | group-by 'category name'
+open service.csv | select 'category name' | group-by 'category name'
+open `~/Downloads/service(1).csv`
+open `~/Downloads/service(1).csv` | explore
+vd `~/Downloads/service(1).csv`
+ls ~/.visidata/
+rm -rf ~/.visidata/
+vd `~/Downloads/service(1).csv`
+nvim
+fg
+open output/timeblocks.csv
+path
+path self
+path self 
+path self  .
+z sched
+mktemp

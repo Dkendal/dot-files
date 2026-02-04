@@ -91,10 +91,5 @@ pr = [
   "util",
   "exec",
   "--",
-  "nu",
-  "-c",
-  """
-  let bookmark = jj log -r 'closest_bookmark(@-)' --no-graph --limit 1 --template bookmarks
-  gh pr view $bookmark --web
-  """,
+  "/Users/dylan.kendal/dot-files/xdg_config/nushell/functions/jj-gh.nu"
 ]

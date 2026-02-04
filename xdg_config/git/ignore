@@ -9,7 +9,6 @@ tmp
 Taskfile.*
 .datagrip
 Session.vim
-CLAUDE.md
 .DS_Store
 .nvim.lua
 .env.local
