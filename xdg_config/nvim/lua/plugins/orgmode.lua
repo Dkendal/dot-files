@@ -37,6 +37,12 @@ local function insert_property()
 	end)
 end
 
+local function insert_created_timestamp()
+	local Date = require("orgmode.objects.date")
+	local now = Date.now()
+	require("orgmode.api").current():get_closest_headline():set_property("CREATED", now:to_wrapped_string(true))
+end
+
 
 --- @type LazyKeysSpec[]
 local keys = {
@@ -102,6 +108,13 @@ local keys = {
 		ft = "org",
 		mode = "n",
 		desc = "org add property",
+	},
+	{
+		"<leader>ic",
+		insert_created_timestamp,
+		ft = "org",
+		mode = "n",
+		desc = "org add CREATED timestamp",
 	},
 	{
 		"<leader>i!",
