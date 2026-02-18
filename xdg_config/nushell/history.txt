@@ -858,3 +858,79 @@ path self
 path self  .
 z sched
 mktemp
+open output/voucher.csv
+open output/voucher.csv | select package_name service_external_ids
+open output/voucher.csv | select _package_name service_external_ids
+open output/voucher.csv | select _package_name 'service external ids'
+open output/voucher.csv | select _package_name service_external_ids
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in }
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in } | take 10
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split } | take 10
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' } | take 10
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | explore
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name { $in }
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name service_external_ids
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name service_external_ids | explore
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name service_external_ids | describe
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name service_external_ids --help
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name service_external_ids --to-table
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name --to-table
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name service_external_ids --to-table
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name service_external_ids --to-table | explore
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name { $in }
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name { $in.service_external_ids }
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name { $in.service_external_ids } | explore
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name { $in.service_external_ids } --help
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name --to-table
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name --to-table | each { $in.items | select service_external_ids }
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name --to-table | each { $in.items | select service_external_ids | flatten }
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name --to-table | each { $in | update items { select service_external_ids | flatten } }
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name --to-table | each { $in | update items { select service_external_ids | flatten } | flatten }
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name --to-table | each { $in | update items { select service_external_ids | flatten } } | flatten
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name --to-table | each { $in | update items { select service_external_ids | flatten } } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name --to-table | each { $in | update items { select service_external_ids | flatten | list } } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name --to-table | each { $in | update items { select service_external_ids } } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name --to-table | each { $in | update items { select service_external_ids | flatten } } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { $in | split row ',' }  | group-by _package_name --to-table | each { update items { select service_external_ids | flatten } } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { select service_external_ids | flatten | get 0 }  } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { select service_external_ids | flatten }  } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten }  } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten } }  | explore
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq } }  | explore
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq } }  | to csv
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq | string join ',' } } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq | strings join ',' } } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq | join  } } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq | str join ','  } } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq | filter { is-empty } | str join ','  } } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq | filter { is-present } | str join ','  } } 
+is-empty -h
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq | filter { is-not-empty } | str join ','  } } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq | filter { is-not-empty } } } 
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq | filter { is-not-empty } } }  | to csv
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq | filter { is-not-empty } | str join ',' } }  | to csv
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq | filter { is-not-empty } | str join ',' } }  | to csv | vd -
+open output/voucher.csv | select _package_name service_external_ids   | update service_external_ids { split row ',' }  | group-by _package_name --to-table | each { update items { get service_external_ids | flatten | uniq | filter { is-not-empty } | str join ',' } }  | to csv | save package_name_service_ids.csv
+vd package_name_service_ids.csv
+fg
+vd output/client.csv
+vd ~/Downloads/
+vd output/client.csv
+vd ~/Downloads/
+mise exec-query-all
+'{"inbox": {"account": "9d4ce721-e5b0-42ec-8ef3-f5e59e32d37b", "created_time": 1772037732.316224, "creator": "d3f68318-c50d-4feb-8153-f8da72873e35", "customer_message": null, "destination_connection_id": null, "destination_type": null, "email_upload_address": "412511df-34dd-486c-9896-72b1a19b9082@mail.couchdrop.io", "email_upload_allowed_addresses": "", "email_upload_enabled": false, "enabled": true, "expiry": 0, "has_password": false, "id": "412511df-34dd-486c-9896-72b1a19b9082", "last_updated": 1772037732.328124, "locked_until": null, "name": "[TEST]", "notifications__email_alert_recipients": "", "notifications__email_enabled": false, "notifications__email_enabled_failure": null, "notifications__email_enabled_success": null, "notifications__webhook_enabled": false, "notifications__webhook_uri": "", "path": "blvd-prod-secure-data-imports/test/uploads/11111111-1111-111111111-111111111111", "portal_enabled": true, "required_fields": [], "required_fields_subfolder_enabled": false, "required_fields_subfolder_naming": "", "restricted_emails": null, "upload_body_content": null, "upload_event_count": 0, "upload_event_last_time": null, "upload_required_fields": null, "webhook_upload_allowed_ips": "", "webhook_upload_enabled": false, "webhook_upload_token_set": false}}' | from json
+'{"inbox": {"account": "9d4ce721-e5b0-42ec-8ef3-f5e59e32d37b", "created_time": 1772037732.316224, "creator": "d3f68318-c50d-4feb-8153-f8da72873e35", "customer_message": null, "destination_connection_id": null, "destination_type": null, "email_upload_address": "412511df-34dd-486c-9896-72b1a19b9082@mail.couchdrop.io", "email_upload_allowed_addresses": "", "email_upload_enabled": false, "enabled": true, "expiry": 0, "has_password": false, "id": "412511df-34dd-486c-9896-72b1a19b9082", "last_updated": 1772037732.328124, "locked_until": null, "name": "[TEST]", "notifications__email_alert_recipients": "", "notifications__email_enabled": false, "notifications__email_enabled_failure": null, "notifications__email_enabled_success": null, "notifications__webhook_enabled": false, "notifications__webhook_uri": "", "path": "blvd-prod-secure-data-imports/test/uploads/11111111-1111-111111111-111111111111", "portal_enabled": true, "required_fields": [], "required_fields_subfolder_enabled": false, "required_fields_subfolder_naming": "", "restricted_emails": null, "upload_body_content": null, "upload_event_count": 0, "upload_event_last_time": null, "upload_required_fields": null, "webhook_upload_allowed_ips": "", "webhook_upload_enabled": false, "webhook_upload_token_set": false}}' | from json | to json
+fg
+mise t
+mise t 
+mise t add uv run main.py
+mise t add main 'uv run main.py'
+mise t add main -- 'uv run main.py'
+mise t r main
+ls
+cat mise.toml
+mise main
+fg
+uv run main.py

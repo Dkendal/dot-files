@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, unstable, ... }:
 let
   home = config.home.homeDirectory;
   configHome = config.xdg.configHome;
@@ -116,7 +116,7 @@ in
 
   programs.mise = {
     enable = true;
-    package = pkgs.mise;
+    package = unstable.mise;
     enableFishIntegration = true;
     enableBashIntegration = true;
     enableNushellIntegration = true;

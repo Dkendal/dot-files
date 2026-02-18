@@ -159,6 +159,7 @@
 
               python312
               python312Packages.matplotlib
+              python312Packages.faker
 
 
               # Custom Rust crates
@@ -341,6 +342,7 @@
           specialArgs = {
             user = user;
           };
+          unstable = nixpkgs-unstable.legacyPackages."aarch64-darwin";
         in
         nix-darwin.lib.darwinSystem {
           specialArgs = specialArgs;
@@ -350,6 +352,7 @@
             {
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "before-home-manager";
+              home-manager.extraSpecialArgs = { inherit unstable; };
               home-manager.users.${user} = import ./home.nix;
             }
           ];
@@ -362,6 +365,7 @@
           specialArgs = {
             user = user;
           };
+          unstable = nixpkgs-unstable.legacyPackages."aarch64-darwin";
         in
         nix-darwin.lib.darwinSystem {
           specialArgs = specialArgs;
@@ -371,6 +375,7 @@
             {
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "before-home-manager";
+              home-manager.extraSpecialArgs = { inherit unstable; };
               home-manager.users.${user} = import ./home.nix;
             }
           ];

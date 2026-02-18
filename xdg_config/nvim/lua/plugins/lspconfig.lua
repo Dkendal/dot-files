@@ -1,4 +1,5 @@
 ---@module 'lazy'
+
 local enabled_langservers = {
 	"bashls",
 	"biome",
@@ -23,6 +24,8 @@ local enabled_langservers = {
 	"nil_ls",
 	"ts_ls",
 	"biome",
+	"pyright",
+	"ruff",
 	-- "expert",
 	"lexical",
 }
