@@ -14,7 +14,7 @@
   outputs = inputs@{ self, nix-darwin, nixpkgs, nixpkgs-unstable, home-manager, ... }:
     let
       overlay = find: prev: {
-        neovim = inputs.neovim-nightly-overlay.packages.${prev.stdenv.hostPlatform.system}.default;
+        # neovim = inputs.neovim-nightly-overlay.packages.${prev.stdenv.hostPlatform.system}.default;
         # go-task = nixpkgs-stable.legacyPackages.${prev.system}.go-task;
       };
       configuration = { pkgs, user, ... }:
@@ -103,7 +103,7 @@
               # Programming Languages & Environment Management
               rustup # Rust toolchain installer
               uv # Python packaging and virtual environment manager
-              mise # Development environment manager (formerly rtx)
+              unstable.mise # Development environment manager (formerly rtx)
 
               # Language Servers (for IDE-like features)
               nil # Nix language server
@@ -157,6 +157,9 @@
               mergiraf
               typst
 
+              python312
+              python312Packages.matplotlib
+
 
               # Custom Rust crates
               (unstable.rustPlatform.buildRustPackage rec {
@@ -189,7 +192,7 @@
               xh # Friendly and fast tool for sending HTTP requests
 
               # Editors
-              neovim # Hyperextensible Vim-based text editor
+              unstable.neovim
 
               # Utilities Not Easily Categorized
               pv # Monitor the progress of data through a pipeline          ];
@@ -197,7 +200,6 @@
               ollama
 
               putty
-              marksman
 
               devenv
               gnuplot

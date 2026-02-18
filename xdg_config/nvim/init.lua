@@ -446,7 +446,11 @@ local plugins = {
 
 	{ "jamessan/vim-gnupg" },
 
-	{ "nvim-treesitter/nvim-treesitter-context", opts = {} },
+	{
+		"nvim-treesitter/nvim-treesitter-context",
+		opts = {},
+		ft = {}
+	},
 
 	{
 		"sindrets/diffview.nvim",
