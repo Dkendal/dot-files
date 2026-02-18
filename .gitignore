@@ -1,3 +1,4 @@
 nix-installer
 xdg_config/fish/fish_variables
 xdg_config/kitty/current-theme.conf
+.roam
