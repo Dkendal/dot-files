@@ -1,6 +1,7 @@
 ---@module 'lazy'
 
 local enabled_langservers = {
+	"tinymist",
 	"bashls",
 	"biome",
 	"clangd",
@@ -26,8 +27,8 @@ local enabled_langservers = {
 	"biome",
 	"pyright",
 	"ruff",
-	-- "expert",
-	"lexical",
+	"expert",
+	-- "lexical",
 }
 
 local default_config = {

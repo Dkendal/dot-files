@@ -57,6 +57,14 @@ return {
 					},
 					url = "https://json.schemastore.org/github-action.json",
 				},
+				{
+					fileMatch = {
+						".claude/settings.json",
+						".claude/settings.local.json",
+						"~/.claude/settings.json",
+					},
+					url = "https://json.schemastore.org/claude-code-settings.json",
+				},
 			},
 		},
 	},

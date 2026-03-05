@@ -128,6 +128,7 @@ in
         elixir = "1";
         lua = "5.1";
         go = "1";
+        watchexec = "2.5";
       };
     };
   };

@@ -934,3 +934,440 @@ cat mise.toml
 mise main
 fg
 uv run main.py
+open zenoti/output/staff.csv
+open zenoti/output/staff.csv | insert a 1
+parallel --help
+sd --help
+mise t ls --all
+mise //customer/waxxpot:map-services
+head customer/waxxpot/data/service_mapping.csv
+sd --help
+mise t ls --all
+mise //customer/waxxpot:map-services
+vd zenoti/output/appointment.csv
+mise t ls
+mise t ls --all
+mise //zenoti:partition
+mise t ls //zenoti
+mise t ls //zenoti:
+mise t ls --all
+mise t r //zenoti:mkln
+vd 'zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256/'
+vd --dark 'zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256/'
+vd --help 'zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256/'
+vd --theme dark 'zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256/'
+open 'zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256/'
+open `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256/`
+ls
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256`
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | each { rename { $in  }  }
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | each { rename --block { $in  }  }
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | each { open | rename --block { $in  } }
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | each { open }
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | take 1 | each { open }
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | take 1 
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | take 1 | each { get name } 
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | take 1 | each { get name | open  } 
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | take 1 | each { get name | open | take 1  } 
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | take 1 | each { get name | open | take 1 | rename --block { str replace ' ' '_' } } 
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | each { get name | open | take 1 | rename --block { str replace ' ' '_' } } 
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | each { get name | open | rename --block { str replace ' ' '_' } } 
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | each { get name | open | rename --block { str replace ' ' '_' }; $in | print }
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | each { get name | open | rename --block { str replace ' ' '_' }; let p = $in | path parse; $p | print }
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | each { get name | open | rename --block { str replace ' ' '_' }; let p = $in.name | path parse; $p | print }
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | each { get name | open | rename --block { str replace ' ' '_' }; let name = $in.name | path parse | get stem; save $"tmp/($name).csv" }
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | each { let f = get name | open | rename --block { str replace ' ' '_' }; let name = $in.name | path parse | get stem; $f | save $"tmp/($name).csv" }
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | each { let f = get name | open | rename --block { str replace --all ' ' '_' }; let name = $in.name | path parse | get stem; $f | save -f $"tmp/($name).csv" }
+fg
+vd zenoti/output/staff.csv
+nvim zenoti/output/staff.csv
+nvim zenoti/output/appointment.csv
+nvim ~/Downloads/output/
+vd ~/Downloads/output/
+ls `zenoti/output/by-location-name/Reynoldsburg-2087 State Route 256` | each { let f = get name | open | rename --block { str replace --all ' ' '_' }; let name = $in.name | path parse | get stem; $f | save -f $"tmp/($name).csv" }
+fg
+path join ""a
+path join "a"
+"a" | path join "a"
+"a" | path join "b"  "c"
+fg
+open ~/Downloads/voucher__package_name_freq.json
+open ~/Downloads/voucher__package_name_freq.json | rename "service external ids_list" "service_external_ids_list"
+open ~/Downloads/voucher__package_name_freq.json 
+open ~/Downloads/voucher__package_name_freq.json | rename package_name count service_external_ids_list
+open ~/Downloads/voucher__package_name_freq.json | rename package_name count service_external_ids_list | each { update service_external_ids_list { flatten } }
+open ~/Downloads/voucher__package_name_freq.json | rename package_name count service_external_ids_list | each { update service_external_ids_list { each { string split "," } | flatten } }
+open ~/Downloads/voucher__package_name_freq.json | rename package_name count service_external_ids_list | each { update service_external_ids_list { each { string split "," } | flatten | uniq } }
+open ~/Downloads/voucher__package_name_freq.json | rename package_name count service_external_ids_list | each { update service_external_ids_list { each { string split "," } | flatten | dedupe } }
+open ~/Downloads/voucher__package_name_freq.json | rename package_name count service_external_ids_list | each { update service_external_ids_list { each { string split "," } | flatten } } | reverse
+open ~/Downloads/voucher__package_name_freq.json | rename package_name count service_external_ids_list | each { update service_external_ids_list { each { string split "," } | flatten } } | reverse | explore
+"1,2" | string split ","
+"1,2" | stringsplit ","
+"1,2" | strings split ","
+"1,2" | str split ","
+"1,2" | lines ","
+lines --help
+split
+"1,2" | split column ","
+open ~/Downloads/voucher__package_name_freq.json | rename package_name count service_external_ids_list | each { update service_external_ids_list { each { split row "," } | flatten } } | reverse | explore
+open ~/Downloads/voucher__package_name_freq.json | rename package_name count service_external_ids_list | each { update service_external_ids_list { each { split row "," } | flatten | uniq} } | reverse | explore
+open ~/Downloads/voucher__package_name_freq.json | rename package_name count service_external_ids_list | each { update service_external_ids_list { each { split row "," } | flatten | uniq} } | save ~/src/boulevard/import-bridge/customer/waxxpot/data/package_mapping.json
+open ~/src/boulevard/import-bridge/customer/waxxpot/data/package_mapping.json
+ls
+z import
+cd ~/src/boulevard/import-bridge/
+ls
+cd ~/src/boulevard/import-bridge/
+ls
+open waxxpot/data/package_mapping.json
+open customer/waxxpot/data/package_mapping.json
+ls
+nvim
+transpose --help
+fg
+reduce -h
+fg
+transpose --help
+fg
+rg 7fc064c6-a1ae-4dba-8404-ba00f1384b59
+rg 7fc064c6-a1ae-4dba-8404-ba00f1384b59 -u
+mise t r //customer/waxpott:exec-query services
+nvim
+mise t r //customer/waxpot:exec-query services
+mise t r //customer/waxpot:exec-query service
+mise t r //customer/waxxpot:exec-query service
+rg 7fc064c6-a1ae-4dba-8404-ba00f1384b59 /Users/dylan.kendal/src/boulevard/import-bridge/zenoti/output/service.csv
+rg 7fc064c6-a1ae-4dba-8404-ba00f1384b59 /Users/dylan.kendal/src/boulevard/import-bridge/zenoti/output/service.csv -uuu
+nvim
+rg 7fc064c6-a1ae-4dba-8404-ba00f1384b59 /Users/dylan.kendal/src/boulevard/import-bridge/zenoti/output/service.csv -uuu
+mise t r //customer/waxxpot:exec-query service
+rg 7fc064c6-a1ae-4dba-8404-ba00f1384b59 /Users/dylan.kendal/src/boulevard/import-bridge/zenoti/output/service.csv -uuu
+fg
+vd customer/waxxpot/data/service_mapping.csv 
+y
+open customer/waxxpot/data/service_mapping.csv
+open customer/waxxpot/data/service_mapping.csv | slect target_service_id
+open customer/waxxpot/data/service_mapping.csv | select target_service_id
+fg
+open customer/waxxpot/data/service_mapping.csv | get target_service_id | each { $"'($in)'"}
+open customer/waxxpot/data/service_mapping.csv | get target_service_id | each { $"'($in)'"} | join
+open customer/waxxpot/data/service_mapping.csv | get target_service_id | each { $"'($in)'"} | str join ","
+open customer/waxxpot/data/service_mapping.csv | get target_service_id | each { $"'($in)'"} | str join "," | pbcopy
+nvim customer/waxxpot/data/hello_sugar_services.csv
+rm customer/waxxpot/data/hello_sugar_services.csv
+mv ~/Downloads/reynoldsburg_2026-03-20-1603.csv customer/waxxpot/data/hello_sugar_services.csv
+vd customer/waxxpot/data/hello_sugar_services.csv
+fg
+exit
+rg 7a940cb6-5f59-4b37-9e7f-1762095733e9
+rg 7a940cb6-5f59-4b37-9e7f-1762095733e9 -uuu
+rg 7a940cb6-5f59-4b37-9e7f-1762095733e9 -uuu customer/waxxpot/data/service_mapping.csv
+rg 7a940cb6-5f59-4b37-9e7f-1762095733e9 -uuu customer/waxxpot/data/hello_sugar_services.csv
+mv /Users/dylan.kendal/Downloads/reynoldsburg_2026-03-20-1610.csv customer/waxxpot/data/package_mapping.json
+mv /Users/dylan.kendal/Downloads/reynoldsburg_2026-03-20-1610.csv customer/waxxpot/data/hello_sugar_services.csv
+stor create --help
+string split
+split -h
+{ x: 1 }.x
+{ x: 1 }["x"]
+{ x: 1 }['x']
+{ x: 1 } | get x
+{ x: 1 } | get y
+let k = "x"
+{ x: 1 } | get $k
+{ x: 1 } | get $k --help
+transpose -h
+rg 37b4d5c0-fa6e-4dee-a569-afe352359d48
+rg 37b4d5c0-fa6e-4dee-a569-afe352359d48 -u
+vd zenoti/output/service.csv
+'' | strip
+group-by -h
+join -h
+vd customer/waxxpot/data/service_mapping.csv customer/waxxpot/data/hello_sugar_services.csv
+get -h
+fg
+rg 20348260-65af-480e-b01b-dfe3f9633a05
+rg 20348260-65af-480e-b01b-dfe3f9633a05 -uu
+rg 20348260-65af-480e-b01b-dfe3f9633a05 -uu customer/
+vd customer/waxxpot/data/service_mapping.csv customer/waxxpot/data/hello_sugar_services.csv
+vd customer/waxxpot/data/service_mapping.csv
+vd customer/waxxpot/data/hello_sugar_services.csv
+rg 20348260-65af-480e-b01b-dfe3f9633a05 -uu customer/
+vd customer/waxxpot/data/hello_sugar_services.csv
+rg 20348260-65af-480e-b01b-dfe3f9633a05
+rg 20348260-65af-480e-b01b-dfe3f9633a05 -uu customer/
+open customer/waxxpot/data/
+save -h
+rename --help
+help path
+help path self
+nu customer/waxxpot/mise-tasks/map-services.nu
+nu customer/waxxpot/mise-tasks/map-services.nu platforms/zenoti/output/
+fg
+claude
+claude install
+mise use aqua:nushell/nushell direnv python@3
+jj show
+jj split 
+jj show
+jj show -r @-
+fg
+claude
+which claude
+nvim '/Users/dylan.kendal/Library/Application Support/nushell/config.nu'
+unalias claude
+alias -h
+claude 
+claude
+assert
+expect
+which expect
+expect --help
+man expect
+fg
+mise //customer/waxxpot:check
+fg
+wc -l ./CLAUDE.md
+wc -l ./CLAUDE.md | split
+wc -l ./CLAUDE.md | split words
+wc -l ./CLAUDE.md | split list
+wc -l ./CLAUDE.md | split list ' '
+wc -l ./CLAUDE.md | split 
+wc -l ./CLAUDE.md | split words
+wc -l ./CLAUDE.md | split words ' '
+jj new
+jj show
+jj
+jj log
+jj log --stat
+jj
+jj tug
+mise //customer/waxxpot:main
+open -h
+nvim /Users/dylan.kendal/.config/nushell/config.nu
+update --help
+open data/package_mapping.csv
+open data/package_mapping.csv | group-by package_name
+open data/package_mapping.csv | group-by package_name service_id
+open data/package_mapping.csv | group-by package_name service_id | explore
+group-by -h
+open data/package_mapping.csv | group-by package_name  | update cells { select service_id }
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id }
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id | str join "," }
+join -h
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id | str join "," }
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id | str join "," } | desc
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id | str join "," } | describe
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id | str join "," } | explore
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id | str join "," } | describe
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id | str join "," } | table
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id | str join "," }
+group-by -h
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id | str join "," }
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id | str join "," } | table
+table --help
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id | str join "," } | get 0
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id | str join "," } | first
+open data/package_mapping.csv | group-by package_name  | update cells { get service_id | str join "," } | describe
+open data/package_mapping.csv | group-by package_name  --to-table
+open data/package_mapping.csv | group-by package_name --to-table | update items { get service_id | str join "," }
+drop -h
+help reject
+help rename
+help join
+fg
+reject -h
+fg
+vd customer/waxxpot/output/stage/07/voucher.csv
+help join
+jj show
+str replace -h
+vd customer/waxxpot/output/stage/07/voucher.csv
+nu
+http get "https://api.couchdrop.io/manage/fileprops/permissions" -h
+http get "https://api.couchdrop.io/manage/fileprops/permissions" -H "Bearer v2_b0bc4b4a-f391-4417-b28f-8d9df921bcc1:e2538660-071a-4df8-89c6-50b2fd773610"
+http get "https://api.couchdrop.io/manage/fileprops/permissions" -H "Authorization: Bearer v2_b0bc4b4a-f391-4417-b28f-8d9df921bcc1:e2538660-071a-4df8-89c6-50b2fd773610"
+http get "https://api.couchdrop.io/manage/fileprops/permissions" -H ["Authorization" "Bearer v2_b0bc4b4a-f391-4417-b28f-8d9df921bcc1:e2538660-071a-4df8-89c6-50b2fd773610"]
+http get "https://api.couchdrop.io/manage/fileprops/permissions" -H ["Content-Type" "application/json" "token" "Bearer v2_b0bc4b4a-f391-4417-b28f-8d9df921bcc1:e2538660-071a-4df8-89c6-50b2fd773610"]
+http get "https://api.couchdrop.io/manage/fileprops/permissions" -H ["Content-Type" "application/json" "token" "v2_b0bc4b4a-f391-4417-b28f-8d9df921bcc1:e2538660-071a-4df8-89c6-50b2fd773610"]
+http get "https://api.couchdrop.io/manage/fileprops/permissions" -H ["v2_b0bc4b4a-f391-4417-b28f-8d9df921bcc1:e2538660-071a-4df8-89c6-50b2fd773610"]
+http get "https://api.couchdrop.io/manage/fileprops/permissions" -H [token "v2_b0bc4b4a-f391-4417-b28f-8d9df921bcc1:e2538660-071a-4df8-89c6-50b2fd773610"]
+http get "https://api.couchdrop.io/manage/fileprops/permissions" -H [token v2_b0bc4b4a-f391-4417-b28f-8d9df921bcc1:e2538660-071a-4df8-89c6-50b2fd773610]
+http get "https://api.couchdrop.io/manage/fileprops/permissions" -H [token `v2_b0bc4b4a-f391-4417-b28f-8d9df921bcc1:e2538660-071a-4df8-89c6-50b2fd773610`]
+http get "https://api.couchdrop.io/manage/fileprops/permissions" -H [token `v2_b0bc4b4a-f391-4417-b28f-8d9df921bcc1:e2538660-071a-4df8-89c6-50b2fd773610` Content-Type application/json]
+http post "https://api.couchdrop.io/authenticate" -h
+ls /Users/dylan.kendal/orgfiles/old_notes/daily/
+ls /Users/dylan.kendal/orgfiles/old_notes/daily/ | each { path }
+ls /Users/dylan.kendal/orgfiles/old_notes/daily/ | each { path pase }
+ls /Users/dylan.kendal/orgfiles/old_notes/daily/ | each {  }
+ls /Users/dylan.kendal/orgfiles/old_notes/daily/ | each { get name }
+ls /Users/dylan.kendal/orgfiles/old_notes/daily/ | each { get name | path parse }
+ls /Users/dylan.kendal/orgfiles/old_notes/daily/ | each { get name | path parse } | group-by stem
+ls /Users/dylan.kendal/orgfiles/old_notes/daily/ | each { get name | path parse } | group-by stem | where
+ls /Users/dylan.kendal/orgfiles/old_notes/daily/ | each { get name | path parse } | group-by stem --table
+ls /Users/dylan.kendal/orgfiles/old_notes/daily/ | each { get name | path parse } | group-by stem --to-table
+ls /Users/dylan.kendal/orgfiles/old_notes/daily/ | each { get name | path parse } | group-by stem --to-table | where items
+ls /Users/dylan.kendal/orgfiles/old_notes/daily/ | each { get name | path parse } | group-by stem --to-table | where { items | length } 
+ls /Users/dylan.kendal/orgfiles/old_notes/daily/ | each { get name | path parse } | group-by stem --to-table | where { ($in.items | length) > 1 } 
+fd pay-
+fd pay- -0
+trash (fd pay- -0)
+fd pay- 
+fd pay-  | each 
+fd pay-  | each { $in }
+ls pages
+ls pages/@___
+ls pages/@___*
+ls pages/@___* | each { get name }
+ls pages/@___* | each { get name | path parse }
+ls pages/@___* | each { get name | path parse | get stem }
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' ''}
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { $"[[($in)]]" } } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { $"[($in)]" } } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { $"[($in)]" } | rg $in } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { $"[($in)]" } | rg --fixed-strings $in } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { $"[($in)]" } } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { ($"[($in)]", $"($in)") } } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"($in)"} } } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"([$in)]"} } } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"([$in])"} } } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"([@/$in])"} } } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"[@/($in)]"} } } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"[@/($in)]"} } | get a } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"[@/($in)]"} } | get $in.a } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"[@/($in)]"} } | $in.a } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"[@/($in)]"} } | sd --preview --fixed-strings $in.a $in.b } 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"[@/($in)]"} } | sd --preview --fixed-strings $in.a $in.b }; 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"[@/($in)]"} } | sd --preview --fixed-strings $in.a $in.b | print }; 
+each -h
+for --h
+for --help
+jj show
+jj
+ls
+sd --help
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"[@/($in)]"} } | sd --preview --fixed-strings $in.a $in.b **/*.org }; 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"[@/($in)]"} } | sd --preview --fixed-strings $in.a $in.b **/*.md }; 
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"[@/($in)]"} } | sd -fe --fixed-strings $in.a $in.b **/*.md }; 
+fg
+jj show
+jj
+jj show -r @-
+ls pages/@___* | each { get name | path parse | get stem | str replace '@___' '' | do { {a: $"[($in)]", b: $"[@/($in)]"} } | sd -fe --fixed-strings $in.a $in.b **/*.md }; 
+for --help
+for $in in (ls ./pages)
+ls pages
+fg
+jj show
+jj restore 
+jj
+rg colby.lastname
+sd --fixed-strings 'colby.lastname' 'colby.pines' **/*.org
+sd --fixed-strings 'colby.cpines' 'colby.pines' **/*.org
+sd --fixed-strings '[[Colby Pines]]' '[[@/colby.pines]]' **/*.org
+nvim
+cd
+cd ~/Downloads/
+ls
+ls | fzf 
+cd 5400.rejuva-aesthetics-wellness/
+ls
+vd patients.csv
+claude
+vd patient_notes.csv
+..
+^rm -rf ./5400.rejuva-aesthetics-wellness/
+ls
+fg
+open scratch.csv
+open scratch.tsv
+open scratch.tsv | to sql
+to -h
+save -h
+fg
+open scratch.tsv 
+open scratch.tsv  | each { each { describe } }
+string -h
+fg
+finder .
+open .
+open `~/Downloads/Hello Sugar Price Increase ProServ Request 05-2026.xlsx`
+let f = open `~/Downloads/Hello Sugar Price Increase ProServ Request 05-2026.xlsx`;
+$f | take 1
+$f | describe
+$f | get 'Part C: Existing Client Memberships'
+$f | get 'Part C: Existing Client Membersh'
+$f | get 'Part C Existing Client Membersh'
+let f = $f | get 'Part C Existing Client Membersh'
+$f
+$f | describe
+$f | take 1
+$f | take 2
+$f | rename --help
+$f | get 2
+$f | get 2 | values
+$f | get 1 | values
+$f | take 10 | rename ($f | get 1)
+$f | take 10 | rename ($f | get 1 | to list)
+$f | take 10 | rename ($f | get 1 | values)
+$f | take 10 | rename ...($f | get 1 | values)
+$f | drop 2 | take 10 | rename ...($f | get 1 | values)
+dro -h
+drop -h
+$f | skip 1 | take 10 | rename ...($f | get 1 | values)
+$f | skip 2 | take 10 | rename ...($f | get 1 | values)
+let f = $f | skip 2 | rename ...($f | get 1 | values)
+$f
+$f | get `Subscription ID` ``
+$f | describe
+$f 
+$f | to table
+$f | as table
+let f = open `~/Downloads/Hello Sugar Price Increase ProServ Request 05-2026.xlsx`;
+let f = open `~/Downloads/Hello Sugar Price Increase ProServ Request 05-2026.xlsx` | get 'Part C Existing Client Membersh'; let g = $f | skip 2 | rename ...($f | get 1 | values)
+$g | take 10
+$g | take 10 | table
+$g | take 10 | table | describe
+$g | take 10 | first | describe
+$g | where `Match?` = false |  get `Subscription ID` `Final Desired Price` | take 10 | first | describe
+$g | where { |x| $x.`Match?` == false } |  get `Subscription ID` `Final Desired Price` | take 10 | first | describe
+$g | where `Match?` == false |  get `Subscription ID` `Final Desired Price` | take 10 | first | describe
+$g | where `Match?` == false |  get `Subscription ID` `Final Desired Price` | take 10
+$g | table | where `Match?` == false |  get `Subscription ID` `Final Desired Price` | take 10
+$g | where `Match?` == false |  get `Subscription ID` `Final Desired Price` | take 10 | table
+describe $g
+$g | describe
+$g | first
+let f = open `~/Downloads/Hello Sugar Price Increase ProServ Request 05-2026.xlsx` | get 'Part C Existing Client Membersh'; let g = $f | skip 2 | rename ...($f | get 1 | values)
+explore $f
+$f | explore
+$g | explore
+$g | where `Match?` == false |  select `Subscription ID` `Final Desired Price` | take 10 | table
+$g | where `Match?` == false |  select `Subscription ID` `Final Desired Price` | take 10
+$g | where `Match?` == false |  select `Subscription ID` `Final Desired Price` | rename membership_id price
+$g | where `Match?` == false |  select `Subscription ID` `Final Desired Price` | rename membership_id price | save update.csv
+$g | where `Match?` == false | describe
+let f = open `~/Downloads/Hello Sugar Price Increase ProServ Request 05-2026.xlsx` | get 'Part C Existing Client Membersh'; let g = $f | skip 2 | rename ...($f | get 1 | values)
+$g | where `Match?` == false | first | describe
+$g | where `Match?` == false |  select `Subscription ID` `Final Desired Price` `Client Name` | rename membership_id, price, client_name | save update.csv
+$g | where `Match?` == false |  select `Subscription ID` `Final Desired Price` `Client Name` | rename membership_id, price, client_name | save update.csv -f
+vd update.csv
+$g | where `Match?` == false |  select `Subscription ID` `Current Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name | save update.csv -f
+$g | where `Match?` == false |  select `Subscription ID` `Current Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name |  take 4
+$g | where `Match?` == false |  select `Subscription ID` `Current Client Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name |  take 4
+$g | where `Match?` == false |  select `Subscription ID` `Current Client Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name | save update.csv
+$g | where `Match?` == false |  select `Subscription ID` `Current Client Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name | save update.csv -f
+let f = open `~/Downloads/Hello Sugar Price Increase ProServ Request 05-2026.xlsx` | get 'Part C Existing Client Membersh'; let g = $f | skip 2 | rename ...($f | get 1 | values)
+$g | take 10 | where `Match?` == false |  select `Subscription ID` `Current Client Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name 
+$g | take 10 | where `Match?` == false |  select `Subscription ID` `Current Client Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name  | update old_price { * 100 }
+$g | take 10 | where `Match?` == false |  select `Subscription ID` `Current Client Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name  | update old_price {  $it * 100 }
+$g | take 10 | where `Match?` == false |  select `Subscription ID` `Current Client Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name  | update old_price { |x| $x * 100 }
+update -h
+$g | take 10 | where `Match?` == false |  select `Subscription ID` `Current Client Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name  | update old_price { |x| $x.old_price * 100 }
+$g | take 10 | where `Match?` == false |  select `Subscription ID` `Current Client Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name  | update old_price { |x| $x.old_price * 100 } | update new_price { |x| $x.new_price * 100 }
+$g | take 10 | where `Match?` == false |  select `Subscription ID` `Current Client Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name  | update old_price { |x| $x.old_price * 100 } | update new_price { |x| $x.new_price * 100 | as integer } 
+$g | take 10 | where `Match?` == false |  select `Subscription ID` `Current Client Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name  | update old_price { |x| $x.old_price * 100 } | update new_price { |x| $x.new_price * 100 } | save update.csv -f 
+z sched
+let f = open `~/Downloads/Hello Sugar Price Increase ProServ Request 05-2026.xlsx` | get 'Part C Existing Client Membersh'; let g = $f | skip 2 | rename ...($f | get 1 | values)
+$g | where `Match?` == false |  select `Subscription ID` `Current Client Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name  | update old_price { |x| $x.old_price * 100 } | update new_price { |x| $x.new_price * 100 } | save update.csv -f
+help pivot

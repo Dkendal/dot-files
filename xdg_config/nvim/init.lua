@@ -28,10 +28,7 @@ local plugins = {
 
 	{ "terrastruct/d2-vim", ft = "d2" },
 
-	{
-		"https://github.com/kaarmu/typst.vim",
-		ft = "typst",
-	},
+	{ "https://github.com/kaarmu/typst.vim", ft = "typst", lazy = false },
 
 	{
 		dir = "~/src/dkendal/nvim-kitty",
@@ -353,6 +350,7 @@ local plugins = {
 	},
 
 	{
+		lazy = false,
 		"https://github.com/stevearc/oil.nvim",
 		dependencies = {
 			"echasnovski/mini.icons",
@@ -364,6 +362,9 @@ local plugins = {
 		keys = {
 			{ "-", "<CMD>Oil<CR>", desc = "Open parent directory" },
 		},
+		commands = {
+			"Oil"
+		}
 	},
 
 	{

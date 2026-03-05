@@ -3,7 +3,6 @@ source ~/.config/nushell/config.nu
 use functions/jira.nu
 
 alias fg = job unfreeze
-alias claude = ~/.claude/local/claude
 alias p = polars
 
 $env.config.keybindings ++= [

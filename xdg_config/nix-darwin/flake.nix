@@ -207,7 +207,13 @@
               nodePackages.vega-cli
               nodePackages.vega-lite
               timg
+              tlaplus18
             ];
+
+          services.tailscale = {
+            package = unstable.tailscale;
+            enable = true;
+          };
 
           homebrew = {
             enable = true;
@@ -275,8 +281,6 @@
           nixpkgs.config.allowUnfree = true;
           nixpkgs.overlays = [ overlay ];
 
-          # services.tailscale.enable = true;
-
           programs.zsh.enable = true;
           programs.bash.enable = true;
           programs.fish.enable = true;
@@ -285,13 +289,6 @@
             home = "/Users/${user}";
             shell = pkgs.fish;
           };
-
-          # users.users.claude = {
-          #   createHome = false;
-          # };
-          #
-          # users.groups.ai_agents = {
-          # };
 
           system.primaryUser = user;
 

@@ -1,0 +1,9 @@
+[tools]
+node = "latest"
+
+[tasks]
+install = { run = "sudo darwin-rebuild switch --flake /etc/nix-darwin", alias = "i" }
+upgrade = { run = "nix flake update", alias = "u" }
+edit = { run = "$EDITOR ~/.config/nix-darwin/flake.nix" }
+clean = { run = "sudo nix-collect-garbage --delete-older-than 30d" }
+list-generations = { run = "sudo nix-env --list-generations --profile /nix/var/nix/profiles/system", alias = "lsg" }

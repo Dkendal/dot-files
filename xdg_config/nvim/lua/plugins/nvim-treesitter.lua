@@ -16,7 +16,7 @@ return {
 			sync_install = true,
 			modules = {},
 			ensure_installed = {},
-			ignore_install = { 'org' },
+			ignore_install = { 'org', 'typst' },
 			query_linter = {
 				enable = true,
 				use_virtual_text = true,

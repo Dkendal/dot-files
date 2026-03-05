@@ -1,0 +1,3 @@
+[revset-aliases]
+"trunk" = "develop@origin"
+"trunk()" = "trunk"
