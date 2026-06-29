@@ -53,7 +53,7 @@
               git # Distributed version control system
               git-absorb # Git command for automatically absorbing staged changes into commits
               lazygit # Simple terminal UI for git commands
-              lazyjj
+              jjui
               jujutsu # Distributed version control system (alternative to Git)
               tig # Text-mode interface for Git
               delta # Syntax-highlighting pager for git, diff outputs
@@ -122,6 +122,7 @@
               gnupg # GNU Privacy Guard - encryption and signing tool
               gpg-tui # Terminal user interface for GnuPG
               trufflehog # Secret detection in git repositories or files
+              gitleaks # Fast secret scanner (regex + entropy) for the pre-push hook
 
               # Monitoring & Logging
               entr # Run arbitrary commands when files change

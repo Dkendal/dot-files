@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#
+# pre-push hook: block pushes that would leak secrets.
+#
+# NOTE: git hooks fire on `git push`. Jujutsu's `jj git push` does NOT run
+# git hooks, so run `task check` manually before pushing with jj.
+
+hook_dir="$(cd "$(dirname "$0")" && pwd)"
+exec "$hook_dir/secret-scan.sh"

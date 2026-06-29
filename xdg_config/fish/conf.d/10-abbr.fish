@@ -72,6 +72,7 @@ abbr -a -- mr mise run
 
 if test uname = "Darwin"
   abbr -a -- rm trash
+  abbr -a -- nix-rebuild "sudo darwin-rebuild switch --flake /etc/nix-darwin"
 else if test uname = "Linux"
   #
 end

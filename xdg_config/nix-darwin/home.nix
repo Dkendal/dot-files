@@ -97,15 +97,46 @@ in
   programs.treesitter-parsers = {
     enable = true;
     parsers = {
+      luadoc = {
+        url = "https://github.com/tree-sitter-grammars/tree-sitter-luadoc";
+        ref = "873612aadd3f684dd4e631bdf42ea8990c57634e";
+        hash = "sha256-ttGBB9sn+xd9jWzjNAzpo/lwYVYZGSUGEip4K3PfBP0=";
+      };
+      csv = {
+        url = "https://github.com/tree-sitter-grammars/tree-sitter-csv";
+        ref = "f6bf6e35eb0b95fbadea4bb39cb9709507fcb181";
+        hash = "sha256-9mW0kT4av/ULFqLXdMuyLrMPtQxrIOKY60GQ4QDB33o=";
+        location = "csv";
+      };
+      vim = {
+        url = "https://github.com/tree-sitter-grammars/tree-sitter-vim";
+        ref = "3092fcd99eb87bbd0fc434aa03650ba58bd5b43b";
+        hash = "sha256-MnLBFuJCJbetcS07fG5fkCwHtf/EcNP+Syf0Gn0K39c=";
+      };
+      query = {
+        url = "https://github.com/tree-sitter-grammars/tree-sitter-query";
+        ref = "15e00db655cf1708cf8e4b172b2f321d9b7b98c1";
+        hash = "sha256-gZangrC4Nn6JLz9kY7WXYRiKtRowtlvUD6+pDP8HTzM=";
+      };
+      diff = {
+        url = "https://github.com/tree-sitter-grammars/tree-sitter-diff";
+        ref = "2520c3f934b3179bb540d23e0ef45f75304b5fed";
+        hash = "sha256-8rYLNGgoZSvvfqO2++nAgFKmvbkKJ3m+9B8bTXp6Us4=";
+      };
+      haskell = {
+        url = "https://github.com/tree-sitter-grammars/tree-sitter-haskell";
+        ref = "98aedbd2d6947a168ba3ba3755d70b0cb6b78395";
+        hash = "sha256-eunizglx3nye3LZIAndBX/hf0BvFOWmThQwxvvjqcfU=";
+      };
       markdown = {
         url = "https://github.com/tree-sitter-grammars/tree-sitter-markdown";
-        ref = "main";
+        ref = "c3570720f7f7bbad22fe96603f106276618e0cf5";
         hash = "sha256-wQKcqU0V6gHj84qOkUwdXsBW3f6MNfJMFxuGTucAgh8=";
         location = "tree-sitter-markdown";
       };
       markdown-inline = {
         url = "https://github.com/tree-sitter-grammars/tree-sitter-markdown";
-        ref = "main";
+        ref = "c3570720f7f7bbad22fe96603f106276618e0cf5";
         hash = "sha256-wQKcqU0V6gHj84qOkUwdXsBW3f6MNfJMFxuGTucAgh8=";
         location = "tree-sitter-markdown-inline";
         language = "markdown_inline";
@@ -136,6 +167,11 @@ in
         url = "https://github.com/tree-sitter/tree-sitter-toml";
         ref = "64b56832c2cffe41758f28e05c756a3a98d16f41";
         hash = "sha256-m9RlGkHiOL/PNENrdEPqtPlahSqGymsx7gZrCoN/Lsk=";
+      };
+      c_sharp = {
+        url = "https://github.com/tree-sitter/tree-sitter-c-sharp";
+        ref = "af29416d729b7a6603101b513604392d8f675e3b";
+        hash = "sha256-3iTkgG4eitny4VHI+IwJaVvkVKN/PzotYXFCWbJ4TPU=";
       };
     };
   };

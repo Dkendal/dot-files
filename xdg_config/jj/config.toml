@@ -1,6 +1,6 @@
 [user]
-name = "Dylan Kendal"
-email = "dylan.kendal@blvd.co"
+name = "Dylan C. Kendal"
+email = "dylankendal@gmail.com"
 
 [ui]
 default-command = "log"
@@ -36,22 +36,12 @@ gpgsign = true
 'trunk' = 'trunk()'
 'HEAD' = '@-'
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+'nearest_nonempty(to)' = 'heads(::to & ~empty())'
 
 [git]
 sign-on-push = true
 
-[template-aliases]
-commit_description_verbose = '''
-concat(
-  description,
-  "\n",
-  "JJ: This commit contains the following changes:\n",
-  indent("JJ:    ", diff.stat(72)),
-  "JJ: ignore-rest\n",
-  diff.git(),
-)
-'''
-
+[templates]
 draft_commit_description = '''
 concat(
   description,
@@ -70,13 +60,12 @@ concat(
 '''
 
 [aliases]
-dv = ["--config=templates.draft_commit_description=commit_description_verbose", "describe"]
 fetch = ["git", "fetch"]
 push = ["git", "push"]
 clone = ["git", "clone"]
 n = ["new", "-r", "trunk()"]
 bl = ["bookmark", "list"]
-tug = ["bookmark", "advance"]
+tug = ["bookmark", "advance", "--to", "nearest_nonempty(@)"]
 pr = [
   "util",
   "exec",

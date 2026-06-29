@@ -4,5 +4,6 @@ version: '3'
 
 tasks:
   check:
+    desc: Scan git history for secrets (gitleaks + trufflehog)
     cmds:
-      - trufflehog --no-update git file://./
+      - ./git-hooks/secret-scan.sh

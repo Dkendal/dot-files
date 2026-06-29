@@ -15,7 +15,7 @@ local opts = {
 		enabled = false
 	},
 	sources = {
-		default = { "lazydev", "lsp", "path", "snippets", "buffer"},
+		default = { "lazydev", "lsp", "path", "snippets", "buffer" },
 		per_filetype = {
 			org = { 'orgmode', 'buffer' }
 		},
@@ -31,14 +31,6 @@ local opts = {
 				module = 'orgmode.org.autocompletion.blink',
 				fallbacks = { 'buffer' },
 			},
-			ripgrep = {
-				module = "blink-ripgrep",
-				name = "Ripgrep",
-				-- see the full configuration below for all available options
-				---@module "blink-ripgrep"
-				---@type blink-ripgrep.Options
-				opts = {},
-			},
 		}
 	},
 }
@@ -46,7 +38,6 @@ local opts = {
 --- @type LazyPluginSpec[]
 local dependencies = {
 	{ "rafamadriz/friendly-snippets" },
-	{ "mikavilpas/blink-ripgrep.nvim" },
 }
 
 --- @type LazyPluginSpec
