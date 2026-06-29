@@ -76,7 +76,7 @@ push = ["git", "push"]
 clone = ["git", "clone"]
 n = ["new", "-r", "trunk()"]
 bl = ["bookmark", "list"]
-tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
+tug = ["bookmark", "advance"]
 pr = [
   "util",
   "exec",

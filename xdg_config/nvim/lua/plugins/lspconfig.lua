@@ -21,10 +21,11 @@ local enabled_langservers = {
 	"teal_ls",
 	"terraformls",
 	"nil_ls",
-	"ts_ls",
+	-- "ts_ls",
 	"biome",
 	-- "expert",
 	"lexical",
+	"typescript_go_ls"
 }
 
 ---@type LazyPluginSpec

@@ -69,7 +69,7 @@ in
           "kitty"
           "nix-darwin"
           "nvim"
-          "jj"
+          "jj/config.toml"
         ];
     in
     builtins.listToAttrs (map
@@ -131,6 +131,11 @@ in
         url = "https://github.com/tree-sitter/tree-sitter-rust";
         ref = "77a3747266f4d621d0757825e6b11edcbf991ca5";
         hash = "sha256-Ls6tB6IxXDQDWwx0BJ7RgbheelC4MH8z97E7wwhkDcY=";
+      };
+      toml = {
+        url = "https://github.com/tree-sitter/tree-sitter-toml";
+        ref = "64b56832c2cffe41758f28e05c756a3a98d16f41";
+        hash = "sha256-m9RlGkHiOL/PNENrdEPqtPlahSqGymsx7gZrCoN/Lsk=";
       };
     };
   };
