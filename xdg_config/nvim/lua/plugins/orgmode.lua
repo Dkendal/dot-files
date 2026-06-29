@@ -32,7 +32,7 @@ end
 local function insert_property()
 	vim.ui.input({ prompt = "Property key:" }, function(key)
 		vim.ui.input({ prompt = ("Value for %s:"):format(key) }, function(value)
-			require("orgmode.api").current():get_closest_headline():set_property(key, value)
+			require("orgmode.api").current():get_closest_headline():set_property(key:upper(), value)
 		end)
 	end)
 end
@@ -568,7 +568,7 @@ local function config()
 		if not event.old_todo_state and event.headline and event.headline:get_todo() then
 			if not event.headline:get_property('CREATED') then
 				local now = Date.now()
-				event.headline:set_property('CREATED', now:to_wrapped_string(true))
+				event.headline:set_property('CREATED', now:to_wrapped_string(false))
 			end
 		end
 	end)

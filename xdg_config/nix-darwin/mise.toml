@@ -1,12 +1,12 @@
 # mise tasks configuration for nix-darwin
 # Converted from justfile
 
-[tasks.upgrade]
+[tasks.flake-upgrade]
 alias = "u"
 description = "Update nix flake"
 run = "nix flake update"
 
-[tasks.install]
+[tasks.flake-install]
 alias = "i"
 description = "Build and switch to new configuration"
 run = "sudo darwin-rebuild switch --flake /etc/nix-darwin"

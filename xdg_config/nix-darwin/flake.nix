@@ -2,25 +2,21 @@
   description = "Example Darwin system flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
-    nix-darwin.url = "github:LnL7/nix-darwin";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
+    nix-darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager";
+    home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nixpkgs-stable, home-manager, ... }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, nixpkgs-unstable, home-manager, ... }:
     let
-      overlay = find: prev: {
-        neovim = inputs.neovim-nightly-overlay.packages.${prev.system}.default;
-        # go-task = nixpkgs-stable.legacyPackages.${prev.system}.go-task;
+      overlay = final: prev: {
+        # neovim = inputs.neovim-nightly-overlay.packages.${prev.system}.default;
+        fzf = nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system}.fzf;
       };
       configuration = { pkgs, user, ... }:
-        let
-          stable = nixpkgs-stable.legacyPackages.${pkgs.system};
-        in
         {
           # List packages installed in system profile. To search by name, run:
           # $ nix-env -qaP | grep wget
@@ -43,7 +39,7 @@
               tree-sitter # Parser generator tool and incremental parsing library
               rclone # Command line program to sync files and directories
               restic # Backup program with encryption and deduplication
-              du-dust # More intuitive version of du (disk usage)
+              dust # More intuitive version of du (disk usage)
 
               # Shell & Terminal
               nushell # Data-driven shell with structured data
@@ -87,11 +83,9 @@
               # Database Tools
               postgresql
               pgformatter # PostgreSQL SQL syntax beautifier
-              stable.pgcli
 
               # Code Quality & Formatting
               dprint # Pluggable and configurable code formatting platform
-              nodePackages.prettier # Code formatter for JavaScript, CSS, JSON, etc.
               ast-grep # CLI tool for structural search and replace of code
               codespell # Check code for common misspellings
               stylua # Opinionated Lua code formatter
@@ -99,9 +93,9 @@
               shellcheck
 
               # Programming Languages & Environment Management
-              rustup # Rust toolchain installer
               uv # Python packaging and virtual environment manager
               mise # Development environment manager (formerly rtx)
+              rustup
 
               # Language Servers (for IDE-like features)
               nil # Nix language server
@@ -112,7 +106,7 @@
               bash-language-server # Bash Language Server
               taplo # TOML Language Server
               fennel-ls # Fennel language server
-              lexical # elixir language server
+              beamPackages.expert
               luajitPackages.fennel # Lisp that compiles to Lua
               luajitPackages.teal-language-server # Teal language server
               luajitPackages.tl # Teal language compiler/type checker
@@ -139,12 +133,6 @@
               d2 # Diagram scripting language
               graphviz # Graph visualization software
 
-              # Accounting & Finance
-              hledger # Plain text accounting tool
-              hledger-ui # Terminal UI for hledger
-              hledger-web # Web interface for hledger
-              hledger-utils
-
               # Work & Productivity
               jira-cli-go # Command line interface for Jira
               act # Run GitHub Actions locally
@@ -154,6 +142,7 @@
               cargo-binstall
               cargo-expand
               mergiraf
+              meld
 
               # Custom Rust crates
               (pkgs.rustPlatform.buildRustPackage rec {
@@ -193,14 +182,14 @@
 
               ollama
 
-              stable.putty
               marksman
 
               devenv
               gnuplot
-              nodePackages.vega-cli
-              nodePackages.vega-lite
               timg
+              lean4
+              scons
+              tlaplus
             ];
 
           homebrew = {

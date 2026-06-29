@@ -27,25 +27,6 @@ local enabled_langservers = {
 	"lexical",
 }
 
-local default_config = {
-	autostart = true,
-	-- See link below for more default configurations
-	-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-	capabilities = {
-		textDocument = {
-			foldingRange = {
-				dynamicRegistration = false,
-				lineFoldingOnly = true,
-			},
-			completion = {
-				completionItem = {
-					snippetSupport = true,
-				},
-			},
-		},
-	},
-}
-
 ---@type LazyPluginSpec
 return {
 	"neovim/nvim-lspconfig",

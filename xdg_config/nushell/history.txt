@@ -159,3 +159,10 @@ nvim /tmp/plot.sh
 polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars with-column [<\n>    (polars concat-str "-" [(polars col year) (polars col quarter)] | polars as ts)<\n>]<\n>| polars collect
 polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter Status]<\n>| polars collect<\n>| polars into-nu
 polars open jira.csv<\n>| polars with-column [<\n>    (polars col Created<\n>     | polars as-datetime "%b/%d/%y %I:%M %p"<\n>     | polars as created_date)<\n>  ]<\n>| polars with-column [<\n>    (polars col created_date | polars datepart year  | polars as year),<\n>    (polars col created_date | polars datepart quarter | polars as quarter)<\n>  ]<\n>| polars group-by [year quarter Status]<\n>| polars agg [<\n>    (polars col Status | polars count | polars as count)<\n>  ]<\n>| polars sort-by [year quarter count]<\n>| polars collect<\n>| polars into-nu
+nvim ~/.config/nushell/env.nu
+nu
+fg
+path 
+fg
+match { x: 1 } { { x: $y } => $y }
+fg

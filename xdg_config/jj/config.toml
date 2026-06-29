@@ -17,15 +17,12 @@ merge-args = [
     "-c :DiffEditor $left $right $output"
 ]
 
-[merge-tools.nvim-diffconflicts]
-program = "nvim"
-merge-args = [
-    "-c", "let g:jj_diffconflicts_marker_length=$marker_length",
-    "-c", "JJDiffConflicts!", "$output", "$base", "$left", "$right",
-]
+[merge-tools.meld]
+program = "meld"
+edit-args = ["--newtab", "$left", "$right"]
 
 [signing]
-behavior = "own"
+behavior = "keep"
 backend = "ssh"
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPftfsUHQkoMrv8W8mDUcwOSOs7CFMitEz0qm+qOriXD"
 backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
@@ -55,36 +52,28 @@ concat(
 )
 '''
 
-[templates]
-log = '''
-  if(root,
-    format_root_commit(self),
-    label(if(current_working_copy, "working_copy"),
-      concat(
-        separate(" ",
-          format_short_change_id_with_hidden_and_divergent_info(self),
-          if(empty, label("empty", "(empty)")),
-          if(description,
-            description.first_line(),
-            label(if(empty, "empty"), description_placeholder),
-          ),
-          bookmarks,
-          tags,
-          working_copies,
-          if(git_head, label("git_head", "HEAD")),
-          if(conflict, label("conflict", "conflict")),
-          if(config("ui.show-cryptographic-signatures").as_boolean(),
-            format_short_cryptographic_signature(signature)),
-        ) ++ "\n",
-      ),
-    )
-  )
+draft_commit_description = '''
+concat(
+  description,
+  surround(
+    "\nJJ: This commit contains the following changes:\n", "",
+    indent("JJ:     ", diff.summary()),
+  ),
+  surround(
+    "\nJJ: This commit contains the following changes:\n", "",
+    indent("JJ:     ", diff.stat(72)),
+  ),
+  "\n",
+  "JJ: ignore-rest\n",
+  diff.git(),
+)
 '''
 
 [aliases]
 dv = ["--config=templates.draft_commit_description=commit_description_verbose", "describe"]
 fetch = ["git", "fetch"]
 push = ["git", "push"]
+clone = ["git", "clone"]
 n = ["new", "-r", "trunk()"]
 bl = ["bookmark", "list"]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]

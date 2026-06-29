@@ -443,10 +443,13 @@ local plugins = {
 
 	{ "jamessan/vim-gnupg" },
 
-	{ "nvim-treesitter/nvim-treesitter-context", opts = {} },
+	-- { "nvim-treesitter/nvim-treesitter-context", opts = {} },
 
 	{
 		"sindrets/diffview.nvim",
+		dependencies = {
+			"MunifTanjim/nui.nvim"
+		},
 		lazy = true,
 		cmd = {
 			"DiffviewClose",
@@ -460,6 +463,9 @@ local plugins = {
 	},
 	{
 		"julienvincent/hunk.nvim",
+		dependencies = {
+			"MunifTanjim/nui.nvim"
+		},
 		cmd = { "DiffEditor" },
 		config = function()
 			require("hunk").setup()
@@ -518,6 +524,7 @@ require("lazy").setup({
 require("user.boxes")
 require("user.background").init()
 require("user.projects")
+-- require("user.macosx_appearance").setup()
 
 vim.o.exrc = true
 vim.o.secure = true

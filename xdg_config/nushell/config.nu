@@ -1,8 +1,5 @@
 source ~/.config/nushell/config.nu
 
-plugin add nu_plugin_polars
-plugin use polars
-
 use functions/jira-api.nu
 
 alias fg = job unfreeze

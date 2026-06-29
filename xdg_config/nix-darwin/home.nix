@@ -1,12 +1,17 @@
 { config, pkgs, lib, inputs, ... }:
 let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
   home = config.home.homeDirectory;
   configHome = config.xdg.configHome;
   dotFilesDir = "${home}/dot-files";
   gh = "git@github.com:Dkendal";
   mySrc = "${home}/src/dkendal";
   ln = config.lib.file.mkOutOfStoreSymlink;
-  onePassPath = "~/.1password/agent.sock";
+  identityAgent =
+    if isDarwin then
+      "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+    else
+      "~/.1password/agent.sock";
 in
 {
   home.stateVersion = "24.05";
@@ -14,7 +19,10 @@ in
   home.packages = with pkgs; [
     # nushell
     nushellPlugins.formats
-    nushellPlugins.highlight
+    # highlight disabled: nu_plugin_highlight (1.4.12+0.110.0) is built against
+    # nushell 0.110.0 and is incompatible with the current nushell 0.113.1.
+    # Re-enable once nixpkgs bumps the plugin to match.
+    # nushellPlugins.highlight
     nushellPlugins.polars
     nushellPlugins.query
     nushellPlugins.skim
@@ -25,27 +33,27 @@ in
     just-lsp
   ];
 
-  home.activation.makeRepos = lib.hm.dag.entryAfter [ "installPackages" ] ''
-    mkdir -p ${home}/src
-
-    clone_repo() {
-      local repo_name=$1
-      local repo_path=$2
-      if [ ! -d "$repo_path" ]; then
-        echo "Cloning $repo_name"
-        ${pkgs.git}/bin/git clone "$repo_name" "$repo_path"
-      else
-        echo "Skipping $repo_name: already cloned"
-      fi
-    }
-
-    clone_repo "${gh}/dot-files.git" "${dotFilesDir}"
-    clone_repo "${gh}/newtype.git" "${mySrc}/newtype"
-    clone_repo "${gh}/nvim-treeclimber.git" "${mySrc}/nvim-treeclimber"
-    clone_repo "${gh}/nvim-kitty.git" "${mySrc}/nvim-kitty"
-    clone_repo "${gh}/nvim-alternate.git" "${mySrc}/nvim-alternate"
-    clone_repo "${gh}/nvim-coverage.git" "${mySrc}/nvim-coverage"
-  '';
+  home.activation.makeRepos =
+    let
+      repos = {
+        "dot-files" = dotFilesDir;
+        "newtype" = "${mySrc}/newtype";
+        "nvim-treeclimber" = "${mySrc}/nvim-treeclimber";
+        "nvim-kitty" = "${mySrc}/nvim-kitty";
+        "nvim-alternate" = "${mySrc}/nvim-alternate";
+        "nvim-coverage" = "${mySrc}/nvim-coverage";
+      };
+      cloneRepo = name: path: ''
+        if [ ! -d "${path}" ]; then
+          echo "Cloning ${name}"
+          $DRY_RUN_CMD ${pkgs.git}/bin/git clone $VERBOSE_ARG "${gh}/${name}.git" "${path}"
+        fi
+      '';
+    in
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      $DRY_RUN_CMD mkdir -p "${mySrc}"
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList cloneRepo repos)}
+    '';
 
   xdg.enable = true;
 
@@ -114,7 +122,8 @@ in
     };
     plugins = with pkgs.nushellPlugins; [
       formats
-      highlight
+      # highlight disabled: incompatible nushell version (0.110.0 vs 0.113.1)
+      # highlight
       polars
       query
       skim
@@ -126,16 +135,6 @@ in
     enableFishIntegration = true;
     enableBashIntegration = true;
     enableNushellIntegration = true;
-    globalConfig = {
-      tools = {
-        node = "lts";
-        usage = "0.3";
-        erlang = "27";
-        elixir = "1";
-        lua = "5.1";
-        go = "1";
-      };
-    };
   };
 
   programs.starship =
@@ -179,8 +178,7 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks."*" = {
-      identityAgent = onePassPath;
-    };
+    # matchBlocks."*".identityAgent = ''"${identityAgent}"'';
+    settings."*".identityAgent = ''"${identityAgent}"'';
   };
 }
