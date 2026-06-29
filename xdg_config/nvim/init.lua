@@ -9,6 +9,8 @@ end, {
 	path = vim.fs.joinpath(vim.fn.stdpath("config"), "init.d"),
 })
 
+vim.opt.runtimepath:append(vim.fn.expand("~/.local/treesitter-parsers"))
+
 table.sort(init_files)
 
 for _, file in ipairs(init_files) do
@@ -175,7 +177,6 @@ local plugins = {
 		},
 		event = "LspAttach",
 		dependencies = {
-			"nvim-treesitter/nvim-treesitter", -- optional
 			"nvim-tree/nvim-web-devicons", -- optional
 		},
 		keys = {
@@ -442,8 +443,6 @@ local plugins = {
 	{ "j-hui/fidget.nvim", opts = {} },
 
 	{ "jamessan/vim-gnupg" },
-
-	-- { "nvim-treesitter/nvim-treesitter-context", opts = {} },
 
 	{
 		"sindrets/diffview.nvim",

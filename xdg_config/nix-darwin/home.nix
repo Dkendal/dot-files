@@ -14,6 +14,8 @@ let
       "~/.1password/agent.sock";
 in
 {
+  imports = [ ./modules/treesitter-parsers.nix ];
+
   home.stateVersion = "24.05";
 
   home.packages = with pkgs; [
@@ -91,6 +93,47 @@ in
       })
       list);
 
+
+  programs.treesitter-parsers = {
+    enable = true;
+    parsers = {
+      markdown = {
+        url = "https://github.com/tree-sitter-grammars/tree-sitter-markdown";
+        ref = "main";
+        hash = "sha256-wQKcqU0V6gHj84qOkUwdXsBW3f6MNfJMFxuGTucAgh8=";
+        location = "tree-sitter-markdown";
+      };
+      markdown-inline = {
+        url = "https://github.com/tree-sitter-grammars/tree-sitter-markdown";
+        ref = "main";
+        hash = "sha256-wQKcqU0V6gHj84qOkUwdXsBW3f6MNfJMFxuGTucAgh8=";
+        location = "tree-sitter-markdown-inline";
+        language = "markdown_inline";
+      };
+      typescript = {
+        url = "https://github.com/tree-sitter/tree-sitter-typescript";
+        ref = "75b3874edb2dc714fb1fd77a32013d0f8699989f";
+        hash = "sha256-A0M6IBoY87ekSV4DfGHDU5zzFWdLjGqSyVr6VENgA+s=";
+        location = "typescript";
+      };
+      tsx = {
+        url = "https://github.com/tree-sitter/tree-sitter-typescript";
+        ref = "75b3874edb2dc714fb1fd77a32013d0f8699989f";
+        hash = "sha256-A0M6IBoY87ekSV4DfGHDU5zzFWdLjGqSyVr6VENgA+s=";
+        location = "tsx";
+      };
+      lua = {
+        url = "https://github.com/tree-sitter-grammars/tree-sitter-lua";
+        ref = "10fe0054734eec83049514ea2e718b2a56acd0c9";
+        hash = "sha256-VzaaN5pj7jMAb/u1fyyH6XmLI+yJpsTlkwpLReTlFNY=";
+      };
+      rust = {
+        url = "https://github.com/tree-sitter/tree-sitter-rust";
+        ref = "77a3747266f4d621d0757825e6b11edcbf991ca5";
+        hash = "sha256-Ls6tB6IxXDQDWwx0BJ7RgbheelC4MH8z97E7wwhkDcY=";
+      };
+    };
+  };
 
   programs.bat.enable = true;
 
