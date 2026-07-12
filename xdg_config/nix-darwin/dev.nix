@@ -68,6 +68,7 @@
       nixpkgs-fmt
       tinymist # Typst language server
       marksman
+      roslyn-ls
 
       # Editors
       neovim # Hyperextensible Vim-based text editor
