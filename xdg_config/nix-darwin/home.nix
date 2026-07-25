@@ -14,7 +14,7 @@ let
       "~/.1password/agent.sock";
 in
 {
-  imports = [ ./modules/treesitter-parsers.nix ];
+  imports = [ ./modules/tree-sitter-parsers.nix ];
 
   home.stateVersion = "24.05";
 
@@ -168,7 +168,7 @@ in
         ref = "64b56832c2cffe41758f28e05c756a3a98d16f41";
         hash = "sha256-m9RlGkHiOL/PNENrdEPqtPlahSqGymsx7gZrCoN/Lsk=";
       };
-      c_sharp = {
+      cs = {
         url = "https://github.com/tree-sitter/tree-sitter-c-sharp";
         ref = "af29416d729b7a6603101b513604392d8f675e3b";
         hash = "sha256-3iTkgG4eitny4VHI+IwJaVvkVKN/PzotYXFCWbJ4TPU=";

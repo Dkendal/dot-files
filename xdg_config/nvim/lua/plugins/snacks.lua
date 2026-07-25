@@ -220,9 +220,9 @@ local keys = {
 	},
 	-- search
 	{
-		'<leader>s"',
+		'<leader>p',
 		function()
-			picker().registers()
+			picker().registers({ confirm = {"paste", "close"} })
 		end,
 		desc = "Registers",
 	},
