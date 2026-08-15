@@ -1,23 +1,19 @@
 { config, pkgs, lib, ... }:
 let
-  inherit (pkgs.stdenv.hostPlatform) isDarwin;
   home = config.home.homeDirectory;
-  dotFilesDir = "${home}/dot-files";
+  root = "${home}/dot-files";
   gh = "git@github.com:Dkendal";
   mySrc = "${home}/src/dkendal";
   ln = config.lib.file.mkOutOfStoreSymlink;
-  identityAgent =
-    if isDarwin then
-      "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-    else
-      "~/.1password/agent.sock";
-  jsonFormat = pkgs.formats.json { };
+  lns = path:
+    assert lib.pathExists (../. + "/${path}");
+    config.lib.file.mkOutOfStoreSymlink "${root}/${path}";
 in
 {
   home.activation.makeRepos =
     let
       repos = {
-        "dot-files" = dotFilesDir;
+        "dot-files" = root;
         "newtype" = "${mySrc}/newtype";
         "nvim-treeclimber" = "${mySrc}/nvim-treeclimber";
         "nvim-kitty" = "${mySrc}/nvim-kitty";
@@ -38,19 +34,16 @@ in
 
   xdg.enable = true;
 
-  xdg.configFile."fish".source = ln "${dotFilesDir}/xdg_config/fish";
-  xdg.configFile."nvim".source = ln "${dotFilesDir}/xdg_config/nvim";
-  xdg.configFile."jj/config.toml".source = ln "${dotFilesDir}/xdg_config/jj";
-  xdg.configFile."nix-darwin".source = ln "${dotFilesDir}/xdg_config/nix-darwin";
-  xdg.configFile."kitty".source = ln "${dotFilesDir}/xdg_config/kitty";
-  xdg.configFile."git".source = ln "${dotFilesDir}/xdg_config/git";
+  xdg.configFile."fish".source = ln "${root}/xdg_config/fish";
+  xdg.configFile."nvim".source = ln "${root}/xdg_config/nvim";
+  xdg.configFile."jj/config.toml".source = ln "${root}/xdg_config/jj";
+  xdg.configFile."nix-darwin".source = ln "${root}/xdg_config/nix-darwin";
+  xdg.configFile."kitty".source = ln "${root}/xdg_config/kitty";
+  xdg.configFile."git".source = ln "${root}/xdg_config/git";
 
-  home.file."Library/Application Support/nushell".source = ln "${dotFilesDir}/xdg_config/nushell";
+  home.file."Library/Application Support/nushell".source = lns "xdg_config/nushell";
 
-  home.file.".pi/agent/models.json".source =
-    jsonFormat.generate "pi-models.json" {
-      default = "claude-opus-5";
-    };
+  home.file.".pi/agent/models.json".source = lns "./xdg_config/nix-darwin/home/dotfiles/pi-models.json";
 
   home.file.".claude/output-styles/eli5.md".source =
     pkgs.writeText "claude-output-styles-eli5.md" ''

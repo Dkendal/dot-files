@@ -38,7 +38,7 @@
           specialArgs = { user = user; };
           modules = [
             configuration
-            ./darwin.nix
+            ./home/platforms/darwin.nix
             home-manager.darwinModules.home-manager
             { home-manager.users.${user} = import ./home.nix; }
           ];
@@ -53,19 +53,19 @@
           specialArgs = { user = user; };
           modules = [
             configuration
-            ./darwin.nix
+            ./home/platforms/darwin.nix
             home-manager.darwinModules.home-manager
             { home-manager.users.${user} = import ./home.nix; }
           ];
         };
 
-      # Place holder configuration for desktop
+      # Desktop
       nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { user = "dylan"; };
         modules = [
           configuration
-          ./linux.nix
+          ./home/platforms/linux.nix
           home-manager.nixosModules.home-manager
           { home-manager.users.dylan = import ./home.nix; }
         ];
