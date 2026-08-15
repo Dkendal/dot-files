@@ -1371,3 +1371,351 @@ z sched
 let f = open `~/Downloads/Hello Sugar Price Increase ProServ Request 05-2026.xlsx` | get 'Part C Existing Client Membersh'; let g = $f | skip 2 | rename ...($f | get 1 | values)
 $g | where `Match?` == false |  select `Subscription ID` `Current Client Price` `Final Desired Price` `Client Name` | rename membership_id old_price new_price client_name  | update old_price { |x| $x.old_price * 100 } | update new_price { |x| $x.new_price * 100 } | save update.csv -f
 help pivot
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' 
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"'  | from rows
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' | lines
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' | lines | each { |bookmark| jj log -r $"closest_bookmark\(($bookmark)\)"}
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' | lines | each { |bookmark| jj log -r $"closest_bookmark\(($bookmark)\)" -T "local_bookmarks" }
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' | lines | each { |bookmark| jj log -r $"closest_bookmark\(($bookmark)\)" -T "local_bookmarks" --no-graph }
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |bookmark|<\n>  let closest = jj log -r $"closest_bookmark\(($bookmark)\)" -T "local_bookmarks" --no-graph<\n>  echo $"(bookmark) ($closest)"<\n>}
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |bookmark|<\n>  let closest = jj log -r $"closest_bookmark\(($bookmark)\)" -T "local_bookmarks" --no-graph<\n>  echo $"($bookmark) ($closest)"<\n>}
+fg
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |bookmark|<\n>  let closest = jj log -r $"closest_bookmark\(($bookmark)-\)" -T "local_bookmarks" --no-graph<\n>  echo $"($bookmark) ($closest)"<\n>}
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  ^gh --head $head --base $base --fill --dry-run<\n>}
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  ^gh pr create --head $head --base $base --fill --dry-run<\n>}
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  ^gh pr create --head $head --base $base --fill<\n>}
+let revset = 'trunk()..@ & bookmarks()'<\n>jj log -r $revset --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  ^gh pr edit --head $head --base $base --dry-run<\n>}
+let revset = 'trunk()..@ & bookmarks()'<\n>jj log -r $revset --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  echo ^gh pr edit --head $head --base $base<\n>}
+gh pr edit --help
+fg
+let revset = 'trunk()..@ & bookmarks()'<\n>jj log -r $revset --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  ^gh pr edit --head $head --base $base<\n>}
+let revset = 'trunk()..@ & bookmarks()'<\n>jj log -r $revset --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  gh pr edit --head $head --base $base<\n>}
+let revset = 'trunk()..@ & bookmarks()';<\n>jj log -r $revset --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |;<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph;<\n>  gh pr edit --head $head --base $base;<\n>}
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  ^gh pr edit --head $head --base $base<\n>}
+fg
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  ^gh pr edit $head --base $base<\n>}
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  echo ^gh pr edit $head --base $base<\n>}
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  echo -- ^gh pr edit $head --base $base<\n>}
+jj log -r 'trunk()..@ & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  # ^gh pr edit $head --base $base<\n>  print head $head base $base<\n>}
+jj
+jj log -r 'mutable() & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  # ^gh pr edit $head --base $base<\n>  print head $head base $base<\n>}
+jj log -r 'mutable() & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  # ^gh pr edit $head --base $base<\n>  print $"> head ($head) base ($base) <"<\n>}
+jj log push-xzpurmqulkos
+jj log -r push-xzpurmqulkos
+jj log -r push-xzpurmqulkos::
+jj log -r push-xzpurmqulkos::bookmarks()
+jj log -r 'push-xzpurmqulkos::bookmarks()'
+jj log -r 'push-xzpurmqulkos..bookmarks()'
+jj log -r 'push-xzpurmqulkos..main'
+jj log -r 'push-xzpurmqulkos..trunk()'
+jj log -r 'trunk()..push-xzpurmqulkos'
+jj log -r 'trunk()-..push-xzpurmqulkos'
+jj log -r 'push-xzpurmqulkos..'
+jj log -r '..push-xzpurmqulkos'
+jj git fetch
+jj rebase -r 'mutable()' --onto 'trunk()'
+jj
+jj log -r 'mutable() & bookmarks()' --no-graph -T 'local_bookmarks.join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  # ^gh pr edit $head --base $base<\n>  print $"> head ($head) base ($base) <"<\n>}
+jj
+jj log -r 'mutable() & bookmarks()'
+jj log -r 'mutable() & bookmarks()' -T 'local_bookmarks()'
+jj log -r 'mutable() & bookmarks()' -T 'local_bookmarks'
+jj log -r 'mutable() & bookmarks()' -T 'local_bookmarks.name'
+jj log -r 'mutable() & bookmarks()' -T 'local_bookmarks.each { |x| x.name }'
+jj log -r 'mutable() & bookmarks()' -T 'local_bookmarks.each(|x| x.name)'
+jj log -r 'mutable() & bookmarks()' -T 'local_bookmarks.map(|x| x.name)'
+jj log -r 'mutable() & bookmarks()' -T 'local_bookmarks().map(|x| x.name)'
+jj log -r 'mutable() & bookmarks()' -T 'local_bookmarks().map(|x| x)'
+jj log -r 'mutable() & bookmarks()' -T 'local_bookmarks.map(|x| x)'
+jj log -r 'mutable() & bookmarks()' -T 'local_bookmarks.map(|x| x.name())'
+fg
+jj log -r 'mutable() & bookmarks()' --no-graph -T 'local_bookmarks.map(|x| x.name).join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  # ^gh pr edit $head --base $base<\n>  print $"> head ($head) base ($base) <"<\n>}
+jj log -r 'mutable() & bookmarks()' --no-graph -T 'local_bookmarks.map(|x| x.name()).join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  # ^gh pr edit $head --base $base<\n>  print $"> head ($head) base ($base) <"<\n>}
+jj log -r 'mutable() & bookmarks()' --no-graph -T 'local_bookmarks.map(|x| x.name()).join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.join("\n") ++ "\n"' --no-graph<\n>  ^gh pr edit $head --base $base<\n>}
+jj log -r 'mutable() & bookmarks()' --no-graph -T 'local_bookmarks.map(|x| x.name()).join("\n") ++ "\n"' |<\n>lines |<\n>each { |head|<\n>  let base = jj log -r $"closest_bookmark\(($head)-\)" -T 'local_bookmarks.map(|x| x.name()).join("\n") ++ "\n"' --no-graph<\n>  ^gh pr edit $head --base $base<\n>}
+nvim ~/.config/jj/config.toml
+fg
+jj
+open docker-compose.yml
+open docker-compose.yml | get services
+open docker-compose.yml | get services.db
+open docker-compose.yml | get services.db.environment
+open docker-compose.yml | get services.db
+open docker-compose.yml | get services.db.ports
+open docker-compose.yml | get services.db.ports | string split ":"
+open docker-compose.yml | get services.db.ports | strings split ":"
+open docker-compose.yml | get services.db.ports | str
+split -h
+open docker-compose.yml | get services.db.ports | split words
+open docker-compose.yml | get services.db.ports | split words | first
+open docker-compose.yml | get services.db.ports | split words
+open docker-compose.yml | get services.db.ports | split words | get 0
+open docker-compose.yml | get services.db.ports | split words | get 0 0
+open docker-compose.yml | get services.db.ports | split words | get 0 0 0
+open docker-compose.yml | get services.db.ports | split words | get 0
+open docker-compose.yml | get services.db.ports | split words | get 0.0
+fg
+glob data/*/validated.json
+glob "data/*/validated.json"
+"data/*/validated.json" | glob
+glob "data/**/validated.json"
+glob "data/**/validated.json" | each { |path| path parse $path }
+glob "data/**/validated.json" | each { |path| path parse }
+glob "data/**/validated.json" | each { |path| $path | path parse }
+glob "data/**/validated.json" | each { |path| $path | path parse } | explore
+glob "data/**/validated.json" | each { |path| $path | path dirname  } | explore
+glob "data/**/validated.json" | each { |path| $path | path relative-to $env.PWD } | explore
+let root = (git root); glob "data/**/validated.json" | each { |path| $path | path relative-to $root }
+let root = (git root); glob "data/**/validated.json" | each { |path| $path | path relative-to $root | path split  }
+let root = (git root); glob "data/**/validated.json" | each { |path| $path | path relative-to $root | parse "data/validated/{t}/validated.json"  }
+let root = (git root); glob "data/**/validated.json" | each { |path| $path | path relative-to $root | parse "data/validated/{business_id}/{group_id}/{type}/validated.json"  }
+let root = (git root); glob "data/**/validated.json" | each { |path| $path | path relative-to $root | parse "data/validated/{business_id}/{group_id}/{type}/validated.json"  } | flatten
+./tools/scratch.nu
+nu ./tools/scratch.nu
+nu -h
+nu
+help open
+take -h
+./tools/scratch.nu -l 1
+./tools/scratch.nu -l 2
+./tools/scratch.nu 
+jj
+./tools/scratch.nu 
+]
+./tools/scratch.nu 
+./tools/scratch.nu -l 1
+./tools/scratch.nu -l 1 
+where -h
+./tools/scratch.nu -l 1 
+./tools/scratch.nu -l 1 -t clients
+./tools/scratch.nu -l 1 -t client 
+./tools/scratch.nu -l 1 -t { client }
+./tools/scratch.nu -l 1 -t [ client ]
+./tools/scratch.nu -l 1 -t client foo
+./tools/scratch.nu -l 1 -t client -t foo
+"1 2 3" | split words 
+"1/2/3 2 3" | split words 
+"1/2/3 2 3" | split words -h
+"1/2/3 2 3" | split cell-path -h
+"1/2/3 2 3" | split cell-path -
+split cell-path -h
+lines -h
+cols
+columns -h
+values 
+values -h
+"1/2/3 2 3" | split row ' '
+"1/2/3  2 3" | split row ' '0
+"1/2/3  2 3" | split row ' '
+"1/2/3  2 3" | split row ' ' | remove { empty }
+"1/2/3  2 3" | split row ' ' | compact { empty }
+"1/2/3  2 3" | split row ' ' | compact 
+"1/2/3  2 3" | split row ' ' | reject -h
+reject -h
+"1/2/3  2 3" | split row ' ' | where is-not-empty
+"1/2/3  2 3" | split row '\s+'
+"1/2/3  2 3" | split row '/s+'
+"1/2/3  2 3" | split row -h
+"1/2/3  2 3" | split row -r '\s+'
+./tools/scratch.nu -l 1 -t client -t foo
+./tools/scratch.nu -l 1 -t client -t clients
+./tools/scratch.nu -l 1 -t clien
+./tools/scratch.nu -l 1 -t client
+./tools/scratch.nu -l 1 -t clients
+./tools/scratch.nu -l 1 -t client
+./tools/scratch.nu -l 1 -t clientas
+./tools/scratch.nu -l 1 -t clients
+./tools/scratch.nu -l 1 
+./tools/scratch.nu -l 3
+./tools/scratch.nu
+./tools/scratch.nu -l 100
+./tools/scratch.nu -l 100 
+./tools/scratch.nu -l 100 -t clients
+./tools/scratch.nu -l 100 
+./tools/scratch.nu -l 100 -t clients
+./tools/scratch.nu -l 1 
+git root
+./tools/scratch.nu -l 1 
+git root
+./tools/scratch.nu -l 1 
+./tools/scratch.nu -l 1 -t resources
+./tools/scratch.nu -t resources
+./tools/scratch.nu -t resources -b f79f9802-9bd4-4f2f-9393-2781d0c58128
+./tools/scratch.nu -t resources
+time 
+now
+date
+date now
+date now -h
+date now 
+./tools/scratch.nu -t resources
+./tools/scratch.nu -t resources -1
+./tools/scratch.nu -t resources -l 1
+to csv -h
+./tools/scratch.nu -t resources -l 1
+rg -h
+./tools/scratch.nu -t resources -l 1 -f ./out/(date now).csv
+./tools/scratch.nu -t resources -l 1 
+./tools/scratch.nu -t resources -l 20
+./tools/scratch.nu 
+ls out
+mkdir out
+./tools/scratch.nu -f ./out/ids.csv
+glob "data/raw/**"
+glob "data/raw/**/*.csv"
+glob "data/raw/**/*.csv" | parse "data/raw/{business_id}/{group_id}/{type}/{timestamp}.csv"
+glob "data/raw/**/*.csv" | parse "data/raw/"
+glob "data/raw/**/*.csv" | parse "data/raw/{}"
+glob "data/raw/**/*.csv" | each { parse "data/raw/{}" }
+glob "data/raw/**/*.csv" | parse "data/{x}"
+glob "data/raw/**/*.csv" 
+glob "data/raw/**/*.csv" -h
+glob "data/raw/**/*.csv" | path relative-to (git root)
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "data/"
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "data/{}"
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "data/{x}"
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "data/{x}" | insert 1
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "data/{x}" | insert x 1
+./tools/scratch.nu raw -l 1
+./tools/scratch.nu validated -l 1
+./tools/scratch.nu raw -l 1
+./tools/scratch.nu raw
+glob "data/raw/**/*.csv"
+./tools/scratch.nu raw
+./tools/scratch.nu rawa -l1
+./tools/scratch.nu rawa -l 1
+./tools/scratch.nu raw -l 1
+./tools/scratch.nu raw -l 1 -t resources
+./tools/scratch.nu raw -t resources
+fd resources data/raw/
+fd resources data/raw/ --full-path
+fd resources data/raw/ --full-path -t file
+fd resources data/raw/ --full-path -t file | vd
+fd resources data/raw/ --full-path -t file | vim -
+vd -h
+vd (fd resources data/raw/ --full-path -t file)
+fd resources data/raw/ --full-path -t file
+vd data/raw/ea75d49f-528e-4101-9f9f-fdd2fd182946/baeb20ce-beaa-44aa-9270-f7f5573e8f86/resources/20260715012953.csv
+./tools/scratch.nu raw -t resources
+./tools/scratch.nu raw
+./tools/scratch.nu raw -f out/raw.csv
+open ./out/validated.csv | get type
+open ./out/validated.csv | get type | uniq
+open ./out/validated.csv | cut -d',' -f 4 | sort -u
+open ./out/validated.csv | cut -d',' -f 4 | ^sort -u
+open --raw ./out/validated.csv | cut -d',' -f 4 | ^sort -u
+cat ./out/validated.csv | cut -d',' -f 4 | ^sort -u
+^cat ./out/validated.csv | ^cut -d',' -f 4 | ^sort -u | save -f ./out/types.csv
+open ./out/types.csv
+nvim ./out/types.csv
+open ./out/types.csv
+fg
+nvim ./out/types.csv
+nvim ./out/load_imported.sql
+fg
+open ./out/types.csv
+open ./out/types.csv | split '/'
+open ./out/types.csv | str split '/'
+open ./out/types.csv | split row '/'
+open ./out/types.csv | split row "/"
+open ./out/types.csv
+open ./out/types.csv | each { split row "/" }
+open ./out/types.csv 
+open ./out/types.csv | get type
+open ./out/types.csv | get type | split row "/"
+open ./out/types.csv | get type | split row "/" | last
+open ./out/types.csv | get type | each { split row "/" | last }
+open ./out/types.csv | get type | each { split row "/" | last } | to text
+open ./out/types.csv | get type | each { split row "/" | last } | uniq
+open ./out/types.csv | get type | each { split row "/" | last } | uniq | to text
+open ./out/types.csv | get type | each { split row "/" | last } | uniq | to text | pbcopy
+fg
+open ./out/types.csv | get type | each { split row "/" | last } | uniq | to text | pbcopy
+fg
+./tools/scratch.nu raw -l 10
+./tools/scratch.nu raw -l 1
+nu ./tools/scratch.nu raw -l 1
+nu ./tools/generate_denorm_data.nu raw -l 1
+nu ./tools/generate_denorm_data.nu raw -l 1 | xan 
+nu ./tools/generate_denorm_data.nu raw -l 1 | xan  view
+nu ./tools/generate_denorm_data.nu raw -l 1
+nu ./tools/generate_denorm_data.nu raw -l 1 | head
+nu ./tools/generate_denorm_data.nu raw -l 1 
+nu ./tools/generate_denorm_data.nu raw -l 1  | head
+nu ./tools/generate_denorm_data.nu raw -l 1
+nu ./tools/generate_denorm_data.nu raw -l 1 -t resources
+nu ./tools/generate_denorm_data.nu raw -l 2 -t resources
+nu ./tools/generate_denorm_data.nu raw -l 5 -t resources
+nu ./tools/generate_norm_data.nu raw -l 5 -t resources
+glob "data/raw/**/*.csv"
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "data/{x}" | insert x 1
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "{}/data/{}"
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "{}/data/{x}"
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "{_}/data/{_}"
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "{_}/data/{x}"
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "data/{b}"
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "data/{}"
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "data/{}/{a}"
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "data/{_}/{a}"
+glob "data/raw/**/*.csv" | path relative-to (git root) | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv"
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: (parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type) } }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type) } }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | each { first }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values audit/
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values 
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first } | each { open }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first } 
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first } | get path
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first | open | describe }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first | open  }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first | path  }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first | path parse }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first | ^xan }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first | ^xan columns  }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first | get path  }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first | get path | open  }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first | get path | open | desc  }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first | get path | open | describe  }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first | get path | open | columns  }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { { type: $in.type, columns: ($in | first | get path | open | columns) } }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first } | each { { type: $in.type, columns: ($in | get path | open | columns) } }
+glob "data/raw/**/*.csv" | path relative-to (git root) | each { |f| { path: $f, type: ($f | parse "data/raw/{business_id}/{group_id}/{type}/{name}.csv" | get type | first) } } | shuffle | group-by type | values  | each { first } | each { { type: $in.type, columns: ($in | get path | open | columns) } } | table
+nufmt
+fg
+./tools/generate_norm_data.nu raw -l 1 -t resources
+./tools/generate_norm_data.nu raw -l 2 -t resources
+./tools/generate_norm_data.nu raw -t resources
+./tools/generate_norm_data.nu raw -t resources -l 1
+./tools/generate_norm_data.nu raw -t resources
+./tools/generate_norm_data.nu raw -t appointments
+fg
+./tools/generate_norm_data.nu raw -t appointments
+./tools/generate_norm_data.nu raw -t appointmentsa -l 1
+./tools/generate_norm_data.nu raw -t appointments -l 1
+./tools/generate_norm_data.nu raw -t appointments -l 2
+./tools/generate_norm_data.nu raw -t appointments
+xan headers data/raw/*/*/appointments/*.csv
+xan headers data/raw/*/*/appointments/*.csv | --csv
+xan headers data/raw/*/*/appointments/*.csv --csv
+xan headers data/raw/*/*/appointments/*.csv --csv --json
+xan headers data/raw/*/*/appointments/*.csv --csv -j
+xan headers data/raw/*/*/appointments/*.csv --csv -j | xan transpose
+xan headers data/raw/*/*/appointments/*.csv --csv -j | xan transpose | xan view
+./tools/generate_norm_data.nu raw -t appointments
+./tools/generate_norm_data.nu raw -t appointments -l 10
+./tools/generate_norm_data.nu raw -t appointments -l 1
+datetime
+format datetime
+format date -h
+./tools/generate_norm_data.nu raw -t appointments -l 1
+vd /Users/dylan.kendal/Documents/bulk-import-2-audit/out/raw-normalized/appointments.csv
+./tools/generate_norm_data.nu raw -t appointments -l 10
+vd /Users/dylan.kendal/Documents/bulk-import-2-audit/out/raw-normalized/appointments.csv
+claude
+./tools/generate_norm_data.nu raw 
+fg

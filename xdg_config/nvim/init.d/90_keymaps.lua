@@ -108,9 +108,11 @@ map("v", "<C-s>", ":s/")
 
 -- Copy relative path to clipboard
 map("n", "<leader>fyy", copy_relative_path)
+
 map({ "n", "v" }, "<leader>fyl", function()
 	require("user.copy_path")({ bang = false, range = 0 })
 end)
+
 -- Copy basename
 map("n", "<leader>fyb", ":let @+=expand('%:t')<cr>:let @*=@+<cr>")
 

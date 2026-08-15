@@ -18,3 +18,5 @@ Session.vim
 **/.claude/settings.local.json
 **/CRUSH.md
 **/.crush
+.roam
+.serena

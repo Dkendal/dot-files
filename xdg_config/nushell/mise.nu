@@ -22,7 +22,7 @@ hide,GOROOT,
 hide,LUA_INIT,
 hide,MIX_ARCHIVES,
 hide,MIX_HOME,
-set,PATH,/Users/dylan.kendal/.cargo/bin:/Users/dylan.kendal/.local/bin:/opt/homebrew/bin:/Applications/kitty.app/Contents/MacOS:/Users/dylan.kendal/.nix-profile/bin:/etc/profiles/per-user/dylan.kendal/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+set,PATH,/Users/dylan.kendal/.hoop/bin:/Users/dylan.kendal/.cargo/bin:/Users/dylan.kendal/.local/bin:/opt/homebrew/bin:/Applications/kitty.app/Contents/MacOS:/Users/dylan.kendal/.nix-profile/bin:/etc/profiles/per-user/dylan.kendal/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 hide,MISE_SHELL,
 hide,__MISE_DIFF,
 hide,__MISE_DIFF,' | parse vars | update-env

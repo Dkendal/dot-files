@@ -1,0 +1,20 @@
+[revset-aliases]
+"trunk()" = "develop@origin"
+"immutable_heads()" = "present(trunk()) | untracked_remote_bookmarks() | develop@origin"
+
+[fix.tools.biomejs]
+command = [
+  "npx",
+  "@biomejs/biome",
+  "check",
+  "--use-editorconfig=true",
+  "--fix",
+  "--stdin-file-path=$path",
+]
+patterns = [
+  "glob:'src/**/*.js'",
+  "glob:'src/**/*.ts'",
+  "glob:'src/**/*.jsx'",
+  "glob:'src/**/*.tsx'",
+  "glob:'src/**/*.json'",
+]

@@ -50,20 +50,22 @@ local default_config = {
 	},
 }
 
+-- local roslyn =
+-- 		{
+-- 			"seblyng/roslyn.nvim",
+-- 			---@module 'roslyn.config'
+-- 			---@type RoslynNvimConfig
+-- 			opts = {
+-- 				-- your configuration comes here; leave empty for default settings
+-- 			},
+-- 		}
+
 ---@type LazyPluginSpec
 return {
 	"neovim/nvim-lspconfig",
 	dependencies = {
 		"lvimuser/lsp-inlayhints.nvim",
 		{ "ray-x/lsp_signature.nvim", opts = {} },
-		{
-			"seblyng/roslyn.nvim",
-			---@module 'roslyn.config'
-			---@type RoslynNvimConfig
-			opts = {
-				-- your configuration comes here; leave empty for default settings
-			},
-		}
 	},
 	init = function()
 		-- :help lspconfig-all

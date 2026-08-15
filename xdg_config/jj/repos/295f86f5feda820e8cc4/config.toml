@@ -1,0 +1,7 @@
+[user]
+name = "Dylan C Kendal"
+email = "dylankendal@gmail.com"
+
+[revset-aliases]
+"trunk()" = "main@origin"
+"trunk" = "main@origin"

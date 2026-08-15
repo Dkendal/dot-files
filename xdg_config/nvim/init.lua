@@ -212,6 +212,7 @@ local plugins = {
 
 	{
 		"numToStr/Comment.nvim",
+		lazy = false,
 		opts = {
 			toggler = {
 				-- Line-comment toggle keymap

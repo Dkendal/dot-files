@@ -49,7 +49,7 @@ abbr -a -- stripansi sed\ -E\ \'s/\\x1b\\\[\[0-9\;\]\*m//g\'
 
 abbr -a -- jja 'jj abandon'
 abbr -a -- jjl "jj log -r 'trunk()..@'"
-abbr -a -- jjra "jj rebase -s 'roots(trunk..mine()) & mutable()' -d 'trunk()'"
+abbr -a -- nix-darwin-switch "sudo darwin-rebuild switch --flake /etc/nix-darwin"
 
 abbr -a -- pr "gh pr view (jj log --no-pager -r 'trunk()..@ & tracked_remote_bookmarks()' --no-graph -T 'bookmarks' --limit 1)"
 

@@ -1,0 +1,2 @@
+[revset-aliases]
+"trunk()" = "main@origin"
