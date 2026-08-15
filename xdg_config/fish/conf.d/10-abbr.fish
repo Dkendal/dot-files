@@ -1,7 +1,5 @@
 abbr -a -- ci 'gh pr status'
 
-abbr -a -- dus 'dev up; and dev s'
-
 abbr -a -- g git
 abbr -a -- gC 'git commit --verbose --no-verify'
 abbr -a -- gS 'git stash push'
@@ -37,8 +35,6 @@ abbr -a -- gws 'git status --short'
 
 abbr -a -- kittydiff 'kitty +kitten diff'
 
-abbr -a -- ls eza
-
 abbr -a -- mt 'mix test'
 abbr -a -- mtf 'mix test --failed'
 abbr -a -- mf mix-failed
@@ -51,28 +47,24 @@ abbr -a -- n 'nvim --listen ~/.cache/nvim/server.pipe'
 abbr -a -- nr 'nvim --server ~/.cache/nvim/server.pipe --remote'
 abbr -a -- stripansi sed\ -E\ \'s/\\x1b\\\[\[0-9\;\]\*m//g\'
 
-abbr -a -- ss 'sl status'
-abbr -a -- sls 'sl status'
-abbr -a -- slp 'sl pull'
-abbr -a -- slpr 'sl pr'
-abbr -a -- sla 'sl add'
-abbr -a -- slg 'sl goto'
-abbr -a -- slc 'sl commit'
-abbr -a -- sld 'sl diff | delta'
-abbr -a -- slu 'sl unshelve'
-abbr -a -- slS 'sl shelve'
-
 abbr -a -- jja 'jj abandon'
 abbr -a -- jjl "jj log -r 'trunk()..@'"
-abbr -a -- jjra "jj rebase -s 'roots(trunk..mine()) & mutable()' -d 'trunk()'"
+abbr -a -- nix-darwin-switch "sudo darwin-rebuild switch --flake /etc/nix-darwin"
 
 abbr -a -- pr "gh pr view (jj log --no-pager -r 'trunk()..@ & tracked_remote_bookmarks()' --no-graph -T 'bookmarks' --limit 1)"
 
-abbr -a -- mr mise run
 
 if test uname = "Darwin"
   abbr -a -- rm trash
   abbr -a -- nix-rebuild "sudo darwin-rebuild switch --flake /etc/nix-darwin"
 else if test uname = "Linux"
   #
+end
+if type -q eza
+  abbr -a -- ls eza
+  abbr -a -- ll "eza -la --sort created"
+end
+
+if test (uname) = 'Darwin'
+  abbr -a -- rm trash
 end

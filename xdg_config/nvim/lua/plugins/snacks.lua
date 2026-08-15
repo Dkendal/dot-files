@@ -9,14 +9,14 @@ local keys = {
 	{
 		"<leader>.",
 		function()
-			require("snacks").scratch()
+			Snacks.scratch()
 		end,
 		desc = "Toggle Scratch Buffer",
 	},
 	{
 		"<leader>S",
 		function()
-			require("snacks").scratch.select()
+			Snacks.scratch.select()
 		end,
 		desc = "Select Scratch Buffer",
 	},
@@ -67,7 +67,7 @@ local keys = {
 	{
 		"<leader>e",
 		function()
-			require("snacks").explorer()
+			Snacks.explorer()
 		end,
 		desc = "File Explorer",
 	},
@@ -220,6 +220,7 @@ local keys = {
 	},
 	-- search
 	{
+		'<leader>s"',
 		'<leader>p',
 		function()
 			picker().registers({ confirm = {"paste", "close"} })
@@ -559,8 +560,6 @@ return {
 		},
 		bigfile = {},
 		quickfile = {},
-		-- animated smooth scrolling
-		-- scroll = {},
 		statuscolumn = {},
 		gitbrowse = {},
 		image = {},

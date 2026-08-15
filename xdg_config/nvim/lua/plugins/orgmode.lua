@@ -37,6 +37,13 @@ local function insert_property()
 	end)
 end
 
+local function insert_created_timestamp()
+	local Date = require("orgmode.objects.date")
+	local now = Date.now()
+	require("orgmode.api").current():get_closest_headline():set_property("CREATED", now:to_wrapped_string(false))
+end
+
+
 --- @type LazyKeysSpec[]
 local keys = {
 	{
@@ -44,7 +51,7 @@ local keys = {
 		action("org_mappings.meta_return"),
 		ft = "org",
 		mode = "n",
-		desc = "org meta return",
+		desc = "Meta return (smart insertion)",
 	},
 	{
 		"<leader>$",
@@ -100,7 +107,14 @@ local keys = {
 		insert_property,
 		ft = "org",
 		mode = "n",
-		desc = "org timestamp (inactive)",
+		desc = "org add property",
+	},
+	{
+		"<leader>ic",
+		insert_created_timestamp,
+		ft = "org",
+		mode = "n",
+		desc = "org add CREATED timestamp",
 	},
 	{
 		"<leader>i!",
@@ -114,7 +128,7 @@ local keys = {
 		action("org_mappings.org_time_stamp"),
 		ft = "org",
 		mode = "n",
-		desc = "org timestamp",
+		desc = "org timestamp (active)",
 	},
 	{
 		"<leader>iT",
@@ -185,7 +199,7 @@ local keys = {
 		action("org_mappings.open_at_point"),
 		ft = "org",
 		mode = "n",
-		desc = "org open",
+		desc = "org open link at point",
 	},
 
 	{
@@ -246,21 +260,21 @@ local keys = {
 		function() require("ext.orgmode.snacks").picker_orgmode_todos() end,
 		ft = "org",
 		mode = "n",
-		desc = "Orgmode search TODOs",
+		desc = "Search TODOs",
 	},
 	{
 		"<leader>ss",
 		function() require("ext.orgmode.snacks").org_buf_headlines() end,
 		ft = "org",
 		mode = "n",
-		desc = "Orgmode search buffer headlines",
+		desc = "Search buffer headlines",
 	},
 	{
 		"<leader>sS",
 		function() require("ext.orgmode.snacks").org_headlines("~/orgfiles/") end,
 		ft = "org",
 		mode = "n",
-		desc = "Orgmode search headlines",
+		desc = "Search all headlines",
 	},
 
 	-- References
@@ -269,14 +283,14 @@ local keys = {
 		function() require("ext.orgmode.snacks").org_backlinks(0) end,
 		ft = "org",
 		mode = "n",
-		desc = "Orgmode references",
+		desc = "Show backlinks/references",
 	},
 	{
 		"gd",
 		action("org_mappings.open_at_point"),
 		ft = "org",
 		mode = "n",
-		desc = "org open",
+		desc = "Goto definition (open link)",
 	},
 
 	-- Insert
@@ -285,21 +299,21 @@ local keys = {
 		require("ext.orgmode.snacks").insert_file,
 		ft = "org",
 		mode = "n",
-		desc = "Insert org file link",
+		desc = "Insert file link",
 	},
 	{
 		"@f",
 		require("ext.orgmode.snacks").insert_file,
 		ft = "org",
 		mode = "i",
-		desc = "Insert org file link",
+		desc = "Insert file link",
 	},
 	{
 		"@@",
 		require("ext.orgmode.snacks").insert_person,
 		ft = "org",
 		mode = "i",
-		desc = "Insert org file link",
+		desc = "Insert person link",
 	},
 
 	{
@@ -309,7 +323,7 @@ local keys = {
 		end,
 		ft = "org",
 		mode = "n",
-		desc = "org search headlines",
+		desc = "Spell check",
 	},
 
 	{
@@ -317,7 +331,7 @@ local keys = {
 		action("org_mappings.do_promote"),
 		ft = "org",
 		mode = "n",
-		desc = "org premote headline",
+		desc = "org promote headline",
 	},
 	{
 		"<leader>l",
@@ -361,21 +375,21 @@ local keys = {
 		action("org_mappings.meta_return"),
 		ft = "org",
 		mode = "i",
-		desc = "org meta return",
+		desc = "Meta return (smart insertion)",
 	},
 	{
 		"<C-h>",
 		action("org_mappings.do_promote"),
 		ft = "org",
 		mode = "i",
-		desc = "org demote heading",
+		desc = "org promote heading",
 	},
 	{
 		"<C-l>",
 		action("org_mappings.do_demote"),
 		ft = "org",
 		mode = "i",
-		desc = "org promote heading",
+		desc = "org demote heading",
 	},
 
 	-- Toggles
@@ -400,7 +414,7 @@ local keys = {
 		function() require("ext.orgmode.jira").fetch_issue() end,
 		ft = "org",
 		mode = "n",
-		desc = "Fetch the Jisa issue for the current headline",
+		desc = "Fetch Jira issue for headline",
 	},
 }
 
@@ -411,7 +425,7 @@ local function config()
 	local Date = require("orgmode.objects.date")
 
 	require("orgmode").setup({
-		org_agenda_files = "~/orgfiles/**/*",
+		org_agenda_files = { "~/orgfiles/inbox.org", "~/orgfiles/log.org", "~/orgfiles/projects.org", "~/orgfiles/personal.org" },
 		org_default_notes_file = "~/orgfiles/inbox.org",
 		org_use_property_inheritance = false,
 		org_id_link_to_org_use_id = true,

@@ -2,7 +2,7 @@
   description = "System Flake";
 
   inputs = {
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
     nix-darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -13,7 +13,6 @@
   outputs = { self, nix-darwin, nixpkgs-unstable, nixpkgs, home-manager, ... }:
     let
       overlay = final: prev: {
-        # neovim = inputs.neovim-nightly-overlay.packages.${prev.system}.default;
         fzf = nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system}.fzf;
       };
       # Portable configuration shared by all hosts; platform-specific
@@ -35,6 +34,7 @@
       darwinConfigurations."Titania" =
         let
           user = "dylan";
+          unstable = nixpkgs-unstable.legacyPackages."aarch64-darwin";
         in
         nix-darwin.lib.darwinSystem {
           specialArgs = { user = user; };
@@ -43,9 +43,9 @@
             ./darwin.nix
             home-manager.darwinModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "before-home-manager";
+              home-manager.extraSpecialArgs = { inherit unstable; };
               home-manager.users.${user} = import ./home.nix;
             }
           ];
@@ -55,6 +55,7 @@
       darwinConfigurations."dylankendal-mbp" =
         let
           user = "dylan.kendal";
+          unstable = nixpkgs-unstable.legacyPackages."aarch64-darwin";
         in
         nix-darwin.lib.darwinSystem {
           specialArgs = { user = user; };
@@ -63,9 +64,9 @@
             ./darwin.nix
             home-manager.darwinModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "before-home-manager";
+              home-manager.extraSpecialArgs = { inherit unstable; };
               home-manager.users.${user} = import ./home.nix;
             }
           ];

@@ -1,5 +1,7 @@
 ---@module 'lazy'
+
 local enabled_langservers = {
+	"tinymist",
 	"bashls",
 	"biome",
 	"clangd",
@@ -15,18 +17,28 @@ local enabled_langservers = {
 	"pest_ls",
 	"pyright",
 	"racket_langserver",
+	"biome",
+	"expert",
+	"nil_ls",
+	"pyright",
+	"ruff",
 	"rust_analyzer",
 	"svelte",
 	"taplo",
 	"teal_ls",
 	"terraformls",
-	"nil_ls",
-	-- "ts_ls",
-	"biome",
-	-- "expert",
-	"lexical",
 	"typescript_go_ls"
 }
+
+-- local roslyn =
+-- 		{
+-- 			"seblyng/roslyn.nvim",
+-- 			---@module 'roslyn.config'
+-- 			---@type RoslynNvimConfig
+-- 			opts = {
+-- 				-- your configuration comes here; leave empty for default settings
+-- 			},
+-- 		}
 
 ---@type LazyPluginSpec
 return {
@@ -34,14 +46,6 @@ return {
 	dependencies = {
 		"lvimuser/lsp-inlayhints.nvim",
 		{ "ray-x/lsp_signature.nvim", opts = {} },
-		{
-			"seblyng/roslyn.nvim",
-			---@module 'roslyn.config'
-			---@type RoslynNvimConfig
-			opts = {
-				-- your configuration comes here; leave empty for default settings
-			},
-		}
 	},
 	init = function()
 		-- :help lspconfig-all

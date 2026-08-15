@@ -1,106 +1,3 @@
----Callback function for prewalk traversal
----@alias PrewalkCallback fun(node: TSNode, parent: TSNode?, depth: integer): boolean?
----Return false to skip visiting children of this node
-
----@param node TSNode The root node to start traversal from
----@param callback PrewalkCallback Function called for each node. Return false to skip children
----@param parent TSNode? The parent node (used internally during recursion)
----@param depth integer? The current depth in the tree (default: 0)
----@return nil
-local function prewalk(node, callback, parent, depth)
-  depth = depth or 0
-
-  -- Visit current node (pre-order)
-  local result = callback(node, parent, depth)
-
-  -- If callback returns false, skip children
-  if result == false then
-    return
-  end
-
-  -- Recursively visit children
-  for child, field_name in node:iter_children() do
-    prewalk(child, callback, node, depth + 1)
-  end
-end
-
-local function node_to_sexpr(node, bufnr)
-  bufnr = bufnr or 0
-
-  local function sexpr_helper(n, depth)
-    local node_type = n:type()
-    local child_count = n:child_count()
-
-    if child_count == 0 then
-      -- Leaf node - include the text content
-      local text = vim.treesitter.get_node_text(n, bufnr)
-      -- Escape special characters in text
-      text = text:gsub('"', '\\"'):gsub('\n', '\\n')
-      return string.format('(%s "%s")', node_type, text)
-    else
-      -- Non-leaf node - recursively process children
-      local parts = { "(" .. node_type }
-
-      for i = 0, child_count - 1 do
-        local child = n:child(i)
-        if child then
-          table.insert(parts, sexpr_helper(child, depth + 1))
-        end
-      end
-
-      table.insert(parts, ")")
-      return table.concat(parts, " ")
-    end
-  end
-
-  return sexpr_helper(node, 0)
-end
-
--- Usage example:
-local function print_node_sexpr()
-  local node = vim.treesitter.get_node()
-  if node then
-    local sexpr = node_to_sexpr(node)
-    print(sexpr)
-  else
-    print("No node under cursor")
-  end
-end
-
--- You can call it like:
--- :lua print_node_sexpr()
-local function node_to_sexpr_pretty(node, bufnr)
-  bufnr = bufnr or 0
-
-  local function sexpr_helper(n, depth)
-    local indent = string.rep("  ", depth)
-    local node_type = n:type()
-    local child_count = n:child_count()
-
-    if child_count == 0 then
-      local text = vim.treesitter.get_node_text(n, bufnr)
-      text = text:gsub('"', '\\"'):gsub('\n', '\\n')
-      return string.format('(%s "%s")', node_type, text)
-    else
-      local parts = { "(" .. node_type }
-
-      for i = 0, child_count - 1 do
-        local child = n:child(i)
-        if child then
-          table.insert(parts, "\n" .. indent .. "  " .. sexpr_helper(child, depth + 1))
-        end
-      end
-
-      table.insert(parts, ")")
-      return table.concat(parts, "")
-    end
-  end
-
-  return sexpr_helper(node, 0)
-end
-local _ = vim.iter
-local M = {}
----
 ---@class ext.org.jira.JiraIssueFields
 ---@field parent ext.org.jira.JiraIssueParent?
 ---@field statusCategory ext.org.jira.JiraStatusCategory
@@ -278,8 +175,10 @@ local M = {}
 ---@field total integer
 ---@field startAt integer
 
+local M = {}
+
 --- @return nil | ext.org.jira.JiraIssue
-local function get_issue(key)
+function M.get_issue(key)
   if type(key) ~= "string" then
     error("expected string")
   end
@@ -310,7 +209,7 @@ end
 --- @param keys string[]
 --- @param default any
 --- @return any
-local function get_in(data, keys, default)
+function M.get_in(data, keys, default)
   if data == nil then
     return default
   end
@@ -337,7 +236,7 @@ local function get_in(data, keys, default)
 end
 
 --- @param issue ext.org.jira.JiraIssue
-local function format_issue(issue)
+function M.format_issue(issue)
   local fields = issue.fields
 
   local priority = ""
@@ -388,92 +287,13 @@ local function format_issue(issue)
       status = fields.status.name,
       type = fields.issuetype.name,
       type_id = fields.issuetype.id,
-      assignee = get_in(fields, { "assignee", "emailAddress" }),
-      reporter = get_in(fields, { "reporter", "emailAddress" }),
-      parent = get_in(fields, { "parent", "key" }),
-      components = _(fields.components):map(function(x) return x.name end):join(", ") or "",
-      investment = get_in(fields, { "customfield_10186", "value" })
+      assignee = M.get_in(fields, { "assignee", "emailAddress" }),
+      reporter = M.get_in(fields, { "reporter", "emailAddress" }),
+      parent = M.get_in(fields, { "parent", "key" }),
+      components = vim.iter(fields.components):map(function(x) return x.name end):join(", ") or "",
+      investment = M.get_in(fields, { "customfield_10186", "value" })
     }
   }
-end
-
-function M.get_closest_headline()
-  local orgmode = require 'orgmode.api'
-  local headline = orgmode.current():get_closest_headline()
-
-  if headline == nil then
-    return
-  end
-
-  return headline
-end
-
-function M.test()
-  local headline = M.get_closest_headline()
-
-  if headline == nil then
-    error("expected headline")
-  end
-
-  local source = headline.title
-  local pos = headline.position
-  local stars = string.rep("*", headline.level)
-  local status = "TODO"
-  local rep = string.format("%s %s %s", status, stars, "test")
-  vim.api.nvim_buf_set_text(0, pos.start_line - 1, 0, pos.end_line - 1, -1, { rep })
-  -- vim.print(vim.inspect(text))
-end
-
-function M.fetch_issue()
-  local headline = M.get_closest_headline()
-
-  if not headline then
-    error("headline is nil")
-  end
-
-  local jira_key = headline:get_property("custom_id")
-
-  if not jira_key then
-    jira_key = headline:get_property("id")
-
-    if not jira_key then
-      error("CUSTOM_ID and ID is nil")
-    end
-  end
-
-  local issue = get_issue(jira_key)
-
-  if not issue then
-    error(string.format("couldn't find issue %s", jira_key))
-  end
-
-  local issue_data = format_issue(issue)
-
-  for key, value in pairs(issue_data.properties) do
-    headline:set_property(key, value)
-  end
-
-  headline:set_property("summary", issue_data.summary)
-
-  if headline.priority ~= "" and issue_data.priority ~= "" then
-    headline:set_priority("")
-  elseif issue_data.priority ~= "" then
-    headline:set_priority(issue_data.priority)
-  end
-
-  headline:set_scheduled(issue_data.scheduled)
-  headline:set_deadline(issue_data.deadline)
-
-  local pos = headline.position
-  local stars = string.rep("*", headline.level, "")
-  local summary = issue_data.summary
-  local rep = string.format("%s %s %s: %s", stars, issue_data.todo_status, issue_data.key, summary)
-
-  vim.schedule(function()
-    vim.api.nvim_buf_set_text(0, pos.start_line - 1, 0, pos.start_line - 1, -1, { rep })
-  end)
-
-  vim.notify(string.format("Updated issue: %s", jira_key))
 end
 
 return M

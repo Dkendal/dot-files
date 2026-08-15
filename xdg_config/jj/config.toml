@@ -33,11 +33,12 @@ gpgsign = true
 [revset-aliases]
 'user()' = 'user("dylan.kendal@blvd.co")'
 'user(x)' = 'author(x) | committer(x)'
-'trunk' = 'trunk()'
 'HEAD' = '@-'
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
 'nearest_nonempty(to)' = 'heads(::to & ~empty())'
 'bookmark-advance-to' = 'nearest_nonempty(@)'
+'stack(to)' = 'mutable() & bookmarks() & ..to'
+'stack()' = 'stack(@)'
 
 [git]
 sign-on-push = true
@@ -67,16 +68,12 @@ clone = ["git", "clone"]
 n = ["new", "-r", "trunk()"]
 bl = ["bookmark", "list"]
 tug = ["bookmark", "advance", "--to", "nearest_nonempty(@)"]
-pr = [
+gh = [
   "util",
   "exec",
   "--",
   "nu",
-  "-c",
-  """
-  let bookmark = jj log -r 'closest_bookmark(@-)' --no-graph --limit 1 --template bookmarks
-  gh pr view $bookmark --web
-  """,
+  "~/.config/jj/scripts/jj-gh.nu",
 ]
 "bookmark-clean" = [
   "util",
@@ -92,4 +89,18 @@ pr = [
     print "nothing deleted"
   }
   """,
+]
+"gh-create" = [
+  "util",
+  "exec",
+  "--",
+  "nu",
+  "~/.config/jj/scripts/jj-gh-create.nu",
+]
+"gh-sync" = [
+  "util",
+  "exec",
+  "--",
+  "nu",
+  "~/.config/jj/scripts/jj-gh-sync.nu",
 ]

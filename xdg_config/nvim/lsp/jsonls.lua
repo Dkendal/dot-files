@@ -60,10 +60,11 @@ return {
 				{
 					fileMatch = {
 						".claude/settings.json",
+						".claude/settings.json",
+						"~/.claude/settings.json",
 					},
-					url = "https://www.schemastore.org/claude-code-settings.json",
+					url = "https://json.schemastore.org/claude-code-settings.json",
 				},
-
 			},
 		},
 	},
