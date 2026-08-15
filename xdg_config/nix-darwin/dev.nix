@@ -69,6 +69,7 @@
       tinymist # Typst language server
       marksman
       roslyn-ls
+      tmux
 
       # Editors
       neovim # Hyperextensible Vim-based text editor

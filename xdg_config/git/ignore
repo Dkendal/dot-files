@@ -21,3 +21,4 @@ Session.vim
 .jj
 
 **/.claude/.cc-writes/
+.serena/**/*

@@ -37,6 +37,7 @@ gpgsign = true
 'HEAD' = '@-'
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
 'nearest_nonempty(to)' = 'heads(::to & ~empty())'
+'bookmark-advance-to' = 'nearest_nonempty(@)'
 
 [git]
 sign-on-push = true
@@ -75,5 +76,20 @@ pr = [
   """
   let bookmark = jj log -r 'closest_bookmark(@-)' --no-graph --limit 1 --template bookmarks
   gh pr view $bookmark --web
+  """,
+]
+"bookmark-clean" = [
+  "util",
+  "exec",
+  "--",
+  "nu",
+  "-c",
+  """
+  let bookmarks = jj bookmark list -r 'bookmarks() & ::main-' -T 'name ++ "\n"'
+  if ($bookmarks | is-not-empty) {
+    jj bookmark delete $bookmarks
+  } else {
+    print "nothing deleted"
+  }
   """,
 ]

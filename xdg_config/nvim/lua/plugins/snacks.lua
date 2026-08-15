@@ -9,14 +9,14 @@ local keys = {
 	{
 		"<leader>.",
 		function()
-			Snacks.scratch()
+			require("snacks").scratch()
 		end,
 		desc = "Toggle Scratch Buffer",
 	},
 	{
 		"<leader>S",
 		function()
-			Snacks.scratch.select()
+			require("snacks").scratch.select()
 		end,
 		desc = "Select Scratch Buffer",
 	},
@@ -67,7 +67,7 @@ local keys = {
 	{
 		"<leader>e",
 		function()
-			Snacks.explorer()
+			require("snacks").explorer()
 		end,
 		desc = "File Explorer",
 	},
@@ -559,7 +559,8 @@ return {
 		},
 		bigfile = {},
 		quickfile = {},
-		scroll = {},
+		-- animated smooth scrolling
+		-- scroll = {},
 		statuscolumn = {},
 		gitbrowse = {},
 		image = {},
