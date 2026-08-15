@@ -4,64 +4,61 @@
 {
   environment.systemPackages = with pkgs;
     [
-      ast-grep # CLI tool for structural search and replace of code
-      bash-language-server # Bash Language Server
+      ast-grep
+      bash-language-server
       cargo-binstall
       cargo-expand
-      cmake # Cross-platform build system generator
-      codespell # Check code for common misspellings
-      colima # Container runtimes on macOS
-      delta # Syntax-highlighting pager for git, diff outputs
-      devenv # Developer environments
-      docker # Platform for developing, shipping, and running applications
-      docker-compose # Tool for defining and running multi-container Docker applications
-      dprint # Pluggable and configurable code formatting platform
-      emmet-ls # Emmet support for Language Servers
-      fennel-ls # Fennel language server
-      fnlfmt # Formatter for Fennel Lisp dialect
-      git # Distributed version control system
-      git-absorb # Git command for automatically absorbing staged changes into commits
+      cmake
+      codespell
+      colima
+      delta
+      devenv
+      docker
+      docker-compose
+      dprint
+      emmet-ls
+      fennel-ls
+      fnlfmt
+      git
+      git-absorb
       gnuplot
-      go-task # Task runner / simpler Make alternative
-      imagemagick # Create, edit, compose, or convert bitmap images
+      go-task
+      imagemagick
       jjui
-      jujutsu # Distributed version control system (alternative to Git)
-      lazydocker # Terminal UI for Docker
-      lazygit # Simple terminal UI for git commands
+      jujutsu
+      lazydocker
+      lazygit
       lean4
-      lua-language-server # Language Server for Lua
+      lua-language-server
       marksman
       meld
       mergiraf
-      mise # Development environment manager (formerly rtx)
-      nil # Nix language server
+      nil
       nixpkgs-fmt
-      nodePackages.vega-cli
-      nodePackages.vega-lite
       ollama
-      patchutils # Collection of programs for manipulating patch files
-      pgformatter # PostgreSQL SQL syntax beautifier
+      patchutils
+      pgformatter
       postgresql
       putty
-      pv # Monitor the progress of data through a pipeline
+      pv
       roslyn-ls
       rustup
       scons
       shellcheck
       shellharden
-      stylua # Opinionated Lua code formatter
-      tailwindcss-language-server # Tailwind CSS Language Server
-      taplo # TOML Language Server
-      tig # Text-mode interface for Git
+      stylua
+      tailwindcss-language-server
+      taplo
+      tig
       timg
-      tinymist # Typst language server
+      tinymist
       tlaplus
       tlaplus18
       tmux
       unstable.neovim
       usage
-      uv # Python packaging and virtual environment manager
-      xh # Friendly and fast tool for sending HTTP requests
+      uv
+      xh
 
       # Custom Rust crates
       (pkgs.rustPlatform.buildRustPackage rec {

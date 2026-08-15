@@ -12,21 +12,20 @@
 
   outputs = { self, nix-darwin, nixpkgs-unstable, nixpkgs, home-manager, ... }:
     let
-      overlay = final: prev: {
-        fzf = nixpkgs-unstable.legacyPackages.${prev.stdenv.hostPlatform.system}.fzf;
+      overlay-unstable = final: prev: {
+        unstable = import nixpkgs-unstable {
+          inherit (prev) system;
+          config.allowUnfree = true;
+        };
       };
-      # Portable configuration shared by all hosts; platform-specific
-      # settings live in darwin.nix / linux.nix.
       configuration = { ... }:
         {
           imports = [ ./common.nix ./dev.nix ];
-
-          nixpkgs.overlays = [ overlay ];
-
-          # Set Git commit hash for darwin-version.
+          nixpkgs.overlays = [ overlay-unstable ];
           system.configurationRevision = self.rev or self.dirtyRev or null;
-
-          # services.tailscale.enable = true;
+          home-manager.useUserPackages = true;
+          home-manager.useGlobalPkgs = true;
+          home-manager.backupFileExtension = "before-home-manager";
         };
     in
     {
@@ -34,7 +33,6 @@
       darwinConfigurations."Titania" =
         let
           user = "dylan";
-          unstable = nixpkgs-unstable.legacyPackages."aarch64-darwin";
         in
         nix-darwin.lib.darwinSystem {
           specialArgs = { user = user; };
@@ -42,12 +40,7 @@
             configuration
             ./darwin.nix
             home-manager.darwinModules.home-manager
-            {
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "before-home-manager";
-              home-manager.extraSpecialArgs = { inherit unstable; };
-              home-manager.users.${user} = import ./home.nix;
-            }
+            { home-manager.users.${user} = import ./home.nix; }
           ];
         };
 
@@ -55,7 +48,6 @@
       darwinConfigurations."dylankendal-mbp" =
         let
           user = "dylan.kendal";
-          unstable = nixpkgs-unstable.legacyPackages."aarch64-darwin";
         in
         nix-darwin.lib.darwinSystem {
           specialArgs = { user = user; };
@@ -63,12 +55,7 @@
             configuration
             ./darwin.nix
             home-manager.darwinModules.home-manager
-            {
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "before-home-manager";
-              home-manager.extraSpecialArgs = { inherit unstable; };
-              home-manager.users.${user} = import ./home.nix;
-            }
+            { home-manager.users.${user} = import ./home.nix; }
           ];
         };
 
