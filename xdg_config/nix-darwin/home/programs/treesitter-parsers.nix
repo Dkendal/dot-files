@@ -1,4 +1,4 @@
-{}:
+{ ... }:
 {
   programs.treesitter-parsers = {
     enable = true;
