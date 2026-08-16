@@ -15,13 +15,9 @@ in
     ./home/programs/treesitter-parsers.nix
   ];
 
-  home.stateVersion = "24.05";
+  home.stateVersion = "26.05";
 
   home.packages = with pkgs; [
-    nushellPlugins.formats
-    nushellPlugins.polars
-    nushellPlugins.query
-    nushellPlugins.skim
     just
     just-formatter
     just-lsp
@@ -58,8 +54,6 @@ in
     };
     plugins = with pkgs.nushellPlugins; [
       formats
-      # highlight disabled: incompatible nushell version (0.110.0 vs 0.113.1)
-      # highlight
       polars
       query
       skim

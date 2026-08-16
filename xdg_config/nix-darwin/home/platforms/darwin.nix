@@ -30,7 +30,6 @@
       "flyctl"
       "fakedata"
       # required for elixir
-      "openssl@1.1"
       "autoconf"
       "coreutils"
       "snowflake-cli"
@@ -72,5 +71,5 @@
     };
   };
 
-  system.stateVersion = 4;
+  system.stateVersion = 7;
 }

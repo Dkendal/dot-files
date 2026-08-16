@@ -7,7 +7,6 @@
   environment.systemPackages = with pkgs;
     [
       # Core System Utilities
-      coreutils # Basic file, shell and text manipulation utilities
       uutils-coreutils-noprefix # Rust implementation of GNU coreutils
       moreutils # Collection of additional Unix utilities
       curl # Command line tool for transferring data with URL syntax
@@ -26,7 +25,7 @@
 
       # Shell & Terminal
       nushell # Data-driven shell with structured data
-      nufmt # Data-driven shell with structured data
+      nufmt
       htop # Interactive process viewer
       gum # Tool for glamorous shell scripts
       viddy # Modern watch command (executes command periodically)
@@ -65,20 +64,6 @@
 
       # Work & Productivity
       jira-cli-go # Command line interface for Jira
-
-      # Media Processing
-      imagemagick # Create, edit, compose, or convert bitmap images
-      luajitPackages.magick
-
-      # HTTP Tools
-      xh # Friendly and fast tool for sending HTTP requests
-
-      # Utilities Not Easily Categorized
-      pv # Monitor the progress of data through a pipeline
-
-      ollama
-      gnuplot
-      timg
     ];
 
   # Necessary for using flakes on this system.
@@ -97,8 +82,8 @@
   nix.settings.max-jobs = "auto";
   nix.settings.cores = 0; # Use all available cores
 
-  # 500MB
-  nix.settings.download-buffer-size = 500000000;
+  nix.settings.auto-optimise-store = true;
+  nix.settings.download-buffer-size = 500000000; # 500MB
 
   nixpkgs.config.allowUnfree = true;
 

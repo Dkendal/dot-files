@@ -24,9 +24,9 @@ local plugins = {
 		ft = "elixir",
 	},
 
-	{ "pest-parser/pest.vim", ft = "pest" },
+	{ "pest-parser/pest.vim",                ft = "pest" },
 
-	{ "terrastruct/d2-vim", ft = "d2" },
+	{ "terrastruct/d2-vim",                  ft = "d2" },
 
 	{ "https://github.com/kaarmu/typst.vim", ft = "typst", lazy = false },
 
@@ -252,11 +252,11 @@ local plugins = {
 	{
 		"mg979/vim-visual-multi",
 		keys = {
-			{ "<C-LeftMouse>", "<Plug>(VM-Mouse-Cursor)", mode = "n" },
-			{ "<C-RightMouse>", "<Plug>(VM-Mouse-Word)", mode = "n" },
-			{ "<M-C-RightMouse>", "<Plug>(VM-Mouse-Column)", mode = "n" },
-			{ "<C-S-j>", "<Plug>(VM-Add-Cursor-Down)", mode = "n" },
-			{ "<C-S-k>", "<Plug>(VM-Add-Cursor-Up)", mode = "n" },
+			{ "<C-LeftMouse>",    "<Plug>(VM-Mouse-Cursor)",    mode = "n" },
+			{ "<C-RightMouse>",   "<Plug>(VM-Mouse-Word)",      mode = "n" },
+			{ "<M-C-RightMouse>", "<Plug>(VM-Mouse-Column)",    mode = "n" },
+			{ "<C-S-j>",          "<Plug>(VM-Add-Cursor-Down)", mode = "n" },
+			{ "<C-S-k>",          "<Plug>(VM-Add-Cursor-Up)",   mode = "n" },
 		},
 		lazy = false,
 		init = function()
@@ -441,9 +441,9 @@ local plugins = {
 
 	{ "Mofiqul/vscode.nvim", lazy = true },
 
-	{ "catppuccin/nvim", lazy = false },
+	{ "catppuccin/nvim",     lazy = false },
 
-	{ "j-hui/fidget.nvim", opts = {} },
+	{ "j-hui/fidget.nvim",   opts = {} },
 
 	{ "jamessan/vim-gnupg" },
 
@@ -494,7 +494,16 @@ local plugins = {
 
 	{ "tpope/vim-unimpaired" },
 
-	{ "uga-rosa/ccc.nvim", opts = {} },
+	{ "uga-rosa/ccc.nvim",    opts = {} },
+
+	{
+		"seblyng/roslyn.nvim",
+		---@module 'roslyn.config'
+		---@type RoslynNvimConfig
+		opts = {
+		},
+	},
+
 	{
 		"mason-org/mason.nvim",
 		opts = {

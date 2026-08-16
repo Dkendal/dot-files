@@ -11,10 +11,6 @@ alias = "i"
 description = "Build and switch to new configuration"
 run = "sudo darwin-rebuild switch --flake /etc/nix-darwin"
 
-[tasks.edit]
-description = "Edit flake.nix"
-run = "$EDITOR ~/.config/nix-darwin/flake.nix"
-
 [tasks.clean]
 description = "Clean up old generations"
 run = "sudo nix-collect-garbage --delete-older-than 30d"

@@ -55,7 +55,7 @@
       tlaplus
       tlaplus18
       tmux
-      unstable.neovim
+      neovim
       usage
       uv
       xh
