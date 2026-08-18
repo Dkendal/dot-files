@@ -4,6 +4,7 @@
 {
   environment.systemPackages = with pkgs;
     [
+      kitty
       ast-grep
       bash-language-server
       cargo-binstall
@@ -41,7 +42,6 @@
       postgresql
       putty
       pv
-      roslyn-ls
       rustup
       scons
       shellcheck

@@ -34,7 +34,7 @@ in
   xdg.configFile = {
     "fish".source = ln "xdg_config/fish";
     "nvim".source = ln "xdg_config/nvim";
-    "jj/config.toml".source = ln "xdg_config/jj";
+    "jj".source = ln "xdg_config/jj";
     "nix-darwin".source = ln "xdg_config/nix-darwin";
     "kitty".source = ln "xdg_config/kitty";
     "git".source = ln "xdg_config/git";

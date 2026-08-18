@@ -11,8 +11,8 @@ listen_on unix:/tmp/kitty.socket
 allow_remote_control yes
 
 # font_family CaskaydiaCove Nerd Font Mono
-# font_size 15.0
-# symbol_map U+1F610-U+1F6B6 Apple Color Emoji
+font_size 15.0
+symbol_map U+1F610-U+1F6B6 Apple Color Emoji
 
 # modify_font underline_position 5
 modify_font underline_thickness 150%
@@ -33,9 +33,9 @@ copy_on_select yes
 
 macos_option_as_alt yes
 macos_quit_when_last_window_closed yes
-# macos_titlebar_color background
+macos_titlebar_color background
 
-kitty_mod super
+kitty_mod cmd
 
 map kitty_mod+enter new_window_with_cwd
 map kitty_mod+g show_last_command_output
@@ -45,8 +45,21 @@ map kitty_mod+w no_op
 mouse_map right press ungrabbed mouse_select_command_output
 map kitty_mod+a goto_layout tall
 map kitty_mod+s goto_layout stack
+map kitty_mod+f move_window_forward
+map kitty_mod+shift+] move_window_forward
+map kitty_mod+shift+[ move_window_backward
+map f4 command_palette
+map kitty_mod+l next_layout
 
 map kitty_mod+p>f kitten hints --type linenum --linenum-action background nvim --server ~/.cache/nvim/server.pipe --remote +{line} {path}
 map kitty_mod+shift+f launch --title "Insert path" --type overlay --cwd current sh -c '/etc/profiles/per-user/dylan/bin/fzf --print0 | kitty @ send-text --match=id:$0 --stdin' '@active-kitty-window-id'
 
 map shift+enter send_text all \e\r
+
+
+# BEGIN_KITTY_FONTS
+font_family      family="CaskaydiaCove NFM"
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+# END_KITTY_FONTS
