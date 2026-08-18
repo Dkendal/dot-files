@@ -38,7 +38,8 @@
           specialArgs = { user = user; };
           modules = [
             configuration
-            ./home/platforms/darwin.nix
+            ./profiles/darwin.nix
+            ./profiles/home.nix
             home-manager.darwinModules.home-manager
             { home-manager.users.${user} = import ./home.nix; }
           ];
@@ -53,7 +54,8 @@
           specialArgs = { user = user; };
           modules = [
             configuration
-            ./home/platforms/darwin.nix
+            ./profiles/darwin.nix
+            ./profiles/work.nix
             home-manager.darwinModules.home-manager
             { home-manager.users.${user} = import ./home.nix; }
           ];
@@ -65,7 +67,7 @@
         specialArgs = { user = "dylan"; };
         modules = [
           configuration
-          ./home/platforms/linux.nix
+          ./profiles/linux.nix
           home-manager.nixosModules.home-manager
           { home-manager.users.dylan = import ./home.nix; }
         ];

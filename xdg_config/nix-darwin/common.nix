@@ -8,7 +8,6 @@
     [
       # Core System Utilities
       uutils-coreutils-noprefix # Rust implementation of GNU coreutils
-      moreutils # Collection of additional Unix utilities
       curl # Command line tool for transferring data with URL syntax
       wget # Non-interactive network downloader
 
@@ -61,9 +60,6 @@
       # Data Visualization & Diagramming
       d2 # Diagram scripting language
       graphviz # Graph visualization software
-
-      # Work & Productivity
-      jira-cli-go # Command line interface for Jira
     ];
 
   # Necessary for using flakes on this system.
