@@ -12,8 +12,8 @@ return {
 			untracked = { text = "┇" },
 		},
 		signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-		numhl = false,    -- Toggle with `:Gitsigns toggle_numhl`
-		linehl = false,   -- Toggle with `:Gitsigns toggle_linehl`
+		numhl = false,   -- Toggle with `:Gitsigns toggle_numhl`
+		linehl = false,  -- Toggle with `:Gitsigns toggle_linehl`
 		word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
 		watch_gitdir = {
 			follow_files = true,
@@ -45,5 +45,6 @@ return {
 		{ "<leader>Gb",  ":Gitsigns toggle_current_line_blame" },
 		{ "<leader>Gb",  ":Gitsigns blame" },
 		{ "<leader>Gbl", ":Gitsigns blame_line" },
+		{ "<leader>Gd",  ":Gitsigns diffthis" },
 	}
 }

@@ -17,7 +17,7 @@ local opts = {
 	sources = {
 		default = { "lazydev", "lsp", "path", "snippets", "buffer" },
 		per_filetype = {
-			org = { 'orgmode', 'buffer' }
+			org = { 'buffer' }
 		},
 		providers = {
 			lazydev = {
@@ -25,11 +25,6 @@ local opts = {
 				module = "lazydev.integrations.blink",
 				-- make lazydev completions top priority (see `:h blink.cmp`)
 				score_offset = 100,
-			},
-			orgmode = {
-				name = 'Orgmode',
-				module = 'orgmode.org.autocompletion.blink',
-				fallbacks = { 'buffer' },
 			},
 		}
 	},

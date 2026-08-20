@@ -1,4 +1,6 @@
+.roam
 nix-installer
 xdg_config/fish/fish_variables
+xdg_config/fish/fish_variables
 xdg_config/kitty/current-theme.conf
-.roam
+xdg_config/nushell/history.txt

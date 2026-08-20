@@ -2,10 +2,21 @@ local function picker()
 	return require("snacks").picker
 end
 
+local function get_root()
+	local filename = vim.api.nvim_buf_get_name(0)
+	local dirname = vim.fs.dirname(filename)
+	local result = vim.system({ "jj", "workspace", "root" }, { cwd = dirname }):wait()
+	if result.code == 0 then
+		local root = vim.trim(result.stdout)
+		return { ok = root }
+	else
+		return { error = result.stderr }
+	end
+end
+
 ---@module "lazy"
 ---@type LazyKeysSpec[]
 local keys = {
-	-- Scratch
 	{
 		"<leader>.",
 		function()
@@ -20,7 +31,6 @@ local keys = {
 		end,
 		desc = "Select Scratch Buffer",
 	},
-	-- Spell check
 	{
 		"s=",
 		function()
@@ -28,7 +38,6 @@ local keys = {
 		end,
 		desc = "Correct spelling",
 	},
-	-- Top Pickers & Explorer
 	{
 		"<leader><space>",
 		function()
@@ -42,6 +51,18 @@ local keys = {
 			picker().buffers()
 		end,
 		desc = "Buffers",
+	},
+	{
+		"<leader>p/",
+		function()
+			local result = get_root()
+			if result.ok then
+				picker().grep({ cwd = result.ok  })
+			else
+				vim.notify(result.error, vim.log.error)
+			end
+		end,
+		desc = "Project grep",
 	},
 	{
 		"<leader>/",
@@ -101,21 +122,16 @@ local keys = {
 		desc = "Find Files",
 	},
 	{
-		"<leader>fo",
+		"<leader>pf",
 		function()
-			picker().files({ cwd = "~/orgfiles" })
+			local result = get_root()
+			if result.ok then
+				picker().files({ dirs = { result.ok }, hidden = true })
+			else
+				vim.notify(result.error, vim.log.levels.ERROR)
+			end
 		end,
-		desc = "Find Org Files",
-	},
-	{
-		"<leader>so",
-		require("ext.orgmode.snacks").picker_orgmode_grep,
-		desc = "Search Org files",
-	},
-	{
-		"<leader>sO",
-		require("ext.orgmode.snacks").picker_orgmode_headlines,
-		desc = "Search Org Headlines",
+		desc = "Project files",
 	},
 	{
 		"<leader>fg",
@@ -125,7 +141,7 @@ local keys = {
 		desc = "Find Git Files",
 	},
 	{
-		"<leader>fp",
+		"<leader>sp",
 		function()
 			picker().projects()
 		end,
@@ -223,7 +239,7 @@ local keys = {
 		'<leader>s"',
 		'<leader>p',
 		function()
-			picker().registers({ confirm = {"paste", "close"} })
+			picker().registers({ confirm = { "paste", "close" } })
 		end,
 		desc = "Registers",
 	},
@@ -495,7 +511,6 @@ return {
 						minipairs_disable = true,
 					},
 				},
-				-- result list window
 				list = {
 					keys = {
 						["/"] = "toggle_focus",

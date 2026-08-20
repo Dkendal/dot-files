@@ -447,33 +447,6 @@ local plugins = {
 
 	{ "jamessan/vim-gnupg" },
 
-	{
-		"sindrets/diffview.nvim",
-		dependencies = {
-			"MunifTanjim/nui.nvim"
-		},
-		lazy = true,
-		cmd = {
-			"DiffviewClose",
-			"DiffviewFileHistory",
-			"DiffviewFocusFiles",
-			"DiffviewLog",
-			"DiffviewOpen",
-			"DiffviewToggleFiles",
-		},
-		opts = {},
-	},
-	{
-		"julienvincent/hunk.nvim",
-		dependencies = {
-			"MunifTanjim/nui.nvim"
-		},
-		cmd = { "DiffEditor" },
-		config = function()
-			require("hunk").setup()
-		end,
-	},
-
 	{ "tpope/vim-abolish" },
 
 	{ "tpope/vim-eunuch" },
@@ -514,6 +487,52 @@ local plugins = {
 		},
 	},
 
+	-- Mardown
+	{
+		"meanderingprogrammer/render-markdown.nvim",
+		ft = "markdown",
+		opts = {}
+	},
+	{
+		"preservim/vim-pencil",
+		ft = { "markdown", ""},
+	},
+	{
+		"https://github.com/junegunn/goyo.vim",
+		ft = { "markdown", "" }
+	},
+
+	-- Diff resolution
+	{ "rafikdraoui/jj-diffconflicts" },
+	{ "spacedentist/resolve.nvim" },
+	{
+		"https://github.com/dnaaun/diffview-jj.nvim",
+		dependencies = {
+			"MunifTanjim/nui.nvim"
+		},
+		lazy = true,
+		cmd = {
+			"JjDiffviewClose",
+			"JjDiffviewFileHistory",
+			"JjDiffviewFocusFiles",
+			"JjDiffviewLog",
+			"JjDiffviewOpen",
+			"JjDiffviewToggleFiles",
+		},
+		opts = {},
+	},
+	{
+		"julienvincent/hunk.nvim",
+		dependencies = {
+			"MunifTanjim/nui.nvim"
+		},
+		cmd = { "DiffEditor" },
+		config = function()
+			require("hunk").setup()
+		end,
+	},
+
+
 	-- TODO move these to dependencies
 	{ "ryanoasis/vim-devicons" },
 	{ "nvim-tree/nvim-web-devicons" },
@@ -536,7 +555,6 @@ require("lazy").setup({
 }, opts)
 require("user.boxes")
 require("user.background").init()
-require("user.projects")
 -- require("user.macosx_appearance").setup()
 
 vim.o.exrc = true

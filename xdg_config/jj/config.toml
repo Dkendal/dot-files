@@ -11,11 +11,13 @@ command = ["mix", "format", "--stdin-filename=$path", "-"]
 patterns = ["glob:'**/*.ex'", "glob:'**/*.exs'"]
 
 
-[merge-tools.hunk]
+[merge-tools.diffconflicts]
 program = "nvim"
 merge-args = [
-    "-c :DiffEditor $left $right $output"
+    "-c", "let g:jj_diffconflicts_marker_length=$marker_length",
+    "-c", "JJDiffConflicts!", "$output", "$base", "$left", "$right",
 ]
+merge-tool-edits-conflict-markers = true
 
 [merge-tools.meld]
 program = "meld"

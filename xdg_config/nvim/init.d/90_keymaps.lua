@@ -1,33 +1,16 @@
-local M = {}
-
 local util = require("user.util")
 local alternatives = require("user.alternatives")
-local alternate_pair = alternatives.alternate_pair
-local map_alternate = alternatives.map_alternate
 local keymap = alternatives.keymap
 
 local map = util.map
-local apply = util.apply
 local feedkeys = util.feedkeys
 local t = util.t
 local set_normal_mode = util.set_normal_mode
 
-local autocmd = vim.api.nvim_create_autocmd
 local fn = vim.fn
 
 local function format_async()
 	vim.lsp.buf.format({ async = true })
-end
-
-local function set_clipboard(text)
-	vim.fn.setreg("+", text)
-	vim.fn.setreg("*", text)
-end
-
-local function copy_absolute_path()
-	local path = vim.fn.expand("%:~")
-	set_clipboard(path)
-	vim.notify(path)
 end
 
 local function copy_relative_path()
@@ -37,32 +20,8 @@ local function copy_relative_path()
 	vim.notify(path)
 end
 
-local function telescope_refactors()
-	feedkeys("<esc>")
-	require("telescope").extensions.refactoring.refactors()
-end
-
 local function inspect_workspace_folders()
 	print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-end
-
-local function find_config_files()
-	return require("telescope.builtin").find_files({ search_dirs = { fn.stdpath("config") } })
-end
-local function find_files()
-	require("telescope.builtin").find_files({ find_command = { "fd" } })
-end
-
-local function find_data_files()
-	return require("telescope.builtin").find_files({ search_dirs = fn.stdpath("data") })
-end
-
-local function grep_data_files()
-	return require("telescope.builtin").live_grep({ cwd = fn.stdpath("data") })
-end
-
-local function find_hidden_files()
-	return require("telescope.builtin").find_files({ find_command = { "fd", "-u" } })
 end
 
 ---@return string[]
@@ -215,9 +174,6 @@ map("x", "@@", ":normal@@<cr>")
 
 map("n", "<space>Wl", inspect_workspace_folders)
 
--- remap to open the Telescope refactoring menu in visual mode
-map("v", "<leader>rr", telescope_refactors, { noremap = true })
-
 map("i", "<c-.>", vim.lsp.codelens.display)
 
 -- Folding
@@ -255,20 +211,11 @@ map("n", "<leader>fes", ":e ~/.config/nvim/after/plugin/snippets.lua<cr>", { des
 map("n", "<leader>fem", ":e ~/.config/nvim/after/plugin/keymaps.lua<cr>", { desc = "Edit keymaps" })
 map("n", "<leader>fee", ":e .envrc<cr>", { desc = "Edit envrc" })
 map("n", "<leader>feE", ":e .tool-versions<cr>", { desc = "Edit tool-versions" })
-map("n", "<leader>fer", ":Telescope reloader<cr>", { desc = "Reload config" })
-map("n", "<leader>gD", "<cmd>Gvdiffsplit!<cr>", { desc = "3-way diff" })
-map("n", "<leader>gs", "<cmd>G<cr>", { desc = "Git status" })
-
-map("n", "<leader>hdf", "<cmd>P! function<cr>", { desc = "Describe: Functions" })
-map("n", "<leader>hdv", "<cmd>P! verbose let<cr>", { desc = "Describe: Variables" })
 
 map("n", "<leader>lR", "<cmd>LspRestart<cr>", { desc = "LSP: Restart" })
 map("n", "<leader>lI", "<cmd>LspInfo<cr>", { desc = "LSP: Info" })
 map("n", "<leader>ls", "<cmd>LspStart<cr>", { desc = "LSP: Start" })
 map("n", "<leader>lS", "<cmd>LspStart<cr>", { desc = "LSP: Stop" })
-
--- Ex mode
-map("c", "<M-=>", [[<c-\>eexpandcmd(getcmdline())<CR>]])
 
 -- Toggle keymaps
 for _, key in ipairs({ "b", "c", "d", "h", "i", "l", "n", "r", "s", "u", "v", "w", "x" }) do

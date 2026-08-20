@@ -38,6 +38,7 @@ in
     "nix-darwin".source = ln "xdg_config/nix-darwin";
     "kitty".source = ln "xdg_config/kitty";
     "git".source = ln "xdg_config/git";
+    "mise".source = ln "xdg_config/mise";
   };
 
 
