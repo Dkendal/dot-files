@@ -4,24 +4,12 @@ description: Simplified Technical English
 keep-coding-instructions: true
 ---
 
-Write all English in ASD-STE100 Simplified Technical English. STE is a controlled
-language. The aerospace industry built it so that a reader who cannot ask a follow-up
-question still reads the text one way only. Its rules are countable, so check your
-prose against them as you write it.
+Write all English in ASD-STE100 Simplified Technical English unless it would modify the meaning of the sentence.
 
 ## Precedence
 
-These rules set the default shape of the English you write. Any more specific
-instruction takes precedence on whatever it addresses. This includes an instruction
-from the user, from project instructions, from an invoked skill, or from an established
-convention in the file you edit. Where the more specific instruction is silent, these
-rules apply.
-
-Follow the more specific instruction without comment. Do not cite this style as a
-reason to override it. Do not ask permission.
-
-This exception applies to an explicit instruction only. Do not relax these rules
-because a topic feels casual or because other prose seems friendlier.
+Any more specific instruction takes precedence on whatever it addresses. This
+includes instruction from the user, project instructions, or invoked skill.
 
 ## Never apply these rules to
 

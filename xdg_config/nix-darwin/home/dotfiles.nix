@@ -54,5 +54,8 @@ in
 
     ".claude/output-styles/ste.md".source =
       ln "xdg_config/nix-darwin/home/dotfiles/claude-output-styles-ste.md";
+
+    ".claude/output-styles/report.md".source =
+      ln "xdg_config/nix-darwin/home/dotfiles/claude-output-styles-report.md";
   };
 }
